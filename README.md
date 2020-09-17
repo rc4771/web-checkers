@@ -7,7 +7,7 @@ a web micro-framework.
 ## Team
 
 - Mike White
-- MEMBER2
+- Will Petersen
 - Rafeed Choudhury
 - David Allen
 
