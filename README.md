@@ -8,7 +8,7 @@ a web micro-framework.
 
 - MEMBER1
 - MEMBER2
-- MEMBER3
+- Rafeed Choudhury
 - David Allen
 
 
