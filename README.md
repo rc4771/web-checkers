@@ -6,7 +6,7 @@ a web micro-framework.
 
 ## Team
 
-- MEMBER1
+- Mike White
 - MEMBER2
 - Rafeed Choudhury
 - David Allen
