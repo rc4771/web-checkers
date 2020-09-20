@@ -10,6 +10,7 @@ a web micro-framework.
 - Will Petersen
 - Rafeed Choudhury
 - David Allen
+- Sokol Nguyen
 
 
 ## Prerequisites
