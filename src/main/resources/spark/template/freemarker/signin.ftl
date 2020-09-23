@@ -12,6 +12,16 @@
 
   <h1>Web Checkers | ${title}</h1>
 
+  <div class="body">
+    <form action="./signin" method="POST">
+      Enter a username that contains only alphanumeric characters and spaces:
+      <br/>
+      <input name="username">
+      <br/>
+      <button type="submit">Sign In</button>
+    </form>
+  </div>
+
 </div>
 </body>
 
