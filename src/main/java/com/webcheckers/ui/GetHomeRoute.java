@@ -23,6 +23,8 @@ public class GetHomeRoute implements Route {
 
   private static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
 
+  public static final String VIEW_NAME = "home.ftl";
+
   private final TemplateEngine templateEngine;
 
   /**
@@ -59,6 +61,6 @@ public class GetHomeRoute implements Route {
     vm.put("message", WELCOME_MSG);
 
     // render the View
-    return templateEngine.render(new ModelAndView(vm , "home.ftl"));
+    return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
   }
 }

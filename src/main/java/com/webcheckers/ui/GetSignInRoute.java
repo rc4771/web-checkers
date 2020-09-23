@@ -16,6 +16,9 @@ import java.util.logging.Logger;
 public class GetSignInRoute implements Route {
   private static final Logger LOG = Logger.getLogger(GetSignInRoute.class.getName());
 
+  public static final String VIEW_NAME = "signin.ftl";
+  public static final String ERROR_MESSAGE_ATTR = "errorMsg";
+
   private final TemplateEngine templateEngine;
 
   /**
@@ -49,6 +52,6 @@ public class GetSignInRoute implements Route {
     vm.put("title", "Please sign in");
 
     // render the View
-    return templateEngine.render(new ModelAndView(vm , "signin.ftl"));
+    return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
   }
 }

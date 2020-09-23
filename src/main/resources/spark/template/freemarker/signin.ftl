@@ -14,6 +14,10 @@
 
   <div class="body">
     <form action="./signin" method="POST">
+      <#if errorMsg??>
+        ${errorMsg}
+        <br/>
+      </#if>
       Enter a username that contains only alphanumeric characters and spaces:
       <br/>
       <input name="username">

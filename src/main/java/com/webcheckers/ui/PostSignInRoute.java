@@ -1,5 +1,6 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.appl.PlayerLobby;
 import spark.*;
 
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class PostSignInRoute implements Route {
 
   private static final String USERNAME_PARAM = "username";
 
+  private final PlayerLobby playerLobby;
   private final TemplateEngine templateEngine;
 
   /**
@@ -27,7 +29,8 @@ public class PostSignInRoute implements Route {
    * @param templateEngine
    *   the HTML template rendering engine
    */
-  public PostSignInRoute(final TemplateEngine templateEngine) {
+  public PostSignInRoute(PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+    this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby is required");
     this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
     //
     LOG.config("PostSignInRoute is initialized.");
@@ -53,8 +56,18 @@ public class PostSignInRoute implements Route {
 
     final String username = request.queryParams(USERNAME_PARAM);
 
-    response.redirect(WebServer.HOME_URL);
-    halt();
-    return null;
+    if (!playerLobby.isValidUsername(username)) {
+      // TODO Handle incorrect usernames
+      vm.put(GetSignInRoute.ERROR_MESSAGE_ATTR, "The username you entered is invalid. Try again.");
+      return templateEngine.render(new ModelAndView(vm, GetSignInRoute.VIEW_NAME));
+    }
+
+    if (playerLobby.isPlayerSignedIn(username)) {
+      // TODO Handle usernames that have already been taken
+
+      return templateEngine.render(new ModelAndView(vm, GetSignInRoute.VIEW_NAME));
+    }
+
+    return templateEngine.render(new ModelAndView(vm, GetHomeRoute.VIEW_NAME));
   }
 }
