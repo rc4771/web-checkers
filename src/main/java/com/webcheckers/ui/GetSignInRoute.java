@@ -9,9 +9,9 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
- * The UI Controller to GET the Home page.
+ * The UI Controller to GET the Sign In page.
  *
- * @author <a href='mailto:bdbvse@rit.edu'>Bryan Basham</a>
+ * @author <a href='mailto:dja7394@rit.edu'>David Allen</a>
  */
 public class GetSignInRoute implements Route {
   private static final Logger LOG = Logger.getLogger(GetSignInRoute.class.getName());
@@ -19,7 +19,7 @@ public class GetSignInRoute implements Route {
   private final TemplateEngine templateEngine;
 
   /**
-   * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
+   * The constructor for the {@code GET /signin} route handler.
    *
    * @param templateEngine
    *   the HTML template rendering engine
@@ -27,11 +27,11 @@ public class GetSignInRoute implements Route {
   public GetSignInRoute(final TemplateEngine templateEngine) {
     this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
     //
-    LOG.config("GetHomeRoute is initialized.");
+    LOG.config("GetSignInRoute is initialized.");
   }
 
   /**
-   * Render the WebCheckers Home page.
+   * Render the sign in page.
    *
    * @param request
    *   the HTTP request
@@ -39,14 +39,14 @@ public class GetSignInRoute implements Route {
    *   the HTTP response
    *
    * @return
-   *   the rendered HTML for the Home page
+   *   the rendered HTML for the sign in page
    */
   @Override
   public Object handle(Request request, Response response) {
     LOG.finer("GetSignInRoute is invoked.");
     //
     Map<String, Object> vm = new HashMap<>();
-    vm.put("title", "Sign in?");
+    vm.put("title", "Please sign in");
 
     // render the View
     return templateEngine.render(new ModelAndView(vm , "signin.ftl"));
