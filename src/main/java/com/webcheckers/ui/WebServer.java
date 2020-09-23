@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 
+import com.webcheckers.appl.PlayerLobby;
 import spark.TemplateEngine;
 
 
@@ -65,6 +66,7 @@ public class WebServer {
 
   private final TemplateEngine templateEngine;
   private final Gson gson;
+  private final PlayerLobby playerLobby;
 
   //
   // Constructor
@@ -78,16 +80,21 @@ public class WebServer {
    * @param gson
    *    The Google JSON parser object used to render Ajax responses.
    *
+   * @param playerLobby
+   *    The {@link PlayerLobby} for the application to handle sign ins.
+   *
    * @throws NullPointerException
    *    If any of the parameters are {@code null}.
    */
-  public WebServer(final TemplateEngine templateEngine, final Gson gson) {
+  public WebServer(final TemplateEngine templateEngine, final Gson gson, final PlayerLobby playerLobby) {
     // validation
     Objects.requireNonNull(templateEngine, "templateEngine must not be null");
     Objects.requireNonNull(gson, "gson must not be null");
+    Objects.requireNonNull(playerLobby, "playerLobby must not be null");
     //
     this.templateEngine = templateEngine;
     this.gson = gson;
+    this.playerLobby = playerLobby;
   }
 
   //
