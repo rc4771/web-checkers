@@ -24,6 +24,7 @@
     <#if currentUser??>
       List of other players currently logged in:
       <br/>
+      <br/>
       ${playerList}
     <#else>
       There are ${playerCount} players logged into Web Checkers at this moment.

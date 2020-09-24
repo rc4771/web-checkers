@@ -96,6 +96,7 @@ public final class Application {
     // response to Ajax requests.
     final Gson gson = new Gson();
 
+    // inject the player lobby into the web server
     final PlayerLobby playerLobby = new PlayerLobby();
 
     // inject the game center and freemarker engine into web server

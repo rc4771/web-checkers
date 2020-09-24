@@ -23,10 +23,10 @@ public class GetHomeRoute implements Route {
   private static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
 
   public static final String VIEW_NAME = "home.ftl";
-  public static final String PLAYER_COUNT_PARAM = "playerCount";
-  public static final String PLAYER_LIST_PARAM = "playerList";
-  public static final String CURRENT_USER_PARAM = "currentUser";
-  public static final String CURRENT_USER_NAME_PARAM = "name";
+  public static final String PLAYER_COUNT_ATTR = "playerCount";
+  public static final String PLAYER_LIST_ATTR = "playerList";
+  public static final String CURRENT_USER_ATTR = "currentUser";
+  public static final String CURRENT_USER_NAME_ATTR = "name";
 
   private final PlayerLobby playerLobby;
   private final TemplateEngine templateEngine;
@@ -34,6 +34,8 @@ public class GetHomeRoute implements Route {
   /**
    * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
    *
+   * @param playerLobby
+   *    The player lobby instance for handling log in related stuff
    * @param templateEngine
    *   the HTML template rendering engine
    */
@@ -58,33 +60,37 @@ public class GetHomeRoute implements Route {
   @Override
   public Object handle(Request request, Response response) {
     LOG.finer("GetHomeRoute is invoked.");
-    //
-    Map<String, Object> vm = new HashMap<>();
-    vm.put("title", "Welcome!");
-
-    // display a user message in the Home page
-    vm.put("message", WELCOME_MSG);
-    vm.put(PLAYER_COUNT_PARAM, playerLobby.getPlayerCount());
 
     final Session httpSession = request.session();
+    Map<String, Object> vm = new HashMap<>();
+
+    vm.put("title", "Welcome!");
+    vm.put("message", WELCOME_MSG);
+    vm.put(PLAYER_COUNT_ATTR, playerLobby.getPlayerCount());
+
+    // If the current session has a player logged in, they need to be displayed different information
     Player sessionPlayer;
     if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) != null) {
       Map<String, Object> vmCurrentUser = new HashMap<>();
-      vmCurrentUser.put(CURRENT_USER_NAME_PARAM, sessionPlayer.getUsername());
+      vmCurrentUser.put(CURRENT_USER_NAME_ATTR, sessionPlayer.getUsername());
+      vm.put(CURRENT_USER_ATTR, vmCurrentUser);
 
-      vm.put(CURRENT_USER_PARAM, vmCurrentUser);
-
+      // Build and display the list of players, excluding the current one, to the home page
       List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayer.getUsername());
-      StringBuilder usernameList = new StringBuilder();
 
-      for (String username : playerUsernames) {
-        usernameList.append(", ").append(username);
+      if (playerUsernames.size() > 0) {
+        StringBuilder usernameList = new StringBuilder();
+        for (String username : playerUsernames) {
+          usernameList.append(", ").append(username);
+        }
+
+        // The .substring(..) is to remove the leading separator
+        vm.put(PLAYER_LIST_ATTR, usernameList.substring(", ".length()));
+      } else {
+        vm.put(PLAYER_LIST_ATTR, "No players currently logged in");
       }
-
-      vm.put(PLAYER_LIST_PARAM, usernameList.substring(", ".length()));
     }
 
-    // render the View
     return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
   }
 }

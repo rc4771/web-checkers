@@ -27,13 +27,15 @@ public class PostSignInRoute implements Route {
   /**
    * The constructor for the {@code POST /signin} route handler.
    *
+   * @param playerLobby
+   *    The player lobby instance for handling log in related stuff
    * @param templateEngine
    *   the HTML template rendering engine
    */
   public PostSignInRoute(PlayerLobby playerLobby, final TemplateEngine templateEngine) {
     this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby is required");
     this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
-    //
+
     LOG.config("PostSignInRoute is initialized.");
   }
 

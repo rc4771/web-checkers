@@ -17,8 +17,15 @@ public class PlayerLobby {
 
     public enum SignInResult {OK, INVALID_USERNAME, USERNAME_TAKEN}
 
+    /**
+     * The grand hashmap containing all players that are signed in, mapped by their username. This username is
+     * guaranteed to be not null, non-empty, and strictly alphanumeric (with spaces).
+     */
     private HashMap<String, Player> signedInPlayers;
 
+    /**
+     * Creates a new PlayerLobby instance to handle sign ins.
+     */
     public PlayerLobby() {
         signedInPlayers = new HashMap<>();
     }
