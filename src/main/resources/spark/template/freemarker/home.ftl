@@ -20,6 +20,15 @@
     <!-- Provide a message to the user, if supplied. -->
     <#include "message.ftl" />
 
+    <!-- Show a list of players for those signed in and a number of players for those not signed in -->
+    <#if currentUser??>
+      List of other players currently logged in:
+      <br/>
+      ${playerList}
+    <#else>
+      There are ${playerCount} players logged into Web Checkers at this moment.
+    </#if>
+
     <!-- TODO: future content on the Home:
             to start games,
             spectating active games,

@@ -1,10 +1,12 @@
 package com.webcheckers.ui;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import spark.*;
 
@@ -21,9 +23,12 @@ public class GetHomeRoute implements Route {
   private static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
 
   public static final String VIEW_NAME = "home.ftl";
+  public static final String PLAYER_COUNT_PARAM = "playerCount";
+  public static final String PLAYER_LIST_PARAM = "playerList";
   public static final String CURRENT_USER_PARAM = "currentUser";
   public static final String CURRENT_USER_NAME_PARAM = "name";
 
+  private final PlayerLobby playerLobby;
   private final TemplateEngine templateEngine;
 
   /**
@@ -32,7 +37,8 @@ public class GetHomeRoute implements Route {
    * @param templateEngine
    *   the HTML template rendering engine
    */
-  public GetHomeRoute(final TemplateEngine templateEngine) {
+  public GetHomeRoute(final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+    this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby is required");
     this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
     //
     LOG.config("GetHomeRoute is initialized.");
@@ -58,6 +64,7 @@ public class GetHomeRoute implements Route {
 
     // display a user message in the Home page
     vm.put("message", WELCOME_MSG);
+    vm.put(PLAYER_COUNT_PARAM, playerLobby.getPlayerCount());
 
     final Session httpSession = request.session();
     Player sessionPlayer;
@@ -67,7 +74,14 @@ public class GetHomeRoute implements Route {
 
       vm.put(CURRENT_USER_PARAM, vmCurrentUser);
 
-      LOG.info("BITCH");
+      List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayer.getUsername());
+      StringBuilder usernameList = new StringBuilder();
+
+      for (String username : playerUsernames) {
+        usernameList.append(", ").append(username);
+      }
+
+      vm.put(PLAYER_LIST_PARAM, usernameList.substring(", ".length()));
     }
 
     // render the View

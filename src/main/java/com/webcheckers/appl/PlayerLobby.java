@@ -2,7 +2,9 @@ package com.webcheckers.appl;
 
 import com.webcheckers.model.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -43,6 +45,45 @@ public class PlayerLobby {
         signedInPlayers.put(username, new Player(username));
 
         return SignInResult.OK;
+    }
+
+    /**
+     * Gets the total number of players signed in.
+     * @return
+     *      An int representing the total number of signed in players
+     */
+    public int getPlayerCount() {
+        return signedInPlayers.size();
+    }
+
+    /**
+     * Gets a list of the names of all players currently signed in.
+     * @return
+     *      A list of all player's usernames
+     */
+    public List<String> getPlayerUsernames() {
+        return getPlayerUsernames(null);
+    }
+
+    /**
+     * Gets a list of the names of all players currently signed in.
+     *
+     * @param excludingUsername
+     *      A username to exclude from the list returned, as to get all player names EXCEPT one
+     *
+     * @return
+     *      A list of all player's usernames
+     */
+    public List<String> getPlayerUsernames(String excludingUsername) {
+        List<String> usernames = new ArrayList<>();
+        for (final Player player : signedInPlayers.values()) {
+            if (excludingUsername != null && excludingUsername.equals(player.getUsername()))
+                continue;
+
+            usernames.add(player.getUsername());
+        }
+
+        return usernames;
     }
 
     /**
