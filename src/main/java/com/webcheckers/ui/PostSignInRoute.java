@@ -18,7 +18,8 @@ import static spark.Spark.halt;
 public class PostSignInRoute implements Route {
   private static final Logger LOG = Logger.getLogger(PostSignInRoute.class.getName());
 
-  private static final String USERNAME_PARAM = "username";
+  public static final String USERNAME_PARAM = "username";
+  public static final String PLAYER_SESSION_KEY = "currentUser";
 
   private final PlayerLobby playerLobby;
   private final TemplateEngine templateEngine;
@@ -55,19 +56,26 @@ public class PostSignInRoute implements Route {
     vm.put("title", "Sign in?");
 
     final String username = request.queryParams(USERNAME_PARAM);
+    final PlayerLobby.SignInResult signInResult = playerLobby.signInPlayer(username);
 
-    if (!playerLobby.isValidUsername(username)) {
-      // TODO Handle incorrect usernames
-      vm.put(GetSignInRoute.ERROR_MESSAGE_ATTR, "The username you entered is invalid. Try again.");
-      return templateEngine.render(new ModelAndView(vm, GetSignInRoute.VIEW_NAME));
+    switch (signInResult) {
+      case INVALID_USERNAME: {
+        vm.put(GetSignInRoute.ERROR_MESSAGE_ATTR, "The username you entered is invalid. Try again.");
+        return templateEngine.render(new ModelAndView(vm, GetSignInRoute.VIEW_NAME));
+      }
+      case USERNAME_TAKEN: {
+        vm.put(GetSignInRoute.ERROR_MESSAGE_ATTR, "The username you entered is already taken. Try again.");
+        return templateEngine.render(new ModelAndView(vm, GetSignInRoute.VIEW_NAME));
+      }
+      case OK: {
+        // Add the newly signed in player to the HTTP session
+        final Session httpSession = request.session();
+        httpSession.attribute(PLAYER_SESSION_KEY, playerLobby.getPlayer(username));
+      }
     }
 
-    if (playerLobby.isPlayerSignedIn(username)) {
-      // TODO Handle usernames that have already been taken
-
-      return templateEngine.render(new ModelAndView(vm, GetSignInRoute.VIEW_NAME));
-    }
-
-    return templateEngine.render(new ModelAndView(vm, GetHomeRoute.VIEW_NAME));
+    response.redirect(WebServer.HOME_URL);
+    halt();
+    return null;
   }
 }

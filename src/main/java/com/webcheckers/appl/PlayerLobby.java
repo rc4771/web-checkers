@@ -13,14 +13,47 @@ import java.util.logging.Logger;
 public class PlayerLobby {
     private static final Logger LOG = Logger.getLogger(PlayerLobby.class.getName());
 
+    public enum SignInResult {OK, INVALID_USERNAME, USERNAME_TAKEN}
+
     private HashMap<String, Player> signedInPlayers;
 
     public PlayerLobby() {
         signedInPlayers = new HashMap<>();
     }
 
-    public boolean isPlayerSignedIn(String username) {
-        return signedInPlayers.containsKey(username);
+    /**
+     * Attempts to sign in a player with a given username
+     * @param username
+     *      The username to sign in with. This will be error checked
+     * @return
+     *      An enum indicating the result of the sign in attempt:
+     *      OK                  - If the sign in attempt was successful
+     *      INVALID_USERNAME    - If the username entered is invalid
+     *      USERNAME_TAKEN      - If the username is already taken by another player
+     */
+    public SignInResult signInPlayer(String username) {
+        if (!isValidUsername(username)) {
+            return SignInResult.INVALID_USERNAME;
+        }
+
+        if (signedInPlayers.containsKey(username)) {
+            return SignInResult.USERNAME_TAKEN;
+        }
+
+        signedInPlayers.put(username, new Player(username));
+
+        return SignInResult.OK;
+    }
+
+    /**
+     * Gets a player instance by it's username.
+     * @param username
+     *      The username of the player to get
+     * @return
+     *      The instance of the player. Will be null if there is no player by this username
+     */
+    public Player getPlayer(String username) {
+        return signedInPlayers.get(username);
     }
 
     /**
@@ -31,7 +64,7 @@ public class PlayerLobby {
      * @return
      *      A boolean for if the username is valid or not
      */
-    public boolean isValidUsername(String username) {
+    private boolean isValidUsername(String username) {
         if (username == null)
             return false;
 

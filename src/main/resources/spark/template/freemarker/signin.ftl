@@ -17,6 +17,7 @@
       <#if errorMsg??>
         ${errorMsg}
         <br/>
+        <br/>
       </#if>
       Enter a username that contains only alphanumeric characters and spaces:
       <br/>
