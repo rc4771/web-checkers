@@ -197,7 +197,7 @@ public class WebChecker {
     }
 
     public static void main(String[] args) {
-        //add red first
+        //add red first.
         piecesAdder("R");
         piecesAdder("W");
         showCheckerBoard();
