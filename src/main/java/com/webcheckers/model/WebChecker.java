@@ -1,5 +1,6 @@
 package com.webcheckers.model;
 
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class WebChecker {
@@ -41,6 +42,28 @@ public class WebChecker {
     }
 
     /**
+     * Remove a piece from its previous position.
+     */
+    public static void removePiece(int a, int b,int x, int y) {
+        if (Checkerboard[a][b]==null || Checkerboard[x][y] !=null) {
+            System.out.println("No pieces there/collision with other pieces.");
+        } else {
+            Checkerboard[a][b] = " ";
+        }
+    }
+
+    public static void movePiece(String[] abxy) {
+        int a = Integer.parseInt(abxy[0]);
+        int b = Integer.parseInt(abxy[1]);
+        int x = Integer.parseInt(abxy[2]);
+        int y = Integer.parseInt(abxy[3]);
+        String P = Checkerboard[a][b];
+        removePiece(a,b,x,y);
+        addPiece(x,y,P);
+        showCheckerBoard();
+    }
+
+    /**
      * Show board class (only used for debugging and testing)
      * Nicely formatted with pods for each squares.
      */
@@ -74,10 +97,10 @@ public class WebChecker {
 
     /**
      * Check for valid spacing of the movement. diagonal and jump.
-     * @param abxy
-     * @return
+     * @param abxy ab is prev coordinate and xy is new coordinate
+     * @return true if the jump is legal.
      */
-    public boolean Spacing(String[] abxy) {
+    public boolean Jumping(String[] abxy) {
         int a = Integer.parseInt(abxy[0]);
         int b = Integer.parseInt(abxy[1]);
         int x = Integer.parseInt(abxy[2]);
@@ -86,10 +109,10 @@ public class WebChecker {
     }
     /**
      * Check for valid move command
-     * @param abxy
+     * @param abxy ab is prev coordinate and xy is new coordinate
      * @return true if the move is within the 8x8 board
      */
-    public boolean isValidMove(String[] abxy) {
+    public static boolean isValidMove(String[] abxy) {
         int a = Integer.parseInt(abxy[0]);
         int b = Integer.parseInt(abxy[1]);
         int x = Integer.parseInt(abxy[2]);
@@ -121,6 +144,7 @@ public class WebChecker {
                 //check if the move destroy any pieces
                 //TODO
                 //"Move" the piece chosen.
+                //TODO
             }
         }
     }
@@ -130,11 +154,7 @@ public class WebChecker {
      * @return true if the game was won by one side.
      */
     public synchronized boolean isFinished() {
-        if (RedPieces == 0 || WhitePieces == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return RedPieces == 0 || WhitePieces == 0;
     }
 
     /**
@@ -163,10 +183,10 @@ public class WebChecker {
 
     /**
      * Pieces adder for the debugger board.
-     * @param color
+     * @param color color of the piece.
      */
     public static void piecesAdder(String color) {
-        if (color == "R") {
+        if (color.equals("R")) {
             addPiece(RED_ANCHOR_Y,RED_ANCHOR_X,"R");
             addPiece(RED_ANCHOR_Y,RED_ANCHOR_X+2,"R");
             addPiece(RED_ANCHOR_Y,RED_ANCHOR_X+4,"R");
@@ -180,7 +200,7 @@ public class WebChecker {
             addPiece(RED_ANCHOR_Y-2,RED_ANCHOR_X+4,"R");
             addPiece(RED_ANCHOR_Y-2,RED_ANCHOR_X+6,"R");
         }
-        if (color == "W") {
+        if (color.equals("W")) {
             addPiece(WHITE_ANCHOR_Y,WHITE_ANCHOR_X,"W");
             addPiece(WHITE_ANCHOR_Y,WHITE_ANCHOR_X+2,"W");
             addPiece(WHITE_ANCHOR_Y,WHITE_ANCHOR_X+4,"W");
@@ -195,11 +215,32 @@ public class WebChecker {
             addPiece(WHITE_ANCHOR_Y+2,WHITE_ANCHOR_X+6,"W");
         }
     }
+    public static void Scanner(){
+        Scanner userInput = new Scanner(System.in);
+        while(true) {
+            System.out.println("Format: abxy");
+            System.out.println("Where ab is previous row,col and xy is new row, col.");
+            System.out.println("Type-in 'q' to quit.");
+            System.out.print(">>");
+            String input = userInput.nextLine();
+            String[] Coordinates = input.split("");
+            if (Coordinates[0].equals("q")) {
+                System.exit(0);
+            } else if (Coordinates.length == 4 && isValidMove(Coordinates)) {
+                movePiece(Coordinates);
+            } else {
+                Scanner();
+            }
+        }
+    }
+
 
     public static void main(String[] args) {
         //add red first.
         piecesAdder("R");
         piecesAdder("W");
         showCheckerBoard();
+        //Scanner to get user input.
+        Scanner();
     }
 }
