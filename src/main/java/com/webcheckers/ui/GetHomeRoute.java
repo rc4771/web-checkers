@@ -19,6 +19,11 @@ import com.webcheckers.util.Message;
  * @author <a href='mailto:bdbvse@rit.edu'>Bryan Basham</a>
  */
 public class GetHomeRoute implements Route {
+  //Values used in the view-model map for rendering home view.
+  static final String TITLE_ATTR = "title";
+  //Key in session attribute map for the player who started the session.
+  static final String PLAYERLOBBY_KEY = "playerLobby";
+
   private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
   private static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
