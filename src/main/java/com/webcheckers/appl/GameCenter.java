@@ -27,7 +27,7 @@ public class GameCenter {
     //Create client-specific services for the client who recently connected.
     public PlayerLobby newPlayerLobby() {
         LOG.fine("New lobby services instance created.");
-        return new PlayerLobby(this);
+        return new PlayerLobby();
     }
 
     //Create a new game.

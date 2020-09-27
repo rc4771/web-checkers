@@ -60,6 +60,11 @@ public class WebServer {
    */
   public static final String SIGNIN_URL = "/signin";
 
+  /**
+   * The URL pattern to request the game page.
+   */
+  public static final String GAME_URL = "/game";
+
   //
   // Attributes
   //
@@ -156,6 +161,10 @@ public class WebServer {
 
     // Handles the user signing in
     post(SIGNIN_URL, new PostSignInRoute(playerLobby, templateEngine));
+
+    //
+    // Shows the game page
+    get(GAME_URL, new GetGameRoute(templateEngine));
 
     //
     LOG.config("WebServer is initialized.");

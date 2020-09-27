@@ -1,6 +1,8 @@
 package com.webcheckers.appl;
 
 import com.webcheckers.model.Player;
+import com.webcheckers.model.WebChecker;
+import com.webcheckers.ui.WebServer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +15,16 @@ import java.util.logging.Logger;
  * @author <a href='mailto:dja7394@rit.edu'>David Allen</a>
  */
 public class PlayerLobby {
+
+    //
+    //Attributes
+    //
+
+    //Current game
+    private WebChecker game;
+    //Gamecenter for quick call.
+    private GameCenter gameCenter;
+
     private static final Logger LOG = Logger.getLogger(PlayerLobby.class.getName());
 
     public enum SignInResult {OK, INVALID_USERNAME, USERNAME_TAKEN}
@@ -117,5 +129,18 @@ public class PlayerLobby {
             return false;
 
         return !username.isBlank() && !username.isEmpty() && username.matches("^[a-zA-Z0-9_ ]*$");
+    }
+
+    /**
+     * Get the current game that the player is playing. Create one if a game has not been started.
+     *
+     * @return GuessGame
+     *    the current game being played
+     */
+    public synchronized WebChecker currentGame() {
+        if(game == null) {
+            game = gameCenter.getGame();
+        }
+        return game;
     }
 }
