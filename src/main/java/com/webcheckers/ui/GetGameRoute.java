@@ -3,6 +3,7 @@ package com.webcheckers.ui;
 import java.util.*;
 
 import com.webcheckers.model.Board;
+import com.webcheckers.model.Player;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -27,10 +28,6 @@ public class GetGameRoute implements Route{
     public int TABLE_ROW = 8;
     static final String GAME_VIEW = "game.ftl";
     static final String TITLE = "Web Checker";
-    static final String PIECE_TYPE = "space.piece.type";
-    static final String PIECE_COLOR = "space.piece.color";
-    static final String ROW_INDEX = "row.index";
-    static final String CELL_INDEX = "space.cellIdx";
 
     /**
      * The constructor for the {@code GET /game} route handler.
@@ -59,10 +56,11 @@ public class GetGameRoute implements Route{
         final Map<String, Object> vm = new HashMap<>();
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);
         vm.put("board",board);
-        vm.put(ROW_INDEX,"8"); //index by row.
-        vm.put(CELL_INDEX,"8"); //index by space.
-        vm.put(PIECE_TYPE,"PAWN"); //Is it a king or pawn piece.
-        vm.put(PIECE_COLOR,"RED"); //Color of the piece
+        vm.put("currentUser", new Player("botahamec")); // TODO use an actual player
+        vm.put("viewMode", "PLAY");
+        vm.put("redPlayer", new Player("botahamec")); // TODO use an actual player
+        vm.put("whitePlayer", new Player("altahamec")); // TODO use an actual player
+        vm.put("activeColor", "RED"); // TODO actually figure this out
         return templateEngine.render(new ModelAndView(vm, GAME_VIEW));
     }
 }

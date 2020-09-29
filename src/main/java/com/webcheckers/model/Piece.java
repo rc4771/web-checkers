@@ -3,7 +3,7 @@ package com.webcheckers.model;
 public class Piece {
 
     public enum PieceType {
-        SINGLE("single");
+        SINGLE("SINGLE");
 
         private String type;
 
@@ -17,7 +17,7 @@ public class Piece {
     }
 
     public enum PieceColor {
-        RED("red"), WHITE("white");
+        RED("RED"), WHITE("WHITE");
 
         private String color;
 
