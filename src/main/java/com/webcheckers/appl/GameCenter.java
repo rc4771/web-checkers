@@ -35,8 +35,8 @@ public class GameCenter {
     //Public methods
 
     public Game newGame(Player redPlayer, Player whitePlayer) {
-        LOG.fine(String.format("Created a new game with players '%s' and '%s'", redPlayer.getUsername(),
-                whitePlayer.getUsername()));
+        LOG.fine(String.format("Created a new game with players '%s' and '%s'", redPlayer.getName(),
+                whitePlayer.getName()));
         int gameID = totalGames++;
         Game game = new Game(gameID, redPlayer, whitePlayer);
         currentGames.put(gameID, game);
