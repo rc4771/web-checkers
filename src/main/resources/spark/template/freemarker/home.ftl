@@ -26,10 +26,14 @@
       <br/>
       <br/>
 
-      <#list usit as user>
-        <a href="/game?redUser=${currentUser.name}&whiteUser=${user}">${user}</a>
-        <br/>
-      </#list>
+      <#if playerList??>
+        <#list playerList as user>
+          <a href="/game?opponent=${user}">${user}</a>
+          <br/>
+        </#list>
+      <#else>
+        No other players current logged in
+      </#if>
 
     <#else>
       There are ${playerCount} players logged into Web Checkers at this moment.

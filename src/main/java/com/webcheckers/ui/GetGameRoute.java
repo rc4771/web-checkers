@@ -1,8 +1,12 @@
 package com.webcheckers.ui;
 
 import java.util.*;
+import java.util.logging.Logger;
 
+import com.webcheckers.appl.GameCenter;
 import com.webcheckers.model.Board;
+import com.webcheckers.model.Game;
+import com.webcheckers.model.Player;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -15,6 +19,8 @@ import com.webcheckers.model.WebChecker;
 import com.webcheckers.appl.PlayerLobby;
 
 public class GetGameRoute implements Route{
+    private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
+
     //Static string constants for rendering the game view.
     static final String CHESS_BOARD = "chess_board.svg";
     static final String KING_PIECE_RED = "king-piece-red";
@@ -23,6 +29,8 @@ public class GetGameRoute implements Route{
     static final String SINGLE_PIECE_WHITE = "single-piece-red.svg";
 
     private final TemplateEngine templateEngine;
+    private final PlayerLobby playerLobby;
+    private final GameCenter gameCenter;
 
     public int TABLE_ROW = 8;
     static final String GAME_VIEW = "game.ftl";
@@ -31,6 +39,7 @@ public class GetGameRoute implements Route{
     static final String PIECE_COLOR = "space.piece.color";
     static final String ROW_INDEX = "row.index";
     static final String CELL_INDEX = "space.cellIdx";
+    static final String GAME_ID_ATTR = "gameID";
 
     /**
      * The constructor for the {@code GET /game} route handler.
@@ -38,10 +47,14 @@ public class GetGameRoute implements Route{
      * @param   templateEngine
      *          {@link TemplateEngine} used for rendering page HTML.
      */
-    GetGameRoute(final TemplateEngine templateEngine) {
+    GetGameRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby, final GameCenter gameCenter) {
         //validation
         Objects.requireNonNull(templateEngine,"templateEngine must not be null");
+        Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+        Objects.requireNonNull(gameCenter, "gameCenter must not be null");
         this.templateEngine = templateEngine;
+        this.playerLobby = playerLobby;
+        this.gameCenter = gameCenter;
     }
 
     /**
@@ -51,14 +64,22 @@ public class GetGameRoute implements Route{
     public String handle(Request request, Response response) {
         //get game object and start one if no game is in progress.
         final Session httpSession = request.session();
-        final PlayerLobby playerLobby =
-         httpSession.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
 
-        Board board = new Board();
+        if (request.queryParams(GAME_ID_ATTR) == null) {
+            Player redPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY);
+            Player whitePlayer = playerLobby.getPlayer(request.queryParams(GetHomeRoute.OPPONENT_USER_ATTR));
+
+            Game game = gameCenter.newGame(redPlayer, whitePlayer);
+            response.redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GAME_ID_ATTR, game.getGameID()));
+            halt();
+            return null;
+        }
+
+        Game game = gameCenter.getGame(Integer.parseInt(request.queryParams(GAME_ID_ATTR)));
 
         final Map<String, Object> vm = new HashMap<>();
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);
-        vm.put("board",board);
+        vm.put("board", game.getBoard());
         vm.put(ROW_INDEX,"8"); //index by row.
         vm.put(CELL_INDEX,"8"); //index by space.
         vm.put(PIECE_TYPE,"PAWN"); //Is it a king or pawn piece.

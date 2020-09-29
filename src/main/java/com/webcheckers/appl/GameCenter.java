@@ -1,7 +1,10 @@
 package com.webcheckers.appl;
 
+import java.util.HashMap;
 import java.util.logging.Logger;
 
+import com.webcheckers.model.Game;
+import com.webcheckers.model.Player;
 import com.webcheckers.model.WebChecker;
 import org.eclipse.jetty.util.log.Log;
 
@@ -20,35 +23,28 @@ public class GameCenter {
 
     private int totalGames = 0;
 
+    private HashMap<Integer, Game> currentGames;
+
     //Constructors
+
+    public GameCenter() {
+        totalGames = 0;
+        currentGames = new HashMap<>();
+    }
 
     //Public methods
 
-    //Create client-specific services for the client who recently connected.
-    public PlayerLobby newPlayerLobby() {
-        LOG.fine("New lobby services instance created.");
-        return new PlayerLobby();
+    public Game newGame(Player redPlayer, Player whitePlayer) {
+        LOG.fine(String.format("Created a new game with players '%s' and '%s'", redPlayer.getUsername(),
+                whitePlayer.getUsername()));
+        int gameID = totalGames++;
+        Game game = new Game(gameID, redPlayer, whitePlayer);
+        currentGames.put(gameID, game);
+
+        return game;
     }
 
-    //Create a new game.
-    public WebChecker getGame() {
-        return new WebChecker();
+    public Game getGame(int gameID) {
+        return currentGames.get(gameID);
     }
-
-    //Sitewide statistics when a game is finished.
-    public void gameFinished() {
-        synchronized (this) {
-            totalGames++;
-        }
-    }
-
-    //Give user messages about the current site statistics.
-    public synchronized String getGameStatsMsg() {
-        if (totalGames > 1) {
-            return String.format(GAMES_PLAYED_FORMAT,totalGames);
-        } else {
-            return NO_GAME_MSG;
-        }
-    }
-
 }
