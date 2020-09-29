@@ -32,6 +32,8 @@ public class GetHomeRoute implements Route {
   public static final String PLAYER_LIST_ATTR = "playerList";
   public static final String CURRENT_USER_ATTR = "currentUser";
   public static final String CURRENT_USER_NAME_ATTR = "name";
+  public static final String RED_USER_ATTR = "redUser";
+  public static final String WHITE_USER_ATTR = "whiteUser";
 
   private final PlayerLobby playerLobby;
   private final TemplateEngine templateEngine;
@@ -82,6 +84,7 @@ public class GetHomeRoute implements Route {
 
       // Build and display the list of players, excluding the current one, to the home page
       List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayer.getUsername());
+      vm.put("usit", playerUsernames);
 
       if (playerUsernames.size() > 0) {
         StringBuilder usernameList = new StringBuilder();
@@ -92,7 +95,7 @@ public class GetHomeRoute implements Route {
         // The .substring(..) is to remove the leading separator
         vm.put(PLAYER_LIST_ATTR, usernameList.substring(", ".length()));
       } else {
-        vm.put(PLAYER_LIST_ATTR, "No players currently logged in");
+        vm.put(PLAYER_LIST_ATTR, "No other players currently logged in");
       }
     }
 

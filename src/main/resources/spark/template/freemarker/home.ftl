@@ -25,7 +25,12 @@
       List of other players currently logged in:
       <br/>
       <br/>
-      ${playerList}
+
+      <#list usit as user>
+        <a href="/game?redUser=${currentUser.name}&whiteUser=${user}">${user}</a>
+        <br/>
+      </#list>
+
     <#else>
       There are ${playerCount} players logged into Web Checkers at this moment.
     </#if>
