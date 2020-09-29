@@ -20,8 +20,6 @@ import com.webcheckers.util.Message;
 public class GetHomeRoute implements Route {
   //Values used in the view-model map for rendering home view.
   static final String TITLE_ATTR = "title";
-  //Key in session attribute map for the player who started the session.
-  static final String PLAYERLOBBY_KEY = "playerLobby";
 
   private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
@@ -32,6 +30,7 @@ public class GetHomeRoute implements Route {
   public static final String PLAYER_LIST_ATTR = "playerList";
   public static final String CURRENT_USER_ATTR = "currentUser";
   public static final String CURRENT_USER_NAME_ATTR = "name";
+  public static final String OPPONENT_USER_ATTR = "opponent";
 
   private final PlayerLobby playerLobby;
   private final TemplateEngine templateEngine;
@@ -82,18 +81,7 @@ public class GetHomeRoute implements Route {
 
       // Build and display the list of players, excluding the current one, to the home page
       List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayer.getName());
-
-      if (playerUsernames.size() > 0) {
-        StringBuilder usernameList = new StringBuilder();
-        for (String username : playerUsernames) {
-          usernameList.append(", ").append(username);
-        }
-
-        // The .substring(..) is to remove the leading separator
-        vm.put(PLAYER_LIST_ATTR, usernameList.substring(", ".length()));
-      } else {
-        vm.put(PLAYER_LIST_ATTR, "No players currently logged in");
-      }
+      vm.put(PLAYER_LIST_ATTR, playerUsernames.size() > 0 ? playerUsernames : null);
     }
 
     return templateEngine.render(new ModelAndView(vm, VIEW_NAME));

@@ -129,17 +129,4 @@ public class PlayerLobby {
 
         return !username.isBlank() && !username.isEmpty() && username.matches("^[a-zA-Z0-9_ ]*$");
     }
-
-    /**
-     * Get the current game that the player is playing. Create one if a game has not been started.
-     *
-     * @return GuessGame
-     *    the current game being played
-     */
-    public synchronized WebChecker currentGame() {
-        if(game == null) {
-            game = gameCenter.getGame();
-        }
-        return game;
-    }
 }
