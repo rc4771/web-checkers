@@ -100,10 +100,6 @@ public final class Application {
 
     // inject the player lobby into the web server
     final PlayerLobby playerLobby = new PlayerLobby();
-    String[] users = {"usr0", "usr1"};
-    for (String s : users) {
-      playerLobby.signInPlayer(s);
-    }
 
     // inject the game center into the web server
     final GameCenter gameCenter = new GameCenter();

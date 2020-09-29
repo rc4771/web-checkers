@@ -69,7 +69,7 @@ public class GetGameRoute implements Route{
             Player whitePlayer = playerLobby.getPlayer(request.queryParams(GetHomeRoute.OPPONENT_USER_ATTR));
 
             if (whitePlayer.getCurrentGame() != null) {
-                response.redirect(WebServer.HOME_URL);
+                response.redirect(String.format("%s?%s=That player is already in a game", WebServer.HOME_URL, ERROR_MESSAGE_ATTR));
                 halt();
                 return null;
             }

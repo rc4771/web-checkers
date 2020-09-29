@@ -33,6 +33,8 @@ public class GetHomeRoute implements Route {
   public static final String CURRENT_USER_ATTR = "currentUser";
   public static final String CURRENT_USER_NAME_ATTR = "name";
   public static final String OPPONENT_USER_ATTR = "opponent";
+  public static final String ERROR_MESSAGE_ATTR = "errMsg";
+  public static final String MESSAGE_ATTR = "message";
 
   private final PlayerLobby playerLobby;
   private final TemplateEngine templateEngine;
@@ -73,6 +75,10 @@ public class GetHomeRoute implements Route {
     vm.put("title", "Welcome!");
     vm.put("message", WELCOME_MSG);
     vm.put(PLAYER_COUNT_ATTR, playerLobby.getPlayerCount());
+
+    if (request.queryParams(ERROR_MESSAGE_ATTR) != null) {
+      vm.put(MESSAGE_ATTR, Message.error(request.queryParams(ERROR_MESSAGE_ATTR)));
+    }
 
     // If the current session has a player logged in, they need to be displayed different information
     Player sessionPlayer;
