@@ -76,7 +76,7 @@ public class GetGameRoute implements Route{
 
         final Map<String, Object> vm = new HashMap<>();
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);
-        vm.put("board",game.get);
+        vm.put("board",game.getBoard());
         vm.put("currentUser", new Player("botahamec")); // TODO use an actual player
         vm.put("viewMode", "PLAY");
         vm.put("redPlayer", new Player("botahamec")); // TODO use an actual player
