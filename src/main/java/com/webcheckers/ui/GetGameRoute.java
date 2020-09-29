@@ -68,6 +68,12 @@ public class GetGameRoute implements Route{
             Player redPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY);
             Player whitePlayer = playerLobby.getPlayer(request.queryParams(GetHomeRoute.OPPONENT_USER_ATTR));
 
+            if (whitePlayer.getCurrentGame() != null) {
+                response.redirect(WebServer.HOME_URL);
+                halt();
+                return null;
+            }
+
             Game game = gameCenter.newGame(redPlayer, whitePlayer);
             response.redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GAME_ID_ATTR, game.getGameID()));
             halt();
