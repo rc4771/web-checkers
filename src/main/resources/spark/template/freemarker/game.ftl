@@ -8,7 +8,12 @@
   <script>
   window.gameData = {
     "gameID" : ${gameID!'null'},
-
+    "currentUser" : "${currentUser.name}",
+    "viewMode" : "${viewMode}",
+    "modeOptions" : ${modeOptionsAsJSON!'{}'},
+    "redPlayer" : "${redPlayer.name}",
+    "whitePlayer" : "${whitePlayer.name}",
+    "activeColor" : "${activeColor}"
   };
   </script>
 </head>
@@ -68,7 +73,6 @@
                        id="piece-${row.index}-${space.cellIdx}"
                        data-type="${space.piece.type}"
                        data-color="${space.piece.color}">
-                       <img src="../img/${space.piece.type}-piece-${space.piece.color}.svg">
                   </div>
                 </#if>
                 </td>

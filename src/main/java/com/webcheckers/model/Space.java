@@ -2,9 +2,11 @@ package com.webcheckers.model;
 
 public class Space {
     private int cellIdx;
+    private int rowIdx;
     private Piece piece;
 
-    public Space(int cellIdx, Piece piece) {
+    public Space(int rowIdx, int cellIdx, Piece piece) {
+        this.rowIdx = rowIdx;
         this.cellIdx = cellIdx;
         this.piece = piece;
     }
@@ -17,7 +19,11 @@ public class Space {
         return this.piece;
     }
 
+    public boolean isBlack() {
+        return (rowIdx % 2 == 0) != (cellIdx % 2 == 0);
+    }
+
     public boolean isValid() {
-        return true;
+        return piece == null && isBlack();
     }
 }

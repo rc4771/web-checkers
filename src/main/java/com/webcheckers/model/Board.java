@@ -1,6 +1,5 @@
 package com.webcheckers.model;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Board implements Iterable<Row> {
@@ -15,30 +14,30 @@ public class Board implements Iterable<Row> {
                 //*
                 if (i == 0 || i == 2) {
                     if (j % 2 == 0) {
-                        spaces.add(new Space(j, null));
+                        spaces.add(new Space(i, j, null));
                     } else {
-                        spaces.add(new Space(j, new Piece(Piece.PieceColor.RED, Piece.PieceType.SINGLE)));
+                        spaces.add(new Space(i, j, new Piece(Piece.PieceColor.RED, Piece.PieceType.SINGLE)));
                     }
                 } else if (i == 1) {
                     if (j % 2 == 1) {
-                        spaces.add(new Space(j, null));
+                        spaces.add(new Space(i, j, null));
                     } else {
-                        spaces.add(new Space(j, new Piece(Piece.PieceColor.RED, Piece.PieceType.SINGLE)));
+                        spaces.add(new Space(i, j, new Piece(Piece.PieceColor.RED, Piece.PieceType.SINGLE)));
                     }
                 } else if (i == 7 || i == 5) {
                     if (j % 2 == 1) {
-                        spaces.add(new Space(j, null));
+                        spaces.add(new Space(i, j, null));
                     } else {
-                        spaces.add(new Space(j, new Piece(Piece.PieceColor.WHITE, Piece.PieceType.SINGLE)));
+                        spaces.add(new Space(i, j, new Piece(Piece.PieceColor.WHITE, Piece.PieceType.SINGLE)));
                     }
                 } else if (i == 6) {
                     if (j % 2 == 0) {
-                        spaces.add(new Space(j, null));
+                        spaces.add(new Space(i, j, null));
                     } else {
-                        spaces.add(new Space(j, new Piece(Piece.PieceColor.WHITE, Piece.PieceType.SINGLE)));
+                        spaces.add(new Space(i, j, new Piece(Piece.PieceColor.WHITE, Piece.PieceType.SINGLE)));
                     }
                 } else {
-                    spaces.add(new Space(j, null));
+                    spaces.add(new Space(i, j, null));
                 }//*/
             }
             rows.add(new Row(i, spaces));

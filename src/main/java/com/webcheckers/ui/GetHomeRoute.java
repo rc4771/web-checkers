@@ -84,11 +84,11 @@ public class GetHomeRoute implements Route {
       }
 
       Map<String, Object> vmCurrentUser = new HashMap<>();
-      vmCurrentUser.put(CURRENT_USER_NAME_ATTR, sessionPlayer.getUsername());
+      vmCurrentUser.put(CURRENT_USER_NAME_ATTR, sessionPlayer.getName());
       vm.put(CURRENT_USER_ATTR, vmCurrentUser);
 
       // Build and display the list of players, excluding the current one, to the home page
-      List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayer.getUsername());
+      List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayer.getName());
       vm.put(PLAYER_LIST_ATTR, playerUsernames.size() > 0 ? playerUsernames : null);
     }
 

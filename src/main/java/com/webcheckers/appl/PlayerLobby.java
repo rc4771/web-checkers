@@ -2,7 +2,6 @@ package com.webcheckers.appl;
 
 import com.webcheckers.model.Player;
 import com.webcheckers.model.WebChecker;
-import com.webcheckers.ui.WebServer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,10 +95,10 @@ public class PlayerLobby {
     public List<String> getPlayerUsernames(String excludingUsername) {
         List<String> usernames = new ArrayList<>();
         for (final Player player : signedInPlayers.values()) {
-            if (excludingUsername != null && excludingUsername.equals(player.getUsername()))
+            if (excludingUsername != null && excludingUsername.equals(player.getName()))
                 continue;
 
-            usernames.add(player.getUsername());
+            usernames.add(player.getName());
         }
 
         return usernames;
