@@ -1,8 +1,6 @@
 package com.webcheckers.ui;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import spark.ModelAndView;
 import spark.Request;
@@ -25,8 +23,13 @@ public class GetGameRoute implements Route{
 
     private final TemplateEngine templateEngine;
 
-    static final String VIEW = "game.ftl";
+    public int TABLE_ROW = 8;
+    static final String GAME_VIEW = "game.ftl";
     static final String TITLE = "Web Checker";
+    static final String PIECE_TYPE = "space.piece.type";
+    static final String PIECE_COLOR = "space.piece.color";
+    static final String ROW_INDEX = "row.index";
+    static final String CELL_INDEX = "space.cellIdx";
 
     /**
      * The constructor for the {@code GET /game} route handler.
@@ -47,26 +50,25 @@ public class GetGameRoute implements Route{
     public String handle(Request request, Response response) {
         //get game object and start one if no game is in progress.
         final Session httpSession = request.session();
-        //TODO
         final PlayerLobby playerLobby =
          httpSession.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
 
-        //Null playerServices indicates a timed out session or an illegal URL request.
-        //In either cases, the program will redirect back to the home page.
+        List<List<String>> board = Arrays.asList(Arrays.asList("1"),
+                Arrays.asList("2"),Arrays.asList("3"));
+        //Hash test
+        Map<String, Object> boardhash = new HashMap<>();
+        boardhash.put("0","1");
 
-        if (playerLobby != null) {
-            WebChecker game = playerLobby.currentGame();
+        //Iterable<String> boarditer
+        //Iterator<String> ROW = board.iterator();
 
-            final Map<String, Object> vm = new HashMap<>();
-            //TODO
-            //Get some vm in here.
-            vm.put(GetHomeRoute.TITLE_ATTR,TITLE);
-            //Render the game form view.
-            return templateEngine.render(new ModelAndView(vm, VIEW));
-        } else {
-            response.redirect(WebServer.HOME_URL);
-            halt();
-            return null;
-        }
+        final Map<String, Object> vm = new HashMap<>();
+        vm.put(GetHomeRoute.TITLE_ATTR,TITLE);
+        vm.put("board",board);
+        vm.put(ROW_INDEX,"8"); //index by row.
+        vm.put(CELL_INDEX,"8"); //index by space.
+        vm.put(PIECE_TYPE,"PAWN"); //Is it a king or pawn piece.
+        vm.put(PIECE_COLOR,"RED"); //Color of the piece
+        return templateEngine.render(new ModelAndView(vm, GAME_VIEW));
     }
 }

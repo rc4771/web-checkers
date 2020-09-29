@@ -34,6 +34,13 @@ public class WebChecker {
     //Constructors
 
     /**
+     * Board maker
+     */
+    public synchronized String[][] board() {
+        return new String[8][9];
+    }
+
+    /**
      * Simple add piece to the "matrix" 8x8 board.
      * R for red and W for white
      */
@@ -215,6 +222,14 @@ public class WebChecker {
             addPiece(WHITE_ANCHOR_Y+2,WHITE_ANCHOR_X+6,"W");
         }
     }
+
+    /**
+     * Get board method for future logic calculation.
+     */
+    public static String[][] iterator() {
+        return Checkerboard;
+    }
+
     public static void Scanner(){
         Scanner userInput = new Scanner(System.in);
         while(true) {

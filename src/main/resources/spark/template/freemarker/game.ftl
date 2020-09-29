@@ -8,12 +8,7 @@
   <script>
   window.gameData = {
     "gameID" : ${gameID!'null'},
-    "currentUser" : "${currentUser.name}",
-    "viewMode" : "${viewMode}",
-    "modeOptions" : ${modeOptionsAsJSON!'{}'},
-    "redPlayer" : "${redPlayer.name}",
-    "whitePlayer" : "${whitePlayer.name}",
-    "activeColor" : "${activeColor}"
+
   };
   </script>
 </head>
@@ -57,13 +52,12 @@
           </fieldset>
           
         </div>
-  
-        <div class="game-board">
+          <div class="game-board">
           <table id="game-board">
             <tbody>
-            <#list board.iterator() as row>
+            <#list board as row>
               <tr data-row="${row.index}">
-              <#list row.iterator() as space>
+              <#list row as space>
                 <td data-cell="${space.cellIdx}"
                     <#if space.isValid() >
                     class="Space"
@@ -83,6 +77,7 @@
             </tbody>
           </table>
         </div>
+
       </div>
 
     </div>
