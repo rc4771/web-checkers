@@ -1,24 +1,22 @@
 package com.webcheckers.model;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class RowIterator implements Iterator<Row> {
-
-	private List<Row> rows;
+public class SpaceIterator implements Iterator<Space> {
+	private List<Space> spaces;
 	private int currentIdx;
 
-	public RowIterator(List<Row> rows) {
-		this.rows = rows;
+	public SpaceIterator(List<Space> spaces) {
+		this.spaces = spaces;
 		this.currentIdx = 0;
 	}
 
-	public Row next() {
+	public Space next() {
 		if (this.hasNext()) {
-			Row element = rows.get(currentIdx);
-			currentIdx++;
+			Space element = spaces.get(currentIdx);
+			this.currentIdx++;
 			return element;
 		} else {
 			throw new NoSuchElementException();
@@ -26,6 +24,6 @@ public class RowIterator implements Iterator<Row> {
 	}
 
 	public boolean hasNext() {
-		return currentIdx < rows.size();
+		return this.currentIdx < spaces.size();
 	}
 }

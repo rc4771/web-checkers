@@ -2,6 +2,7 @@ package com.webcheckers.ui;
 
 import java.util.*;
 
+import com.webcheckers.model.Board;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -53,14 +54,7 @@ public class GetGameRoute implements Route{
         final PlayerLobby playerLobby =
          httpSession.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
 
-        List<List<String>> board = Arrays.asList(Arrays.asList("1"),
-                Arrays.asList("2"),Arrays.asList("3"));
-        //Hash test
-        Map<String, Object> boardhash = new HashMap<>();
-        boardhash.put("0","1");
-
-        //Iterable<String> boarditer
-        //Iterator<String> ROW = board.iterator();
+        Board board = new Board();
 
         final Map<String, Object> vm = new HashMap<>();
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);

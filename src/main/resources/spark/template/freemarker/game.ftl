@@ -55,9 +55,9 @@
           <div class="game-board">
           <table id="game-board">
             <tbody>
-            <#list board as row>
+            <#list board.iterator() as row>
               <tr data-row="${row.index}">
-              <#list row as space>
+              <#list row.iterator() as space>
                 <td data-cell="${space.cellIdx}"
                     <#if space.isValid() >
                     class="Space"
@@ -68,6 +68,7 @@
                        id="piece-${row.index}-${space.cellIdx}"
                        data-type="${space.piece.type}"
                        data-color="${space.piece.color}">
+                       <img src="../img/${space.piece.type}-piece-${space.piece.color}.svg">
                   </div>
                 </#if>
                 </td>
