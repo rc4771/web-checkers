@@ -41,6 +41,9 @@ public class GameCenter {
         Game game = new Game(gameID, redPlayer, whitePlayer);
         currentGames.put(gameID, game);
 
+        redPlayer.setCurrentGame(game);
+        whitePlayer.setCurrentGame(game);
+
         return game;
     }
 

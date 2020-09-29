@@ -12,6 +12,8 @@ import spark.*;
 
 import com.webcheckers.util.Message;
 
+import static spark.Spark.halt;
+
 /**
  * The UI Controller to GET the Home page.
  *
@@ -75,6 +77,12 @@ public class GetHomeRoute implements Route {
     // If the current session has a player logged in, they need to be displayed different information
     Player sessionPlayer;
     if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) != null) {
+      if (sessionPlayer.getCurrentGame() != null) {
+        response.redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GetGameRoute.GAME_ID_ATTR, sessionPlayer.getCurrentGame().getGameID()));
+        halt();
+        return null;
+      }
+
       Map<String, Object> vmCurrentUser = new HashMap<>();
       vmCurrentUser.put(CURRENT_USER_NAME_ATTR, sessionPlayer.getUsername());
       vm.put(CURRENT_USER_ATTR, vmCurrentUser);
