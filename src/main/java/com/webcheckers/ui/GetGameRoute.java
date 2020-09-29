@@ -14,6 +14,8 @@ import spark.Response;
 import spark.Route;
 import spark.Session;
 import spark.TemplateEngine;
+
+import static com.webcheckers.ui.GetHomeRoute.*;
 import static spark.Spark.halt;
 
 import com.webcheckers.model.WebChecker;
@@ -72,15 +74,27 @@ public class GetGameRoute implements Route{
             return null;
         }
 
+        final Map<String, Object> vm = new HashMap<>();
+
+        // get the current user
+        Player sessionPlayer;
+        if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) != null) {
+            Map<String, Object> vmCurrentUser = new HashMap<>();
+            vmCurrentUser.put(CURRENT_USER_NAME_ATTR, sessionPlayer.getName());
+            vm.put(CURRENT_USER_ATTR, vmCurrentUser);
+
+            // Build and display the list of players, excluding the current one, to the home page
+            List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayer.getName());
+            vm.put(PLAYER_LIST_ATTR, playerUsernames.size() > 0 ? playerUsernames : null);
+        }
+
         Game game = gameCenter.getGame(Integer.parseInt(request.queryParams(GAME_ID_ATTR)));
 
-        final Map<String, Object> vm = new HashMap<>();
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);
         vm.put("board",game.getBoard());
-        vm.put("currentUser", new Player("botahamec")); // TODO use an actual player
         vm.put("viewMode", "PLAY");
-        vm.put("redPlayer", new Player("botahamec")); // TODO use an actual player
-        vm.put("whitePlayer", new Player("altahamec")); // TODO use an actual player
+        vm.put("redPlayer", game.getRedPlayer()); // TODO use an actual player
+        vm.put("whitePlayer", game.getWhitePlayer()); // TODO use an actual player
         vm.put("activeColor", "RED"); // TODO actually figure this out
         return templateEngine.render(new ModelAndView(vm, GAME_VIEW));
     }
