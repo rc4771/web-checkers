@@ -96,8 +96,15 @@ public class GetGameRoute implements Route{
 
         Game game = gameCenter.getGame(Integer.parseInt(request.queryParams(GAME_ID_ATTR)));
 
+        String playerColor;
+        if (game.getRedPlayer().getName().equals(sessionPlayer.getName())) {
+            playerColor = "RED";
+        } else {
+            playerColor = "WHITE";
+        }
+
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);
-        vm.put("board",game.getBoard());
+        vm.put("board",game.getBoard().transposeForColor(playerColor));
         vm.put("viewMode", "PLAY");
         vm.put("redPlayer", game.getRedPlayer()); // TODO use an actual player
         vm.put("whitePlayer", game.getWhitePlayer()); // TODO use an actual player
