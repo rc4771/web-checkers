@@ -4,10 +4,8 @@ import java.util.*;
 import java.util.logging.Logger;
 
 import com.webcheckers.appl.GameCenter;
-import com.webcheckers.model.Board;
+import com.webcheckers.model.*;
 
-import com.webcheckers.model.Game;
-import com.webcheckers.model.Player;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -18,7 +16,6 @@ import spark.TemplateEngine;
 import static com.webcheckers.ui.GetHomeRoute.*;
 import static spark.Spark.halt;
 
-import com.webcheckers.model.WebChecker;
 import com.webcheckers.appl.PlayerLobby;
 
 public class GetGameRoute implements Route{
@@ -35,7 +32,6 @@ public class GetGameRoute implements Route{
     private final PlayerLobby playerLobby;
     private final GameCenter gameCenter;
 
-    public int TABLE_ROW = 8;
     static final String GAME_VIEW = "game.ftl";
     static final String TITLE = "Web Checker";
     static final String GAME_ID_ATTR = "gameID";
@@ -45,15 +41,13 @@ public class GetGameRoute implements Route{
      *
      * @param   templateEngine
      *          {@link TemplateEngine} used for rendering page HTML.
+     * @param   gameCenter
+     *          {@link GameCenter} used to handle game logic across the site
      */
     GetGameRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby, final GameCenter gameCenter) {
-        //validation
-        Objects.requireNonNull(templateEngine,"templateEngine must not be null");
-        Objects.requireNonNull(playerLobby, "playerLobby must not be null");
-        Objects.requireNonNull(gameCenter, "gameCenter must not be null");
-        this.templateEngine = templateEngine;
-        this.playerLobby = playerLobby;
-        this.gameCenter = gameCenter;
+        this.templateEngine = Objects.requireNonNull(templateEngine,"templateEngine must not be null");
+        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+        this.gameCenter = Objects.requireNonNull(gameCenter, "gameCenter must not be null");
     }
 
     /**
@@ -61,20 +55,29 @@ public class GetGameRoute implements Route{
      */
     @Override
     public String handle(Request request, Response response) {
-        //get game object and start one if no game is in progress.
         final Session httpSession = request.session();
 
+        // If there's no gameID, then check to see if we're providing params to create a game
+        // then redirect with the new gameID
         if (request.queryParams(GAME_ID_ATTR) == null) {
-            Player redPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY);
-            Player whitePlayer = playerLobby.getPlayer(request.queryParams(GetHomeRoute.OPPONENT_USER_ATTR));
-
-            if (whitePlayer.getCurrentGame() != null) {
-                response.redirect(String.format("%s?%s=That player is already in a game", WebServer.HOME_URL, ERROR_MESSAGE_ATTR));
+            // Ensure there's an opponent player to create a new game with, otherwise just go back to home
+            String opponentName;
+            if ((opponentName = request.queryParams(GetHomeRoute.OPPONENT_USER_ATTR)) == null) {
+                response.redirect(String.format("%s?%s=Something invalid happened", WebServer.HOME_URL, ERROR_MESSAGE_ATTR));
                 halt();
                 return null;
             }
 
-            Game game = gameCenter.newGame(redPlayer, whitePlayer);
+            Player sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY);
+            Player opponentPlayer = playerLobby.getPlayer(opponentName);
+
+            // If the player selected is already in a game, notify the user
+            if (gameCenter.isPlayerInGame(opponentPlayer)) {
+                return redirectHomeWithMessage(response, "That player is already in a game");
+            }
+
+            // Successfully created a new game, redirect with that gameID
+            Game game = gameCenter.newGame(sessionPlayer, opponentPlayer);
             response.redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GAME_ID_ATTR, game.getGameID()));
             halt();
             return null;
@@ -84,31 +87,42 @@ public class GetGameRoute implements Route{
 
         // get the current user
         Player sessionPlayer;
-        if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) != null) {
-            Map<String, Object> vmCurrentUser = new HashMap<>();
-            vmCurrentUser.put(CURRENT_USER_NAME_ATTR, sessionPlayer.getName());
-            vm.put(CURRENT_USER_ATTR, vmCurrentUser);
-
-            // Build and display the list of players, excluding the current one, to the home page
-            List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayer.getName());
-            vm.put(PLAYER_LIST_ATTR, playerUsernames.size() > 0 ? playerUsernames : null);
+        if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) == null) {
+            return redirectHomeWithMessage(response, "Player object from session was null, contact the developers!");
         }
 
-        Game game = gameCenter.getGame(Integer.parseInt(request.queryParams(GAME_ID_ATTR)));
+        Map<String, Object> vmCurrentUser = new HashMap<>();
+        vmCurrentUser.put(CURRENT_USER_NAME_ATTR, sessionPlayer.getName());
+        vm.put(CURRENT_USER_ATTR, vmCurrentUser);
 
-        String playerColor;
-        if (game.getRedPlayer().getName().equals(sessionPlayer.getName())) {
-            playerColor = "RED";
-        } else {
-            playerColor = "WHITE";
+        // Build and display the list of players, excluding the current one, to the home page
+        List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayer.getName());
+        vm.put(PLAYER_LIST_ATTR, playerUsernames.size() > 0 ? playerUsernames : null);
+
+        Game game;
+        if ((game = gameCenter.getGame(Integer.parseInt(request.queryParams(GAME_ID_ATTR)))) == null) {
+            return redirectHomeWithMessage(response, "Game object was null, contact the developers!");
         }
+
+        Piece.PieceColor playerColor = game.getPlayerColor(sessionPlayer);
 
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);
         vm.put("board",game.getBoard().transposeForColor(playerColor));
         vm.put("viewMode", "PLAY");
-        vm.put("redPlayer", game.getRedPlayer()); // TODO use an actual player
-        vm.put("whitePlayer", game.getWhitePlayer()); // TODO use an actual player
-        vm.put("activeColor", "RED"); // TODO actually figure this out
+        vm.put("redPlayer", game.getRedPlayer());
+        vm.put("whitePlayer", game.getWhitePlayer());
+        vm.put("activeColor", playerColor.toString());
+
         return templateEngine.render(new ModelAndView(vm, GAME_VIEW));
+    }
+
+    /**
+     * Redirects with a message to the home page. This is mainly useful for an error, but also for if the player
+     * selects another player to start a game with, but that player is already in a game.
+     */
+    private String redirectHomeWithMessage(Response response, String message) {
+        response.redirect(String.format("%s?%s=%s", WebServer.HOME_URL, ERROR_MESSAGE_ATTR, message));
+        halt();
+        return null;
     }
 }

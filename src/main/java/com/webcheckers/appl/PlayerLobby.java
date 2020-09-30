@@ -1,7 +1,6 @@
 package com.webcheckers.appl;
 
 import com.webcheckers.model.Player;
-import com.webcheckers.model.WebChecker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,8 +18,6 @@ public class PlayerLobby {
     //Attributes
     //
 
-    //Current game
-    private WebChecker game;
     //Gamecenter for quick call.
     private GameCenter gameCenter;
 

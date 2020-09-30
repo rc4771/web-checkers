@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import spark.*;
@@ -37,6 +38,7 @@ public class GetHomeRoute implements Route {
   public static final String MESSAGE_ATTR = "message";
 
   private final PlayerLobby playerLobby;
+  private final GameCenter gameCenter;
   private final TemplateEngine templateEngine;
 
   /**
@@ -47,8 +49,9 @@ public class GetHomeRoute implements Route {
    * @param templateEngine
    *   the HTML template rendering engine
    */
-  public GetHomeRoute(final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+  public GetHomeRoute(final PlayerLobby playerLobby, final GameCenter gameCenter, final TemplateEngine templateEngine) {
     this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby is required");
+    this.gameCenter = Objects.requireNonNull(gameCenter, "gameCenter is required");
     this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
     //
     LOG.config("GetHomeRoute is initialized.");
@@ -83,11 +86,15 @@ public class GetHomeRoute implements Route {
     // If the current session has a player logged in, they need to be displayed different information
     Player sessionPlayer;
     if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) != null) {
-      if (sessionPlayer.getCurrentGame() != null) {
-        response.redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GetGameRoute.GAME_ID_ATTR, sessionPlayer.getCurrentGame().getGameID()));
+      // Check to see if the player is in a game, in which case redirect them to it
+      int gameID;
+      if ((gameID = gameCenter.getGameFromPlayer(sessionPlayer)) != -1) {
+        response.redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GetGameRoute.GAME_ID_ATTR, gameID));
         halt();
         return null;
       }
+
+      // If not in a game, then show them the home screen with the other players shown on it
 
       Map<String, Object> vmCurrentUser = new HashMap<>();
       vmCurrentUser.put(CURRENT_USER_NAME_ATTR, sessionPlayer.getName());

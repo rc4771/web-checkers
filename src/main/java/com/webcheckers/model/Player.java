@@ -15,8 +15,6 @@ public class Player {
      */
     private String name;
 
-    private Game currentGame;
-
     /**
      * Creates a new player with a username
      * @param name
@@ -36,13 +34,5 @@ public class Player {
      */
     public String getName() {
         return name;
-    }
-
-    public Game getCurrentGame() {
-        return currentGame;
-    }
-
-    public void setCurrentGame(Game game) {
-        currentGame = game;
     }
 }

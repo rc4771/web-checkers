@@ -3,6 +3,9 @@ package com.webcheckers.model;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * An object representing a checkers board in a game
+ */
 public class Board implements Iterable<Row> {
 
     private ArrayList<Row> rows;
@@ -11,6 +14,9 @@ public class Board implements Iterable<Row> {
         this.rows = rows;
     }
 
+    /**
+     * Creates a new checkers board, setup in the starting configuration
+     */
     public Board() {
         this.rows = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
@@ -49,8 +55,15 @@ public class Board implements Iterable<Row> {
         }
     }
 
-    public Board transposeForColor(String color) {
-        if (color.equals("RED")) {
+    /**
+     * Transposes a board for a particular player view, this returns a copy and does not modify the original.
+     * @param color
+     *      What color to rotate the view for
+     * @return
+     *      A copy of this board, but rotated to account for a particular player's view
+     */
+    public Board transposeForColor(Piece.PieceColor color) {
+        if (color == Piece.PieceColor.RED) {
             ArrayList<Row> rows = new ArrayList<>();
             for (int i = 0; i < 8; i++) {
                 ArrayList<Space> spaces = new ArrayList<>();
@@ -65,10 +78,12 @@ public class Board implements Iterable<Row> {
         }
     }
 
-    //Create a constructor for RowIterator that can be passed with values.
-    //iterator() will put all the rows into RowIterator.
-    //RowIterator will have 4 methods from the Iterator doc on Java.
-    //Try arraylist. Store the value into the arraylist.
+    /**
+     * Create a constructor for RowIterator that can be passed with values.
+     * iterator() will put all the rows into RowIterator.
+     * RowIterator will have 4 methods from the Iterator doc on Java.
+     * Try arraylist. Store the value into the arraylist.
+     */
     public RowIterator iterator() {
         return new RowIterator(rows);
     }
