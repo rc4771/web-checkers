@@ -1,6 +1,5 @@
 package com.webcheckers.model;
 
-import com.webcheckers.ui.PostSignInRoute;
 import java.util.logging.Logger;
 
 /**
@@ -14,18 +13,18 @@ public class Player {
     /**
      * This player's username
      */
-    private String username;
+    private String name;
 
     /**
      * Creates a new player with a username
-     * @param username
+     * @param name
      *      The username for this player. MUST be not be null, empty, or contain non alphanumeric characters
      *      besides spaces
      */
-    public Player(String username) {
-        this.username = username;
+    public Player(String name) {
+        this.name = name;
 
-        LOG.fine(String.format("Created a new player with username \"%s\"", username));
+        LOG.fine(String.format("Created a new player with username \"%s\"", name));
     }
 
     /**
@@ -33,7 +32,7 @@ public class Player {
      * @return
      *      The username for this player as a string
      */
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 }

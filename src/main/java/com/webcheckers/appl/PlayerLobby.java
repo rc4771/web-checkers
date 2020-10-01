@@ -13,6 +13,14 @@ import java.util.logging.Logger;
  * @author <a href='mailto:dja7394@rit.edu'>David Allen</a>
  */
 public class PlayerLobby {
+
+    //
+    //Attributes
+    //
+
+    //Gamecenter for quick call.
+    private GameCenter gameCenter;
+
     private static final Logger LOG = Logger.getLogger(PlayerLobby.class.getName());
 
     public enum SignInResult {OK, INVALID_USERNAME, USERNAME_TAKEN}
@@ -84,10 +92,10 @@ public class PlayerLobby {
     public List<String> getPlayerUsernames(String excludingUsername) {
         List<String> usernames = new ArrayList<>();
         for (final Player player : signedInPlayers.values()) {
-            if (excludingUsername != null && excludingUsername.equals(player.getUsername()))
+            if (excludingUsername != null && excludingUsername.equals(player.getName()))
                 continue;
 
-            usernames.add(player.getUsername());
+            usernames.add(player.getName());
         }
 
         return usernames;

@@ -6,11 +6,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import spark.*;
 
 import com.webcheckers.util.Message;
+
+import static spark.Spark.halt;
 
 /**
  * The UI Controller to GET the Home page.
@@ -18,6 +21,9 @@ import com.webcheckers.util.Message;
  * @author <a href='mailto:bdbvse@rit.edu'>Bryan Basham</a>
  */
 public class GetHomeRoute implements Route {
+  //Values used in the view-model map for rendering home view.
+  static final String TITLE_ATTR = "title";
+
   private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
   private static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
@@ -27,8 +33,12 @@ public class GetHomeRoute implements Route {
   public static final String PLAYER_LIST_ATTR = "playerList";
   public static final String CURRENT_USER_ATTR = "currentUser";
   public static final String CURRENT_USER_NAME_ATTR = "name";
+  public static final String OPPONENT_USER_ATTR = "opponent";
+  public static final String ERROR_MESSAGE_ATTR = "errMsg";
+  public static final String MESSAGE_ATTR = "message";
 
   private final PlayerLobby playerLobby;
+  private final GameCenter gameCenter;
   private final TemplateEngine templateEngine;
 
   /**
@@ -39,8 +49,9 @@ public class GetHomeRoute implements Route {
    * @param templateEngine
    *   the HTML template rendering engine
    */
-  public GetHomeRoute(final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+  public GetHomeRoute(final PlayerLobby playerLobby, final GameCenter gameCenter, final TemplateEngine templateEngine) {
     this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby is required");
+    this.gameCenter = Objects.requireNonNull(gameCenter, "gameCenter is required");
     this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
     //
     LOG.config("GetHomeRoute is initialized.");
@@ -68,27 +79,30 @@ public class GetHomeRoute implements Route {
     vm.put("message", WELCOME_MSG);
     vm.put(PLAYER_COUNT_ATTR, playerLobby.getPlayerCount());
 
+    if (request.queryParams(ERROR_MESSAGE_ATTR) != null) {
+      vm.put(MESSAGE_ATTR, Message.error(request.queryParams(ERROR_MESSAGE_ATTR)));
+    }
+
     // If the current session has a player logged in, they need to be displayed different information
     Player sessionPlayer;
     if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) != null) {
+      // Check to see if the player is in a game, in which case redirect them to it
+      int gameID;
+      if ((gameID = gameCenter.getGameFromPlayer(sessionPlayer)) != -1) {
+        response.redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GetGameRoute.GAME_ID_ATTR, gameID));
+        halt();
+        return null;
+      }
+
+      // If not in a game, then show them the home screen with the other players shown on it
+
       Map<String, Object> vmCurrentUser = new HashMap<>();
-      vmCurrentUser.put(CURRENT_USER_NAME_ATTR, sessionPlayer.getUsername());
+      vmCurrentUser.put(CURRENT_USER_NAME_ATTR, sessionPlayer.getName());
       vm.put(CURRENT_USER_ATTR, vmCurrentUser);
 
       // Build and display the list of players, excluding the current one, to the home page
-      List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayer.getUsername());
-
-      if (playerUsernames.size() > 0) {
-        StringBuilder usernameList = new StringBuilder();
-        for (String username : playerUsernames) {
-          usernameList.append(", ").append(username);
-        }
-
-        // The .substring(..) is to remove the leading separator
-        vm.put(PLAYER_LIST_ATTR, usernameList.substring(", ".length()));
-      } else {
-        vm.put(PLAYER_LIST_ATTR, "No players currently logged in");
-      }
+      List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayer.getName());
+      vm.put(PLAYER_LIST_ATTR, playerUsernames.size() > 0 ? playerUsernames : null);
     }
 
     return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
