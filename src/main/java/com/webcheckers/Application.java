@@ -6,6 +6,9 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import com.google.gson.Gson;
+import com.webcheckers.appl.GameCenter;
+import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.Game;
 import com.webcheckers.ui.WebServer;
 
 import spark.TemplateEngine;
@@ -38,6 +41,7 @@ public final class Application {
     }
     return inDemoMode;
   }
+
   private static final String DEMO_MODE_PROPERTY = "demoMode";
   private static Boolean inDemoMode = null;
 
@@ -95,8 +99,14 @@ public final class Application {
     // response to Ajax requests.
     final Gson gson = new Gson();
 
+    // inject the player lobby into the web server
+    final PlayerLobby playerLobby = new PlayerLobby();
+
+    // inject the game center into the web server
+    final GameCenter gameCenter = new GameCenter();
+
     // inject the game center and freemarker engine into web server
-    final WebServer webServer = new WebServer(templateEngine, gson);
+    final WebServer webServer = new WebServer(templateEngine, gson, playerLobby, gameCenter);
 
     // inject web server into application
     final Application app = new Application(webServer);

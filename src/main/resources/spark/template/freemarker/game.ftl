@@ -57,8 +57,7 @@
           </fieldset>
           
         </div>
-  
-        <div class="game-board">
+          <div class="game-board">
           <table id="game-board">
             <tbody>
             <#list board.iterator() as row>
@@ -83,6 +82,7 @@
             </tbody>
           </table>
         </div>
+
       </div>
 
     </div>
