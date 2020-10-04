@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 import static spark.Spark.halt;
+import static spark.Spark.redirect;
 
 /**
  * The {@code POST /validMove} route handler.
@@ -79,6 +80,7 @@ public class PostValidMoveRoute implements Route {
             case OK: {
                 type = "OK";
                 message = "";
+                game.setPendingMove(startRow, startCell, endRow, endCell);
                 break;
             }
             case PIECE_NULL_ERR: {
@@ -96,14 +98,17 @@ public class PostValidMoveRoute implements Route {
                 message = "That type of piece cannot move in that direction";
                 break;
             }
+            case TOO_FAR_ERR: {
+                type = "ERROR";
+                message = "Your cannot move more than 1 space without jumping";
+                break;
+            }
             default: {
                 type = "ERROR";
                 message = "An unknown error has occurred, please contact the developers!";
             }
         }
 
-        System.out.println(type + ": " + message);
-
-        return String.format("{\"type\":\"%s\", \"message\":\"%s\"}", type, message);
+        return String.format("{\"type\":\"%s\", \"text\":\"%s\"}", type, message);
     }
 }

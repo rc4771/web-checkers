@@ -75,6 +75,20 @@ public class Board implements Iterable<Row> {
         return getPieceAt(row, cell) != null;
     }
 
+    public void movePiece(int startRow, int startCell, int endRow, int endCell) {
+        Piece piece = getPieceAt(startRow, startCell);
+        if (piece == null) {
+            return;
+        }
+
+        if (hasPieceAt(endRow, endCell)) {
+            return;
+        }
+
+        rows.get(endRow).getSpaces().get(endCell).setPiece(piece);
+        rows.get(startRow).getSpaces().get(startCell).setPiece(null);
+    }
+
     /**
      * Transposes a board for a particular player view, this returns a copy and does not modify the original.
      * @param color
