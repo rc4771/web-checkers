@@ -66,12 +66,6 @@ public class WebServer {
    */
   public static final String GAME_URL = "/game";
 
-  public static final String VALID_MOVE_URL = "/validateMove";
-
-  public static final String SUBMIT_TURN_URL = "/submitTurn";
-
-  public static final String BACKUP_MOVE_URL = "/backupMove";
-
   //
   // Attributes
   //
@@ -176,11 +170,6 @@ public class WebServer {
     //
     // Shows the game page
     get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameCenter));
-
-    // All in-game move based handlers
-    post(VALID_MOVE_URL, new PostValidateMoveRoute(gameCenter, templateEngine, gson));
-    post(SUBMIT_TURN_URL, new PostSubmitTurnRoute(gameCenter, templateEngine, gson));
-    post(BACKUP_MOVE_URL, new PostBackupMoveRoute(gameCenter, templateEngine, gson));
 
     //
     LOG.config("WebServer is initialized.");

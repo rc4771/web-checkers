@@ -38,8 +38,8 @@ public class Piece {
         }
     }
 
-    private PieceType type;
-    private PieceColor color;
+    private String type;
+    private String color;
 
     /**
      * Creates a new piece from a color and type
@@ -47,21 +47,21 @@ public class Piece {
      * @param type
      */
     public Piece(PieceColor color, PieceType type) {
-        this.color = color;
-        this.type = type;
+        this.color = color.toString();
+        this.type = type.toString();
     }
 
     /**
      * Gets the piece type
      */
-    public PieceType getType() {
+    public String getType() {
         return this.type;
     }
 
     /**
      * Gets the piece color
      */
-    public PieceColor getColor() {
+    public String getColor() {
         return this.color;
     }
 }
