@@ -38,6 +38,15 @@ public class Space {
     }
 
     /**
+     * Sets this space's Piece object
+     * @param newPiece
+     *      The piece to set this space to, this CAN be null if there is no longer a piece here
+     */
+    public void setPiece(Piece newPiece) {
+        this.piece = newPiece;
+    }
+
+    /**
      * Returns a boolean of if this space is black or not
      */
     public boolean isBlack() {
