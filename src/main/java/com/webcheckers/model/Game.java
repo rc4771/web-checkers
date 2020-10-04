@@ -20,7 +20,8 @@ public class Game {
         PIECE_NULL_ERR,
         END_OCCUPIED_ERR,
         MOVE_DIRECTION_ERR,
-        TOO_FAR_ERR
+        TOO_FAR_ERR,
+        NOT_TURN_ERR
     }
 
     /**
@@ -36,7 +37,9 @@ public class Game {
         this.gameID = gameID;
         this.board = new Board();
         this.redPlayer = redPlayer;
+        this.redPlayer.setIsTurn(true);
         this.whitePlayer = whitePlayer;
+        this.whitePlayer.setIsTurn(false);
 
         pendingMoveStartRow = -1;
         pendingMoveStartCell = -1;
@@ -101,9 +104,17 @@ public class Game {
 
         if (color == Piece.PieceColor.RED && startRow > endRow) {   // #3
             return MoveResult.MOVE_DIRECTION_ERR;
-        } else if (color == Piece.PieceColor.WHITE && startRow < endRow) {
+        }
+        else if (color == Piece.PieceColor.RED && !redPlayer.getIsTurn()){
+            return MoveResult.NOT_TURN_ERR;
+        }
+        else if (color == Piece.PieceColor.WHITE && startRow < endRow) {
             return MoveResult.MOVE_DIRECTION_ERR;
         }
+        else if (color == Piece.PieceColor.WHITE && !whitePlayer.getIsTurn()){
+            return MoveResult.NOT_TURN_ERR;
+        }
+
 
         // TODO Implement jumps & multijumps validation
         if (Math.sqrt(Math.pow(endRow - startRow, 2.0) + Math.pow(endCell - startCell, 2.0)) > 1.5) {    // #4
@@ -133,6 +144,14 @@ public class Game {
         }
 
         board.movePiece(pendingMoveStartRow, pendingMoveStartCell, pendingMoveEndRow, pendingMoveEndCell);
+        if (board.getPieceColorAt(pendingMoveEndRow, pendingMoveEndCell) == Piece.PieceColor.RED) {
+            this.redPlayer.setIsTurn(false);
+            this.whitePlayer.setIsTurn(true);
+        }
+        else{
+            this.whitePlayer.setIsTurn(false);
+            this.redPlayer.setIsTurn(true);
+        }
 
         resetPendingMove();
     }

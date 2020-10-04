@@ -32,8 +32,7 @@ public class PostValidMoveRoute implements Route {
     /**
      * The constructor for the {@code POST /validMove} route handler.
      *
-     * @param playerLobby
-     *    The player lobby instance for handling log in related stuff
+     * @param gameCenter The game center instance for handling log in related stuff
      * @param templateEngine
      *   the HTML template rendering engine
      */
@@ -100,7 +99,12 @@ public class PostValidMoveRoute implements Route {
             }
             case TOO_FAR_ERR: {
                 type = "ERROR";
-                message = "Your cannot move more than 1 space without jumping";
+                message = "You cannot move more than 1 space without jumping";
+                break;
+            }
+            case NOT_TURN_ERR: {
+                type = "ERROR";
+                message = "It is not your turn, please wait for the other player to finish their turn";
                 break;
             }
             default: {
