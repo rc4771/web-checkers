@@ -128,6 +128,10 @@ public class Game {
     }
 
     public void submitMove() {
+        if (pendingMoveStartRow < 0 || pendingMoveStartCell < 0 || pendingMoveEndRow < 0 || pendingMoveEndCell < 0) {
+            return;
+        }
+
         board.movePiece(pendingMoveStartRow, pendingMoveStartCell, pendingMoveEndRow, pendingMoveEndCell);
 
         resetPendingMove();
