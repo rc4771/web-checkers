@@ -10,6 +10,15 @@ public class Game {
     private Player redPlayer;
     private Player whitePlayer;
 
+    public enum MoveResult {
+        OK,
+        PIECE_NULL_ERR,
+        END_OCCUPIED_ERR,
+        MOVE_DIRECTION_ERR,
+        MUST_JUMP_ERR,
+        MUST_MAKE_ALL_JUMPS_ERR
+    }
+
     /**
      * Creates a new Game object, with a new board and two players to participate
      * @param gameID
@@ -52,6 +61,41 @@ public class Game {
      */
     public Player getWhitePlayer() {
         return whitePlayer;
+    }
+
+    /**
+     * Validates the move of a piece. This validates:
+     *      1) There is a piece at this row & cell
+     *      2) There isn't a piece at the ending row & cell
+     *      3) The direction of the jump according to the piece's color
+     *      4) If this move isn't a jump, and the player with the color of this piece CAN make a jump, then that
+     *              jump must be made, so this is an invalid move
+     *      5) If this move is a jump, and there are more jumps to be made after this jump, then those jumps must
+     *              be made as well, so this is an invalid move
+     * @param startRow
+     * @param startCell
+     * @param endRow
+     * @param endCell
+     * @return
+     */
+    public MoveResult validateMove(int startRow, int startCell, int endRow, int endCell) {
+        if (!board.hasPieceAt(startRow, startCell)) {
+            return MoveResult.PIECE_NULL_ERR;
+        }
+
+        if (board.hasPieceAt(startRow, endCell)) {
+            return MoveResult.END_OCCUPIED_ERR;
+        }
+
+        Piece.PieceColor color = board.getPieceColorAt(startRow, startCell);
+
+        if (color == Piece.PieceColor.RED && startRow > endRow) {
+            return MoveResult.MOVE_DIRECTION_ERR;
+        } else if (color == Piece.PieceColor.WHITE && startRow < endRow) {
+            return MoveResult.MOVE_DIRECTION_ERR;
+        }
+
+        return MoveResult.OK;
     }
 
     /**

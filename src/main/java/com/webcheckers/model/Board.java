@@ -55,6 +55,26 @@ public class Board implements Iterable<Row> {
         }
     }
 
+    public Piece.PieceColor getPieceColorAt(int row, int cell) {
+        return getPieceAt(row, cell).getColor();
+    }
+
+    public Piece.PieceType getPieceTypeAt(int row, int cell) {
+        return getPieceAt(row, cell).getType();
+    }
+
+    public Piece getPieceAt(int row, int cell) {
+        if (row < 0 || row >= rows.size() || cell < 0 || cell >= rows.size()) { // Rows & cell size must be equal
+            return null;
+        }
+
+        return rows.get(row).getSpaces().get(cell).getPiece();
+    }
+
+    public boolean hasPieceAt(int row, int cell) {
+        return getPieceAt(row, cell) != null;
+    }
+
     /**
      * Transposes a board for a particular player view, this returns a copy and does not modify the original.
      * @param color
