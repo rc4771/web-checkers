@@ -120,13 +120,17 @@ public class Game {
         pendingMoveEndCell = endCell;
     }
 
-    public void submitMove() {
-        board.movePiece(pendingMoveStartRow, pendingMoveStartCell, pendingMoveEndRow, pendingMoveEndCell);
-
+    public void resetPendingMove() {
         pendingMoveStartRow = -1;
         pendingMoveStartCell = -1;
         pendingMoveEndRow = -1;
         pendingMoveEndCell = -1;
+    }
+
+    public void submitMove() {
+        board.movePiece(pendingMoveStartRow, pendingMoveStartCell, pendingMoveEndRow, pendingMoveEndCell);
+
+        resetPendingMove();
     }
 
     /**

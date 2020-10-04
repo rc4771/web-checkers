@@ -14,11 +14,11 @@ import java.util.logging.Logger;
 import static spark.Spark.halt;
 
 /**
- * The {@code POST /submitTurn} route handler.
+ * The {@code POST /backupMove} route handler.
  *
  * @author <a href='mailto:dja7394@rit.edu'>David Allen</a>
  */
-public class PostSubmitTurnRoute implements Route {
+public class PostBackupMoveRoute implements Route {
     private static final Logger LOG = Logger.getLogger(PostSignInRoute.class.getName());
 
     public static final String USERNAME_PARAM = "username";
@@ -28,18 +28,18 @@ public class PostSubmitTurnRoute implements Route {
     private final TemplateEngine templateEngine;
 
     /**
-     * The constructor for the {@code POST /submitTurn} route handler.
+     * The constructor for the {@code POST /backupMove} route handler.
      *
      * @param playerLobby
      *    The player lobby instance for handling log in related stuff
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public PostSubmitTurnRoute(final GameCenter gameCenter, final TemplateEngine templateEngine) {
+    public PostBackupMoveRoute(final GameCenter gameCenter, final TemplateEngine templateEngine) {
         this.gameCenter = Objects.requireNonNull(gameCenter, "gameCenter is required");
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
 
-        LOG.config("PostSubmitTurnRoute is initialized.");
+        LOG.config("PostBackupMoveRoute is initialized.");
     }
 
     /**
@@ -55,12 +55,11 @@ public class PostSubmitTurnRoute implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
-        LOG.finer("PostSubmitTurnRoute is invoked.");
+        LOG.finer("PostBackupMoveRoute is invoked.");
 
         int gameID = Integer.parseInt(request.queryParams("gameID"));
         Game game = gameCenter.getGame(gameID);
-
-        game.submitMove();
+        game.resetPendingMove();
 
         String type = "INFO", message = "";
 
