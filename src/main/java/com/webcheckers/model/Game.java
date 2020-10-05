@@ -105,13 +105,13 @@ public class Game {
         if (color == Piece.PieceColor.RED && startRow > endRow) {   // #3
             return MoveResult.MOVE_DIRECTION_ERR;
         }
-        else if (color == Piece.PieceColor.RED && !redPlayer.getIsTurn()){
+        else if (color == Piece.PieceColor.RED && !redPlayer.getIsTurn()){     //checking for turn
             return MoveResult.NOT_TURN_ERR;
         }
         else if (color == Piece.PieceColor.WHITE && startRow < endRow) {
             return MoveResult.MOVE_DIRECTION_ERR;
         }
-        else if (color == Piece.PieceColor.WHITE && !whitePlayer.getIsTurn()){
+        else if (color == Piece.PieceColor.WHITE && !whitePlayer.getIsTurn()){    //checking for turn
             return MoveResult.NOT_TURN_ERR;
         }
 

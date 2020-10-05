@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.webcheckers.appl.GameCenter;
 import com.webcheckers.model.Game;
+import com.webcheckers.util.Message;
 import spark.*;
 
 import java.util.HashMap;
@@ -30,8 +31,8 @@ public class PostSubmitTurnRoute implements Route {
     /**
      * The constructor for the {@code POST /submitTurn} route handler.
      *
-     * @param playerLobby
-     *    The player lobby instance for handling log in related stuff
+     * @param gameCenter
+     *    The game center instance for handling log in related stuff
      * @param templateEngine
      *   the HTML template rendering engine
      */
@@ -62,7 +63,7 @@ public class PostSubmitTurnRoute implements Route {
 
         game.submitMove();
 
-        String type = "INFO", message = "";
+        String type = "INFO", message = "It is now the other player's turn. Please wait for your next turn.";
 
         return String.format("{\"type\":\"%s\", \"text\":\"%s\"}", type, message);
     }
