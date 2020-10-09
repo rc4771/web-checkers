@@ -99,6 +99,7 @@ username, they're taken back to the Homepage. There, they'll see the names of ot
 they can play against. Clicking one of those will take them to the game. When the game ends,
 they go back to the Homepage.
 
+
 ### UI Tier
 > _Provide a summary of the Server-side UI tier of your architecture.
 > Describe the types of components in the tier and describe their
