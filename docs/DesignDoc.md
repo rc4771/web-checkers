@@ -9,20 +9,21 @@ geometry: margin=1in
 > and appear in the generated PDF in italics._
 
 ## Team Information
-* Team name: TEAMNAME
+* Team name: s1-d-labrats
 * Team members
-  * MEMBER1
-  * MEMBER2
-  * MEMBER3
-  * MEMBER4
+  * Mike White
+  * David Allen
+  * Will Peterson
+  * Sokol Nguyen
+  * Rafeed Choudhury
 
 ## Executive Summary
 
 This is a summary of the project.
 
 ### Purpose
-> _Provide a very brief statement about the project and the most
-> important user group and user goals._
+
+The purpose is to allow Checkers players to play a game of Checkers online.
 
 ### Glossary and Acronyms
 > _Provide a table of terms and acronyms._
@@ -54,12 +55,14 @@ This section describes the features of the application.
 
 This section describes the application domain.
 
-![The WebCheckers Domain Model](domain-model-placeholder.png)
+![The WebCheckers Domain Model](domain_model.png)
 
-> _Provide a high-level overview of the domain for this application. You
-> can discuss the more important domain entities and their relationship
-> to each other._
-
+Our domain model represents a standard game of Checkers. Two players play a game of Checkers.
+The game is played on a board, which contains 64 squares. Each player controls 12 pieces which are
+each placed on a square, which has to be black. The pieces can either be single pieces or king pieces.
+King pieces can move in all four directions and single pieces can only move forward diagonally. The player
+can choose to play against the AI. While playing against the AI, the player can also get help to pick the
+best moves. 
 
 ## Architecture and Design
 
@@ -87,11 +90,14 @@ Details of the components within these tiers are supplied below.
 This section describes the web interface flow; this is how the user views and interacts
 with the WebCheckers application.
 
-![The WebCheckers Web Interface Statechart](web-interface-placeholder.png)
+![The WebCheckers Web Interface Statechart](web-interface.png)
 
-> _Provide a summary of the application's user interface.  Describe, from
-> the user's perspective, the flow of the pages in the web application._
 
+When the player first goes to Web Checkers, there's a button to sign in. When the
+player clicks on that, they're sent to the Sign-In page. Once they've entered a valid
+username, they're taken back to the Homepage. There, they'll see the names of other players
+they can play against. Clicking one of those will take them to the game. When the game ends,
+they go back to the Homepage.
 
 ### UI Tier
 > _Provide a summary of the Server-side UI tier of your architecture.
