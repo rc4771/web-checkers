@@ -102,6 +102,8 @@ public final class Application {
     // inject the player lobby into the web server
     final PlayerLobby playerLobby = new PlayerLobby();
 
+    playerLobby.signInPlayer("test0");
+
     // inject the game center into the web server
     final GameCenter gameCenter = new GameCenter();
 
