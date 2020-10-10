@@ -33,8 +33,12 @@ public class PostValidateMoveRoute implements Route {
     /**
      * The constructor for the {@code POST /backupMove} route handler.
      *
+<<<<<<< HEAD:src/main/java/com/webcheckers/ui/PostValidMoveRoute.java
+     * @param gameCenter The game center instance for handling log in related stuff
+=======
      * @param gameCenter
      *          the GameCenter used to handle game logic across the site
+>>>>>>> master:src/main/java/com/webcheckers/ui/PostValidateMoveRoute.java
      * @param templateEngine
      *          the HTML template rendering engine
      * @param gson
