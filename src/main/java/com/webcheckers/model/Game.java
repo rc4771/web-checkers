@@ -107,13 +107,16 @@ public class Game {
 
         Piece.PieceColor color = board.getPieceColorAt(startRow, startCell);
 
-        if (color == Piece.PieceColor.RED && startRow > endRow) {   // #3
+        if (color == Piece.PieceColor.RED && startRow > endRow                                 // #3 (also checks if
+                && this.board.getPieceTypeAt(startRow,startCell) == Piece.PieceType.SINGLE) {  //a single piece is used,
+                                                                                               // it is invalid if so
             return MoveResult.MOVE_DIRECTION_ERR;
         }
         else if (color == Piece.PieceColor.RED && !redPlayer.getIsTurn()){     //checking for turn
             return MoveResult.NOT_TURN_ERR;
         }
-        else if (color == Piece.PieceColor.WHITE && startRow < endRow) {
+        else if (color == Piece.PieceColor.WHITE && startRow < endRow
+                && this.board.getPieceTypeAt(startRow,startCell) == Piece.PieceType.SINGLE) {
             return MoveResult.MOVE_DIRECTION_ERR;
         }
         else if (color == Piece.PieceColor.WHITE && !whitePlayer.getIsTurn()){    //checking for turn
