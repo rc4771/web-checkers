@@ -99,6 +99,10 @@ public class PostValidateMoveRoute implements Route {
                 msg = Message.error("Your cannot move more than 1 space without jumping");
                 break;
             }
+            case NOT_TURN_ERR: {
+                msg = Message.error("It is not your turn, please wait for the other player to finish their turn");
+                break;
+            }
             default: {
                 msg = Message.error("An unknown error has occurred, please contact the developers!");
             }
