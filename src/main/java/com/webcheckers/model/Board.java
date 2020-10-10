@@ -87,6 +87,11 @@ public class Board implements Iterable<Row> {
 
         rows.get(endRow).getSpaces().get(endCell).setPiece(piece);
         rows.get(startRow).getSpaces().get(startCell).setPiece(null);
+
+        if ((endRow == 7 && piece.getColor() == Piece.PieceColor.RED)               //checks if piece reached opposite
+                || (endRow == 0 && piece.getColor() == Piece.PieceColor.WHITE)) {   //end of the board
+            piece.setType(Piece.PieceType.KING);  //Makes the piece a King
+        }
     }
 
     /**
