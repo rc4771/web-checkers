@@ -16,12 +16,12 @@ public class Game {
     private int pendingMoveEndCell;
 
     public enum MoveResult {
-        OK,
-        PIECE_NULL_ERR,
-        END_OCCUPIED_ERR,
-        MOVE_DIRECTION_ERR,
-        TOO_FAR_ERR,
-        NOT_TURN_ERR
+        OK,                     // The move is valid and can be made
+        PIECE_NULL_ERR,         // There is no piece to move at the start space, so invalid
+        END_OCCUPIED_ERR,       // There is a piece at the end space, so invalid
+        MOVE_DIRECTION_ERR,     // The direction of the move is backwards, so invalid
+        TOO_FAR_ERR,            // The piece moved too far without jumping, so invalid
+        NOT_TURN_ERR,           // It is not the player's turn to move
     }
 
     /**
@@ -80,16 +80,21 @@ public class Game {
      *      1) There is a piece at this row & cell
      *      2) There isn't a piece at the ending row & cell
      *      3) The direction of the jump according to the piece's color
-     *      4) The move only goes 1 square if there are no jumps made
-     *      5) If this move isn't a jump, and the player with the color of this piece CAN make a jump, then that
+     *      4) TODO 1/2 The move only goes 1 square if there are no jumps made
+     *      5) TODO If this move isn't a jump, and the player with the color of this piece CAN make a jump, then that
      *              jump must be made, so this is an invalid move
-     *      6) If this move is a jump, and there are more jumps to be made after this jump, then those jumps must
+     *      6) TODO If this move is a jump, and there are more jumps to be made after this jump, then those jumps must
      *              be made as well, so this is an invalid move
      * @param startRow
+     *      The starting row to move from, should be within board bounds
      * @param startCell
+     *      The starting cell to move from, should be within board bounds
      * @param endRow
+     *      The ending row to move to, should be within board bounds
      * @param endCell
+     *      The ending cell to move to, should be within board bounds
      * @return
+     *      An enum MoveResult representing how the validation of the move checked out, see MoveResult for details
      */
     public MoveResult validateMove(int startRow, int startCell, int endRow, int endCell) {
         if (!board.hasPieceAt(startRow, startCell)) {   // #1
@@ -124,6 +129,17 @@ public class Game {
         return MoveResult.OK;
     }
 
+    /**
+     * Sets the current pending move for the player who's turn it is
+     * @param startRow
+     *      The starting row to move from, should be within board bounds
+     * @param startCell
+     *      The starting cell to move from, should be within board bounds
+     * @param endRow
+     *      The ending row to move to, should be within board bounds
+     * @param endCell
+     *      The ending cell to move to, should be within board bounds
+     */
     public void setPendingMove(int startRow, int startCell, int endRow, int endCell) {
         pendingMoveStartRow = startRow;
         pendingMoveStartCell = startCell;
@@ -131,6 +147,9 @@ public class Game {
         pendingMoveEndCell = endCell;
     }
 
+    /**
+     * Resets the pending move for the player who's turn it is, meaning submitMove(..) will return early and do nothing
+     */
     public void resetPendingMove() {
         pendingMoveStartRow = -1;
         pendingMoveStartCell = -1;
@@ -138,6 +157,10 @@ public class Game {
         pendingMoveEndCell = -1;
     }
 
+    /**
+     * Submits the currently pending move and moves the pieces on the board. If the current pending move has not been
+     * set or was reset, no move will happen
+     */
     public void submitMove() {
         if (pendingMoveStartRow < 0 || pendingMoveStartCell < 0 || pendingMoveEndRow < 0 || pendingMoveEndCell < 0) {
             return;

@@ -27,32 +27,32 @@ public class PostSubmitTurnRoute implements Route {
 
     private final GameCenter gameCenter;
     private final TemplateEngine templateEngine;
+    private final Gson gson;
 
     /**
-     * The constructor for the {@code POST /submitTurn} route handler.
+     * The constructor for the {@code POST /backupMove} route handler.
      *
      * @param gameCenter
+<<<<<<< HEAD
      *    The game center instance for handling log in related stuff
+=======
+     *          the GameCenter used to handle game logic across the site
+>>>>>>> master
      * @param templateEngine
-     *   the HTML template rendering engine
+     *          the HTML template rendering engine
+     * @param gson
+     *          The GSON instance to parse JSON objects and strings
      */
-    public PostSubmitTurnRoute(final GameCenter gameCenter, final TemplateEngine templateEngine) {
+    public PostSubmitTurnRoute(final GameCenter gameCenter, final TemplateEngine templateEngine, final Gson gson) {
         this.gameCenter = Objects.requireNonNull(gameCenter, "gameCenter is required");
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
+        this.gson = Objects.requireNonNull(gson, "gson is required");
 
         LOG.config("PostSubmitTurnRoute is initialized.");
     }
 
     /**
-     *
-     *
-     * @param request
-     *   the HTTP request
-     * @param response
-     *   the HTTP response
-     *
-     * @return
-     *   the rendered HTML for the Home page
+     * {@inheritDoc}
      */
     @Override
     public Object handle(Request request, Response response) {
@@ -63,8 +63,6 @@ public class PostSubmitTurnRoute implements Route {
 
         game.submitMove();
 
-        String type = "INFO", message = "It is now the other player's turn. Please wait for your next turn.";
-
-        return String.format("{\"type\":\"%s\", \"text\":\"%s\"}", type, message);
+        return gson.toJson(Message.info("Move submitted successfully"), Message.class);
     }
 }
