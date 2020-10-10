@@ -109,7 +109,7 @@ public class Game {
 
         if (color == Piece.PieceColor.RED && startRow > endRow                                 // #3 (also checks if
                 && this.board.getPieceTypeAt(startRow,startCell) == Piece.PieceType.SINGLE) {  //a single piece is used,
-                                                                                               // it is invalid if so
+                                                                                               // it is invalid if so)
             return MoveResult.MOVE_DIRECTION_ERR;
         }
         else if (color == Piece.PieceColor.RED && !redPlayer.getIsTurn()){     //checking for turn
