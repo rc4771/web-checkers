@@ -48,6 +48,14 @@ public class GameCenter {
      *      A new game object (the game ID is found within Game)
      */
     public Game newGame(Player redPlayer, Player whitePlayer) {
+        if (redPlayer == null || whitePlayer == null) {
+            return null;
+        }
+
+        if (isPlayerInGame(redPlayer) || isPlayerInGame(whitePlayer)) {
+            return null;
+        }
+
         LOG.fine(String.format("Created a new game with players '%s' and '%s'", redPlayer.getName(),
                 whitePlayer.getName()));
         int gameID = gameIDCounter++;
@@ -87,6 +95,10 @@ public class GameCenter {
      *      The game ID that the player is currently in. If the player is not in a game, it returns -1
      */
     public int getGameFromPlayer(Player player) {
+        if (player == null) {
+            return -1;
+        }
+
         for (int gameID : currentGames.keySet()) {
             Game game = currentGames.get(gameID);
 
