@@ -7,38 +7,41 @@ import static org.junit.jupiter.api.Assertions.*;
 @Tag("Util-tier")
 public class MessageTest {
 
-    @Test
+    private final static String ERROR_MSG = "Error occured.";
+    private final static String INFO_MSG = "Valid execution";
+
     /**\
      * Test to make sure error messages are identified
      */
+    @Test
     void errorMsg(){
-        final Message CuT = Message.error("This is an error.");
+        final Message CuT = Message.error(ERROR_MSG);
         assertEquals(CuT.getType(), Message.Type.ERROR);
 
         assertNotEquals(CuT.getType(), Message.Type.INFO);
     }
 
-    @Test
     /**
      * Test to make sure info messages are identified
      */
+    @Test
     void infoMsg(){
-        final Message CuT = Message.info("This is an info message.");
+        final Message CuT = Message.info(INFO_MSG);
         assertEquals(CuT.getType(), Message.Type.INFO);
 
         assertNotEquals(CuT.getType(), Message.Type.ERROR);
     }
 
-    @Test
     /**
      * Test to see if isSuccessful works
      */
+    @Test
     void isSuccessfulTest(){
-        final Message CuT = Message.info("Info message.");
+        final Message CuT = Message.info(INFO_MSG);
 
         assertTrue(CuT.isSuccessful());
 
-        final Message CuT_Error = Message.error("Error message.");
+        final Message CuT_Error = Message.error(ERROR_MSG);
 
         assertFalse(CuT_Error.isSuccessful());
     }
