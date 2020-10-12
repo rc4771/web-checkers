@@ -33,7 +33,7 @@ public class MessageTest {
     }
 
     /**
-     * Test to see if isSuccessful works
+     * Test to see if isSuccessful method works
      */
     @Test
     void isSuccessfulTest(){
@@ -44,6 +44,17 @@ public class MessageTest {
         final Message CuT_Error = Message.error(ERROR_MSG);
 
         assertFalse(CuT_Error.isSuccessful());
+    }
+
+    /**
+     * Test to see if getText method works
+     */
+    @Test
+    void getTextTest(){
+        final Message CuT = Message.info(INFO_MSG);
+
+        assertEquals(INFO_MSG, CuT.getText());
+        assertNotEquals(CuT.getText(), ERROR_MSG);
     }
 
 }
