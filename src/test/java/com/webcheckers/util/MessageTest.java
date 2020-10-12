@@ -45,4 +45,5 @@ public class MessageTest {
 
         assertFalse(CuT_Error.isSuccessful());
     }
+
 }
