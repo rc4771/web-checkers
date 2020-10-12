@@ -34,4 +34,13 @@ public class Position {
      * @return the cell index of this Position
      */
     public int getCell() {return this.cell;}
+
+    public boolean equals(Object o) {
+        if (o instanceof Position) {
+            Position other = (Position) o;
+            return this.row == other.row && this.cell == other.cell;
+        } else {
+            return false;
+        }
+    }
 }
