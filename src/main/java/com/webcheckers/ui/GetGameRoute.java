@@ -3,6 +3,8 @@ package com.webcheckers.ui;
 import java.util.*;
 import java.util.logging.Logger;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.webcheckers.appl.GameCenter;
 import com.webcheckers.model.*;
 
@@ -31,6 +33,7 @@ public class GetGameRoute implements Route{
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
     private final GameCenter gameCenter;
+    private final Gson gson;
 
     static final String GAME_VIEW = "game.ftl";
     static final String TITLE = "Web Checker";
@@ -44,10 +47,11 @@ public class GetGameRoute implements Route{
      * @param   gameCenter
      *          {@link GameCenter} used to handle game logic across the site
      */
-    GetGameRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby, final GameCenter gameCenter) {
+    GetGameRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby, final GameCenter gameCenter, final Gson gson) {
         this.templateEngine = Objects.requireNonNull(templateEngine,"templateEngine must not be null");
         this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
         this.gameCenter = Objects.requireNonNull(gameCenter, "gameCenter must not be null");
+        this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
     /**
@@ -84,6 +88,8 @@ public class GetGameRoute implements Route{
         }
 
         final Map<String, Object> vm = new HashMap<>();
+        Map<String, Object> modeOptions = new HashMap<>(2);
+        modeOptions.put("isGameOver", false);
 
         // get the current user
         Player sessionPlayer;
@@ -109,6 +115,7 @@ public class GetGameRoute implements Route{
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);
         vm.put("board",game.getBoard().transposeForColor(playerColor));
         vm.put("viewMode", "PLAY");
+        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
         vm.put("redPlayer", game.getRedPlayer());
         vm.put("whitePlayer", game.getWhitePlayer());
         vm.put("activeColor", playerColor.toString());

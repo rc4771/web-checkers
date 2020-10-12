@@ -98,4 +98,15 @@ public class GameCenter {
 
         return -1;
     }
+
+    /**
+     * Gets the game a playes is currently in.
+     * @param currentGame
+     *      The player in question, must not be null
+     * @return
+     *      The game ID that the player is currently in. If the player is not in a game, it returns -1
+     */
+    public void endGame(Game currentGame){
+
+    }
 }
