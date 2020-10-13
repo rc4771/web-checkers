@@ -56,18 +56,35 @@ public class Move {
     /** The pieces captured with this move */
     private List<PieceCapture> captures;
 
+    /**
+     * Creates a new move
+     * @param start The starting position
+     * @param end The final position
+     */
     public Move(Position start, Position end) {
         this.start = start;
         this.end = end;
         this.captures = new ArrayList<>();
     }
 
+    /**
+     * Creates a new move
+     * @param start The starting position
+     * @param end The end position
+     * @param captures Any captures that were made
+     */
     public Move(Position start, Position end, List<PieceCapture> captures) {
         this.start = start;
         this.end = end;
         this.captures = captures;
     }
 
+    /**
+     * Creates a new move
+     * @param start The starting position
+     * @param end The final position
+     * @param capture The capture that was made
+     */
     public Move(Position start, Position end, PieceCapture capture) {
         this.start = start;
         this.end = end;
@@ -121,11 +138,4 @@ public class Move {
         captures.add(capture);
         return new Move(this.start, end, captures);
     }
-
-    public Move addMove(Move move) {
-        List<PieceCapture> captures = new ArrayList<>(this.captures);
-        captures.addAll(move.captures);
-        return new Move(this.start, move.end, captures);
-    }
-
 }

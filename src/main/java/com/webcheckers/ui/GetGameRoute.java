@@ -33,12 +33,22 @@ public class GetGameRoute implements Route{
     static final String SINGLE_PIECE_RED = "single-piece-red.svg";
     static final String SINGLE_PIECE_WHITE = "single-piece-red.svg";
 
+    /** Renders the web page */
     private final TemplateEngine templateEngine;
+
+    /** Stores all the players */
     private final PlayerLobby playerLobby;
+
+    /** Stores the games */
     private final GameCenter gameCenter;
 
+    /** The name of the FTL file */
     static final String GAME_VIEW = "game.ftl";
+
+    /** The name of the page */
     static final String TITLE = "Web Checker";
+
+    /** The GAME ID attribute */
     static final String GAME_ID_ATTR = "gameID";
 
     /**

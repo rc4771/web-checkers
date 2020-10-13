@@ -11,6 +11,8 @@ import java.util.LinkedList;
 public class Piece {
     /**
      * A enum representing the type of piece
+     *
+     * @author Mike White
      */
     public enum PieceType {
         SINGLE("SINGLE"),
@@ -18,10 +20,18 @@ public class Piece {
 
         private String type;
 
+        /**
+         * The type of piece
+         * @param type
+         */
         private PieceType(String type) {
             this.type = type;
         }
 
+        /**
+         * Converts to a string
+         * @return The value as a string
+         */
         public String toString() {
             return this.type;
         }
@@ -29,20 +39,35 @@ public class Piece {
 
     /**
      * An enum representing the piece color
+     *
+     * @author Mike White
      */
     public enum PieceColor {
         RED("RED"), WHITE("WHITE");
 
+        /** The color as a string */
         private String color;
 
+        /**
+         * Creates the color
+         * @param color The color as a string
+         */
         private PieceColor(String color) {
             this.color = color;
         }
 
+        /**
+         * Converts the value to a string
+         * @return The string
+         */
         public String toString() {
             return this.color;
         }
 
+        /**
+         * Returns the opposite color
+         * @return the opposite color
+         */
         public PieceColor opposite() {
             if (this == RED) {
                 return WHITE;
@@ -52,7 +77,10 @@ public class Piece {
         }
     }
 
+    /** The type of piece */
     private PieceType type;
+
+    /** The color of the piece */
     private PieceColor color;
 
     /**
@@ -67,6 +95,8 @@ public class Piece {
 
     /**
      * Gets the piece type
+     *
+     * @return The piece type
      */
     public PieceType getType() {
         return this.type;
@@ -74,6 +104,8 @@ public class Piece {
 
     /**
      * Gets the piece color
+     *
+     * @return the piece color
      */
     public PieceColor getColor() {
         return this.color;
@@ -82,6 +114,8 @@ public class Piece {
     /**
      * sets the type of the Piece
      * @param type the type to set the piece to
+     *
+     * @return The new type
      */
     public void setType(PieceType type){this.type = type;}
 

@@ -6,6 +6,8 @@ package com.webcheckers.model;
  * @author Mike White
  */
 public abstract class Space {
+
+    /** The column the space is in */
     private int cellIdx;
 
     /**

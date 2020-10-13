@@ -12,6 +12,8 @@ import com.webcheckers.model.Player;
  * @author David Allen
  */
 public class GameCenter {
+
+    /** Handles logging */
     private static final Logger LOG = Logger.getLogger(GameCenter.class.getName());
 
     //Constants

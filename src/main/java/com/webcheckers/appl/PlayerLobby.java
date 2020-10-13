@@ -18,11 +18,13 @@ public class PlayerLobby {
     //Attributes
     //
 
-    //Gamecenter for quick call.
+    /// Gamecenter for quick call.
     private GameCenter gameCenter;
 
+    /** Handles logging */
     private static final Logger LOG = Logger.getLogger(PlayerLobby.class.getName());
 
+    /** The result of the sign-in attempt */
     public enum SignInResult {OK, INVALID_USERNAME, USERNAME_TAKEN}
 
     /**

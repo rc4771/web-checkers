@@ -21,13 +21,14 @@ import static spark.Spark.redirect;
  * @author <a href='mailto:dja7394@rit.edu'>David Allen</a>
  */
 public class PostValidateMoveRoute implements Route {
+
+    /** Handles logging */
     private static final Logger LOG = Logger.getLogger(PostSignInRoute.class.getName());
 
-    public static final String USERNAME_PARAM = "username";
-    public static final String PLAYER_SESSION_KEY = "currentUser";
-
+    /** Stores all ongoing games */
     private final GameCenter gameCenter;
-    private final TemplateEngine templateEngine;
+
+    /** Parses Json */
     private final Gson gson;
 
     /**
@@ -35,14 +36,11 @@ public class PostValidateMoveRoute implements Route {
      *
      * @param gameCenter
      *          the GameCenter used to handle game logic across the site
-     * @param templateEngine
-     *          the HTML template rendering engine
      * @param gson
      *          The GSON instance to parse JSON objects and strings
      */
-    public PostValidateMoveRoute(final GameCenter gameCenter, final TemplateEngine templateEngine, final Gson gson) {
+    public PostValidateMoveRoute(final GameCenter gameCenter, final Gson gson) {
         this.gameCenter = Objects.requireNonNull(gameCenter, "gameCenter is required");
-        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
         this.gson = Objects.requireNonNull(gson, "gson is required");
 
         LOG.config("PostValidateMoveRoute is initialized.");

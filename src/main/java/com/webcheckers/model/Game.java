@@ -11,16 +11,28 @@ import java.util.LinkedList;
  * @author David Allen
  */
 public class Game {
+
+    /** The game ID */
     private int gameID;
+
+    /** The board being played on */
     private Board board;
+
+    /** The red player */
     private Player redPlayer;
+
+    /** The white player */
     private Player whitePlayer;
 
+    /** The move currently being made */
     private Move pendingMove;
 
     /** The list of valid jumps */
     private LinkedList<Move> validJumps;
 
+    /**
+     * The result of a move attemp2
+     */
     public enum MoveResult {
         OK,                     // The move is valid and can be made
         PIECE_NULL_ERR,         // There is no piece to move at the start space, so invalid

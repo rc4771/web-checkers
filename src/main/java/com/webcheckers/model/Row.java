@@ -15,6 +15,9 @@ public class Row implements Iterable<Space> {
 
 	/**
 	 * Creates a new board row
+	 *
+	 * @param index The row index
+	 * @param spaces The spaces in the row
 	 */
 	public Row(int index, ArrayList<Space> spaces) {
 		this.spaces = spaces;

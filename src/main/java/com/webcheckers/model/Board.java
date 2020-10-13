@@ -13,8 +13,13 @@ import java.util.ArrayList;
  */
 public class Board implements Iterable<Row> {
 
+    /** The rows in the board */
     private ArrayList<Row> rows;
 
+    /**
+     * Creates a custom board
+     * @param rows The rows
+     */
     private Board(ArrayList<Row> rows) {
         this.rows = rows;
     }

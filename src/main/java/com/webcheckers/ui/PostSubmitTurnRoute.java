@@ -20,13 +20,14 @@ import static spark.Spark.halt;
  * @author <a href='mailto:dja7394@rit.edu'>David Allen</a>
  */
 public class PostSubmitTurnRoute implements Route {
+
+    /** Handles logging */
     private static final Logger LOG = Logger.getLogger(PostSignInRoute.class.getName());
 
-    public static final String USERNAME_PARAM = "username";
-    public static final String PLAYER_SESSION_KEY = "currentUser";
-
+    /** Stores all of the games */
     private final GameCenter gameCenter;
-    private final TemplateEngine templateEngine;
+
+    /** Handles JSON objects */
     private final Gson gson;
 
     /**
@@ -34,14 +35,11 @@ public class PostSubmitTurnRoute implements Route {
      *
      * @param gameCenter
      *    The game center instance for handling log in related stuff
-     * @param templateEngine
-     *          the HTML template rendering engine
      * @param gson
      *          The GSON instance to parse JSON objects and strings
      */
-    public PostSubmitTurnRoute(final GameCenter gameCenter, final TemplateEngine templateEngine, final Gson gson) {
+    public PostSubmitTurnRoute(final GameCenter gameCenter, final Gson gson) {
         this.gameCenter = Objects.requireNonNull(gameCenter, "gameCenter is required");
-        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
         this.gson = Objects.requireNonNull(gson, "gson is required");
 
         LOG.config("PostSubmitTurnRoute is initialized.");
