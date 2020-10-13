@@ -5,6 +5,8 @@ import java.util.List;
 
 /**
  * A class that represents a move.
+ *
+ * @author Rafeed Choudhury
  */
 public class Move {
 

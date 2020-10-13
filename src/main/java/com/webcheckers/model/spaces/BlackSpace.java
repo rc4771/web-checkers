@@ -2,6 +2,11 @@ package com.webcheckers.model.spaces;
 
 import com.webcheckers.model.Space;
 
+/**
+ * A black space on a board. Pieces cannot be placed on this
+ *
+ * @author Mike White
+ */
 public class BlackSpace extends Space {
 	/**
 	 * Creates a new space object

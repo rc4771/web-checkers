@@ -3,7 +3,13 @@ package com.webcheckers.model.spaces;
 import com.webcheckers.model.Piece;
 import com.webcheckers.model.Space;
 
+/**
+ * A white space on a board that may contain a piece
+ *
+ * @author Mike White
+ */
 public class WhiteSpace extends Space {
+	/** The piece on the space */
 	private Piece piece;
 
 	/**

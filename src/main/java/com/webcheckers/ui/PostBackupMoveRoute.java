@@ -33,11 +33,7 @@ public class PostBackupMoveRoute implements Route {
      * The constructor for the {@code POST /backupMove} route handler.
      *
      * @param gameCenter
-<<<<<<< HEAD
      *    The game center instance for handling log in related stuff
-=======
-     *          the GameCenter used to handle game logic across the site
->>>>>>> master
      * @param templateEngine
      *          the HTML template rendering engine
      * @param gson

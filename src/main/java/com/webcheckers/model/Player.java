@@ -3,7 +3,7 @@ package com.webcheckers.model;
 import java.util.logging.Logger;
 
 /**
- *
+ * Represents a player
  *
  * @author <a href='mailto:dja7394@rit.edu'>David Allen</a>
  */

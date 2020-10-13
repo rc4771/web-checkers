@@ -8,6 +8,8 @@ import com.webcheckers.model.Player;
 
 /**
  * An object to coordinate games and game statistics across the site.
+ *
+ * @author David Allen
  */
 public class GameCenter {
     private static final Logger LOG = Logger.getLogger(GameCenter.class.getName());

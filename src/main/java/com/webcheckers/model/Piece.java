@@ -5,6 +5,8 @@ import java.util.LinkedList;
 
 /**
  * A class to represent a checkers piece on the board.
+ *
+ * @author Mike White
  */
 public class Piece {
     /**

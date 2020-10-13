@@ -7,6 +7,8 @@ import java.util.LinkedList;
 /**
  * An object to represent an active game of checkers, with a board, between two players. One player is the "red"
  * player and the other one is the "white" player.
+ *
+ * @author David Allen
  */
 public class Game {
     private int gameID;

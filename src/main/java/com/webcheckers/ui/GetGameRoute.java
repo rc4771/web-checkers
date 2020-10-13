@@ -18,6 +18,11 @@ import static spark.Spark.halt;
 
 import com.webcheckers.appl.PlayerLobby;
 
+/**
+ * Sends the game page to the user
+ *
+ * @author David Allen
+ */
 public class GetGameRoute implements Route{
     private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 

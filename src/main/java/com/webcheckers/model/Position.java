@@ -2,6 +2,8 @@ package com.webcheckers.model;
 
 /**
  * A class that represents a position on the board.
+ *
+ * @author Rafeed Choudhury
  */
 public class Position {
     /**

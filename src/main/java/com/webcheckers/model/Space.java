@@ -1,7 +1,9 @@
 package com.webcheckers.model;
 
 /**
- * A class to represent a space on a baord
+ * A class to represent a space on a board
+ *
+ * @author Mike White
  */
 public abstract class Space {
     private int cellIdx;

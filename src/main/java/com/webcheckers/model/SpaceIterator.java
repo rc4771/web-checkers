@@ -6,6 +6,8 @@ import java.util.NoSuchElementException;
 
 /**
  * An iterator that iterates of the spaces in a row on a board
+ *
+ * @author Mike White
  */
 public class SpaceIterator implements Iterator<Space> {
 	private List<Space> spaces;

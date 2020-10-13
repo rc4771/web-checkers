@@ -6,6 +6,8 @@ import java.util.Iterator;
 
 /**
  * A row on a checkers board
+ *
+ * @author Mike White
  */
 public class Row implements Iterable<Space> {
 	private int index;

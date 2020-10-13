@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 /**
  * An object representing a checkers board in a game
+ *
+ * @author Mike White
  */
 public class Board implements Iterable<Row> {
 
