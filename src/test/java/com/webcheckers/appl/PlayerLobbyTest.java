@@ -2,6 +2,7 @@ package com.webcheckers.appl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.webcheckers.model.Player;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -47,6 +48,26 @@ public class PlayerLobbyTest {
         assertEquals(PlayerLobby.SignInResult.INVALID_USERNAME, pl.signInPlayer(""));
         assertEquals(PlayerLobby.SignInResult.INVALID_USERNAME, pl.signInPlayer("     ")); // spaces
         assertEquals(PlayerLobby.SignInResult.INVALID_USERNAME, pl.signInPlayer("\t")); // tab
+    }
+
+    @Test
+    public void testSignOutPlayer() {
+        PlayerLobby pl = createPlayerLobby();
+        assertEquals(PlayerLobby.SignInResult.OK, pl.signInPlayer("Test123"));
+        assertEquals(PlayerLobby.SignOutResult.OK, pl.signOutPlayer(pl.getPlayer("Test123")));
+    }
+
+    @Test
+    public void testSignOutPlayer_nullPlayer() {
+        PlayerLobby pl = createPlayerLobby();
+        assertEquals(PlayerLobby.SignOutResult.NULL_PLAYER, pl.signOutPlayer(null));
+    }
+
+    @Test
+    public void testSignOutPlayer_playerNotSignedIn() {
+        PlayerLobby pl = createPlayerLobby();
+        Player p = new Player("Test123");
+        assertEquals(PlayerLobby.SignOutResult.PLAYER_NOT_LOGGED_IN, pl.signOutPlayer(p));
     }
 
     @Test

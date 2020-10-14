@@ -25,9 +25,9 @@ public class PlayerLobby {
 
     public enum SignInResult {OK, INVALID_USERNAME, USERNAME_TAKEN}
     public enum SignOutResult {
-        OK(""),
-        NULL_PLAYER(""),
-        PLAYER_NOT_LOGGED_IN("");
+        OK("Sign out successful"),
+        NULL_PLAYER("Player object was null"),
+        PLAYER_NOT_LOGGED_IN("Player is not logged in");
 
         private final String errMsg;
 
