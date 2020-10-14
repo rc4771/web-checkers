@@ -3,10 +3,9 @@ package com.webcheckers.model;
 import com.webcheckers.model.pieces.RedSinglePiece;
 import com.webcheckers.model.pieces.SinglePiece;
 import com.webcheckers.model.pieces.WhiteSinglePiece;
-import com.webcheckers.model.spaces.BlackSpace;
 import com.webcheckers.model.spaces.WhiteSpace;
+import com.webcheckers.model.spaces.BlackSpace;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -38,33 +37,39 @@ public class Board implements Iterable<Row> {
                 //*
                 if (i == 0 || i == 2) {
                     if (j % 2 == 0) {
-                        spaces.add(new BlackSpace(j));
+                        spaces.add(new WhiteSpace(j));
                     } else {
-                        spaces.add(new WhiteSpace(j, new RedSinglePiece()));
+                        spaces.add(new BlackSpace(j, new RedSinglePiece()));
                     }
                 } else if (i == 1) {
                     if (j % 2 == 1) {
-                        spaces.add(new BlackSpace(j));
+                        spaces.add(new WhiteSpace(j));
                     } else {
-                        spaces.add(new WhiteSpace(j, new RedSinglePiece()));
+                        spaces.add(new BlackSpace(j, new RedSinglePiece()));
                     }
                 } else if (i == 7 || i == 5) {
                     if (j % 2 == 1) {
-                        spaces.add(new BlackSpace(j));
+                        spaces.add(new WhiteSpace(j));
                     } else {
-                        spaces.add(new WhiteSpace(j, new WhiteSinglePiece()));
+                        spaces.add(new BlackSpace(j, new WhiteSinglePiece()));
                     }
                 } else if (i == 6) {
                     if (j % 2 == 0) {
-                        spaces.add(new BlackSpace(j));
+                        spaces.add(new WhiteSpace(j));
                     } else {
-                        spaces.add(new WhiteSpace(j, new WhiteSinglePiece()));
+                        spaces.add(new BlackSpace(j, new WhiteSinglePiece()));
+                    }
+                } else if (i == 4) {
+                    if (j % 2 == 0) {
+                        spaces.add(new WhiteSpace(j));
+                    } else {
+                        spaces.add(new BlackSpace(j));
                     }
                 } else {
-                    if (j % 2 == 0) {
-                        spaces.add(new BlackSpace(j));
-                    } else {
+                    if (j % 2 == 1) {
                         spaces.add(new WhiteSpace(j));
+                    } else {
+                        spaces.add(new BlackSpace(j));
                     }
                 }//*/
             }
@@ -126,10 +131,10 @@ public class Board implements Iterable<Row> {
 
         Space space = rows.get(row).getSpaces().get(cell);
 
-        if (space instanceof BlackSpace) {
+        if (space instanceof WhiteSpace) {
             return null; // TODO throw error
         } else {
-            WhiteSpace whiteSpace = (WhiteSpace) space;
+            BlackSpace whiteSpace = (BlackSpace) space;
             return whiteSpace.getPiece();
         }
     }
@@ -147,10 +152,10 @@ public class Board implements Iterable<Row> {
 
         Space space = rows.get(row).getSpaces().get(cell);
 
-        if (space instanceof BlackSpace) {
+        if (space instanceof WhiteSpace) {
             return; // TODO throw error
         } else {
-            WhiteSpace whiteSpace = (WhiteSpace) space;
+            BlackSpace whiteSpace = (BlackSpace) space;
             whiteSpace.setPiece(piece);
         }
     }
@@ -167,10 +172,10 @@ public class Board implements Iterable<Row> {
 
         Space space = rows.get(row).getSpaces().get(cell);
 
-        if (space instanceof BlackSpace) {
+        if (space instanceof WhiteSpace) {
             return; // TODO throw error
         } else {
-            WhiteSpace whiteSpace = (WhiteSpace) space;
+            BlackSpace whiteSpace = (BlackSpace) space;
             whiteSpace.setPiece(null);
         }
     }
@@ -212,11 +217,11 @@ public class Board implements Iterable<Row> {
         Space endSpace = rows.get(endRow).getSpaces().get(endCell);
         Space startSpace = rows.get(startRow).getSpaces().get(startCell);
 
-        if (endSpace instanceof BlackSpace || startSpace instanceof BlackSpace) {
+        if (endSpace instanceof WhiteSpace || startSpace instanceof WhiteSpace) {
             return; // TODO throw error
         } else {
-            WhiteSpace endSpaceWhite = (WhiteSpace) endSpace;
-            WhiteSpace startSpaceWhite = (WhiteSpace) startSpace;
+            BlackSpace endSpaceWhite = (BlackSpace) endSpace;
+            BlackSpace startSpaceWhite = (BlackSpace) startSpace;
             endSpaceWhite.setPiece(piece);
             startSpaceWhite.setPiece(null);
         }
