@@ -20,7 +20,7 @@ import static spark.Spark.halt;
 public class PostSignoutRoute implements Route {
     private static final Logger LOG = Logger.getLogger(PostSignoutRoute.class.getName());
 
-    private static final String NO_SESSION_LAYER_ERROR_MESSAGE = "You are not signed in so you cannot log out (no Player in session)";
+    static final String NO_SESSION_LAYER_ERROR_MESSAGE = "You are not signed in so you cannot log out (no Player in session)";
 
     private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
