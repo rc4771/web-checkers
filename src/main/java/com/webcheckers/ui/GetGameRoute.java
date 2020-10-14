@@ -89,16 +89,6 @@ public class GetGameRoute implements Route{
 
         final Map<String, Object> vm = new HashMap<>();
 
-        final Map<String, Object> modeOptions = new HashMap<>(2);
-        modeOptions.put("isGameOver", false);
-
-        //checking for end of game
-        Player winner = gameCenter.checkGameOver(0);
-        if(winner != null){
-            //gameCenter.endGame(0);
-            modeOptions.put("isGameOver", true);
-            modeOptions.put("gameOverMessage", winner.getName() + "has captured all of the pieces.");
-        }
 
         // get the current user
         Player sessionPlayer;
@@ -121,6 +111,16 @@ public class GetGameRoute implements Route{
 
         Piece.PieceColor playerColor = game.getPlayerColor(sessionPlayer);
 
+        final Map<String, Object> modeOptions = new HashMap<>(2);
+        modeOptions.put("isGameOver", false);
+
+        //checking for end of game
+        if(!game.getActive()){
+            gameCenter.endGame(game);
+            modeOptions.put("isGameOver", true);
+            modeOptions.put("gameOverMessage", "Game Over.");
+        }
+
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);
         vm.put("board",game.getBoard().transposeForColor(playerColor));
         vm.put("viewMode", "PLAY");
@@ -141,4 +141,5 @@ public class GetGameRoute implements Route{
         halt();
         return null;
     }
+
 }

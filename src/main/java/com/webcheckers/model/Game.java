@@ -6,6 +6,7 @@ package com.webcheckers.model;
  */
 public class Game {
     private int gameID;
+    private boolean active;
     private Board board;
     private Player redPlayer;
     private Player whitePlayer;
@@ -21,6 +22,12 @@ public class Game {
         END_OCCUPIED_ERR,       // There is a piece at the end space, so invalid
         MOVE_DIRECTION_ERR,     // The direction of the move is backwards, so invalid
         TOO_FAR_ERR             // The piece moved too far without jumping, so invalid
+    }
+
+    public enum GameOverType {
+        RED,
+        WHITE,
+        RESIGN
     }
 
     /**
@@ -70,6 +77,14 @@ public class Game {
      */
     public Player getWhitePlayer() {
         return whitePlayer;
+    }
+
+    public boolean getActive(){
+        return active;
+    }
+
+    public void setActive(boolean active){
+        this.active = active;
     }
 
     /**
