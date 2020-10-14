@@ -1,5 +1,8 @@
 package com.webcheckers.model;
 
+import com.webcheckers.model.pieces.RedSinglePiece;
+import com.webcheckers.model.pieces.SinglePiece;
+import com.webcheckers.model.pieces.WhiteSinglePiece;
 import com.webcheckers.model.spaces.BlackSpace;
 import com.webcheckers.model.spaces.WhiteSpace;
 
@@ -37,25 +40,25 @@ public class Board implements Iterable<Row> {
                     if (j % 2 == 0) {
                         spaces.add(new BlackSpace(j));
                     } else {
-                        spaces.add(new WhiteSpace(j, new Piece(Piece.PieceColor.RED, Piece.PieceType.SINGLE)));
+                        spaces.add(new WhiteSpace(j, new RedSinglePiece()));
                     }
                 } else if (i == 1) {
                     if (j % 2 == 1) {
                         spaces.add(new BlackSpace(j));
                     } else {
-                        spaces.add(new WhiteSpace(j, new Piece(Piece.PieceColor.RED, Piece.PieceType.SINGLE)));
+                        spaces.add(new WhiteSpace(j, new RedSinglePiece()));
                     }
                 } else if (i == 7 || i == 5) {
                     if (j % 2 == 1) {
                         spaces.add(new BlackSpace(j));
                     } else {
-                        spaces.add(new WhiteSpace(j, new Piece(Piece.PieceColor.WHITE, Piece.PieceType.SINGLE)));
+                        spaces.add(new WhiteSpace(j, new WhiteSinglePiece()));
                     }
                 } else if (i == 6) {
                     if (j % 2 == 0) {
                         spaces.add(new BlackSpace(j));
                     } else {
-                        spaces.add(new WhiteSpace(j, new Piece(Piece.PieceColor.WHITE, Piece.PieceType.SINGLE)));
+                        spaces.add(new WhiteSpace(j, new WhiteSinglePiece()));
                     }
                 } else {
                     if (j % 2 == 0) {
@@ -132,6 +135,27 @@ public class Board implements Iterable<Row> {
     }
 
     /**
+     * Sets the piece at a given location
+     * @param row The row number
+     * @param cell The column number
+     * @param piece The piece to set it to
+     */
+    public void setPieceAt(int row, int cell, Piece piece) {
+        if (!inBounds(row, cell)) { // Rows & cell size must be in the board
+            return; // TODO throw error
+        }
+
+        Space space = rows.get(row).getSpaces().get(cell);
+
+        if (space instanceof BlackSpace) {
+            return; // TODO throw error
+        } else {
+            WhiteSpace whiteSpace = (WhiteSpace) space;
+            whiteSpace.setPiece(piece);
+        }
+    }
+
+    /**
      * Removes a piece from a given position in the board
      * @param row The row to remove from
      * @param cell The column to remove from
@@ -197,9 +221,11 @@ public class Board implements Iterable<Row> {
             startSpaceWhite.setPiece(null);
         }
 
-        if ((endRow == 7 && piece.getColor() == Piece.PieceColor.RED)              //check if piece is on opposite
-                || (endRow == 0 && piece.getColor() == Piece.PieceColor.WHITE)) {  //end of the board
-            piece.setType(Piece.PieceType.KING);     //convert the piece to a King
+        if (((endRow == 7 && piece.getColor() == Piece.PieceColor.RED)              //check if piece is on opposite
+                || (endRow == 0 && piece.getColor() == Piece.PieceColor.WHITE)) &&  //end of the board
+                piece.getType() == Piece.PieceType.SINGLE) { // make sure it's single
+            SinglePiece single = (SinglePiece) piece;
+            setPieceAt(endRow, endCell, single.promote());     //convert the piece to a King
         }
 
         // remove captured pieces from the board
