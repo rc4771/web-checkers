@@ -3,8 +3,11 @@ package com.webcheckers.ui;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.webcheckers.appl.GameCenter;
+import com.webcheckers.model.Board;
 import com.webcheckers.model.Game;
+import com.webcheckers.model.Piece;
 import com.webcheckers.util.Message;
+import com.webcheckers.util.MoveValidator;
 import spark.*;
 
 import java.util.HashMap;
@@ -57,6 +60,8 @@ public class PostValidateMoveRoute implements Route {
 
         int gameID = Integer.parseInt(request.queryParams("gameID"));
         Game game = gameCenter.getGame(gameID);
+        Board board = game.getBoard();
+        Piece.PieceColor player = game.getCurrentTurn();
 
         JsonObject jsonData = gson.fromJson(request.queryParams("actionData"), JsonObject.class);
         int startRow = jsonData.get("start").getAsJsonObject().get("row").getAsInt();
@@ -64,7 +69,7 @@ public class PostValidateMoveRoute implements Route {
         int endRow = jsonData.get("end").getAsJsonObject().get("row").getAsInt();
         int endCell = jsonData.get("end").getAsJsonObject().get("cell").getAsInt();
 
-        Game.MoveResult moveResult = game.validateMove(startRow, startCell, endRow, endCell);
+        MoveValidator.MoveResult moveResult = MoveValidator.validateMove(board, player, startRow, startCell, endRow, endCell);
         Message msg;
 
         // Set the message type and text based on the move validation result
