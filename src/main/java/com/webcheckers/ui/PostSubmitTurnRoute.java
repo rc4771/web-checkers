@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.webcheckers.appl.GameCenter;
 import com.webcheckers.model.Game;
+import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
 
@@ -63,6 +64,32 @@ public class PostSubmitTurnRoute implements Route {
 
         game.submitMove();
 
-        return gson.toJson(Message.info("Move submitted successfully"), Message.class);
+        Game.WinType winType = game.checkWin();
+        Player redPlayer = game.getRedPlayer();
+        Player whitePlayer = game.getWhitePlayer();
+        Message msg;
+
+        // Set the message type and text based on the move validation result
+        switch (winType) {
+            case NO_WIN: {
+                msg = Message.info("Move submitted successfully");
+                break;
+            }
+            case RED: {
+                msg = Message.info(redPlayer.getName() + "has won the game! \n" + whitePlayer.getName() + "has lost");
+                gameCenter.endGame(game);
+                break;
+            }
+            case WHITE: {
+                msg = Message.info(whitePlayer.getName() + "has won the game! \n" + redPlayer.getName() + "has lost");
+                gameCenter.endGame(game);
+                break;
+            }
+            default: {
+                msg = Message.error("An unknown error has occurred, please contact the developers!");
+            }
+        }
+
+        return gson.toJson(msg, Message.class);
     }
 }

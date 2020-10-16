@@ -25,10 +25,10 @@ public class Game {
         NOT_TURN_ERR,           // It is not the player's turn to move
     }
 
-    public enum GameOverType {
+    public enum WinType {
         RED,
         WHITE,
-        RESIGN
+        NO_WIN
     }
 
     /**
@@ -47,6 +47,7 @@ public class Game {
         this.redPlayer.setIsTurn(true);
         this.whitePlayer = whitePlayer;
         this.whitePlayer.setIsTurn(false);
+        this.active = true;
 
         pendingMoveStartRow = -1;
         pendingMoveStartCell = -1;
@@ -213,5 +214,38 @@ public class Game {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Checks the pieces on the board to see if game is over
+     * @return
+     *  If game is over, it will return GameOver
+     */
+    public WinType checkWin(){
+
+        int whitePieces = 0;
+        int redPieces = 0;
+
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; i < 8; i++){
+                if(this.board.hasPieceAt(i, j)){
+                    if(this.board.getPieceAt(i, j).getColor() == Piece.PieceColor.RED){
+                        redPieces++;
+                    }
+                    else{
+                        whitePieces++;
+                    }
+                }
+            }
+        }
+
+        if(redPieces == 0){
+            return WinType.WHITE;
+        }
+        else if (whitePieces == 0){
+            return WinType.RED;
+        }
+
+        return WinType.NO_WIN; //game is not over
     }
 }
