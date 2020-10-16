@@ -1,6 +1,7 @@
 package com.webcheckers.appl;
 
 import com.webcheckers.model.Player;
+import com.webcheckers.util.NameValidator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +52,7 @@ public class PlayerLobby {
      *      USERNAME_TAKEN      - If the username is already taken by another player
      */
     public SignInResult signInPlayer(String username) {
-        if (!isValidUsername(username)) {
+        if (!NameValidator.isValidUsername(username)) {
             return SignInResult.INVALID_USERNAME;
         }
 
@@ -112,20 +113,5 @@ public class PlayerLobby {
      */
     public Player getPlayer(String username) {
         return signedInPlayers.get(username);
-    }
-
-    /**
-     * Checks if a string is a valid username, checks to make sure it's not null, not empty, not blank, and only
-     * contains alphanumeric characters and spaces.
-     * @param username
-     *      The username string to test
-     * @return
-     *      A boolean for if the username is valid or not
-     */
-    private boolean isValidUsername(String username) {
-        if (username == null)
-            return false;
-
-        return !username.isBlank() && !username.isEmpty() && username.matches("^[a-zA-Z0-9_ ]*$");
     }
 }
