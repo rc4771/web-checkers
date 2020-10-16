@@ -8,6 +8,7 @@ import com.webcheckers.model.Game;
 import com.webcheckers.model.Piece;
 import com.webcheckers.util.Message;
 import com.webcheckers.util.MoveValidator;
+import com.webcheckers.util.exceptions.moves.MoveException;
 import spark.*;
 
 import java.util.HashMap;
@@ -69,47 +70,13 @@ public class PostValidateMoveRoute implements Route {
         int endRow = jsonData.get("end").getAsJsonObject().get("row").getAsInt();
         int endCell = jsonData.get("end").getAsJsonObject().get("cell").getAsInt();
 
-        MoveValidator.MoveResult moveResult = MoveValidator.validateMove(board, player, startRow, startCell, endRow, endCell);
         Message msg;
-
-        // Set the message type and text based on the move validation result
-        switch (moveResult) {
-            case OK: {
-                msg = Message.info("Move is valid, you can either Backup that move or Submit your turn");
-                game.setPendingMove(startRow, startCell, endRow, endCell);
-                break;
-            }
-            case PIECE_NULL_ERR: {
-                // When a PIECE_NULL_ERR happens, it's because the player is dragging the piece they've already dragged
-                // a second time, so they should back the piece up first using the button, THEN re drag
-                msg = Message.error("Please reset your move before trying to move again by using the Backup button");
-                break;
-            }
-            case END_OCCUPIED_ERR: {
-                msg = Message.error("There is a piece at the space you're jumping to");
-                break;
-            }
-            case MOVE_DIRECTION_ERR: {
-                msg = Message.error("That type of piece cannot move in that direction");
-                break;
-            }
-            case TOO_FAR_ERR: {
-                msg = Message.error("Your cannot move more than 1 space without jumping");
-                break;
-            }
-            case NOT_TURN_ERR: {
-                msg = Message.error("It is not your turn, please wait for the other player to finish their turn");
-                break;
-            } case INVALID_JUMP: {
-                msg = Message.error("That is not a valid jump move");
-                break;
-            } case MUST_MAKE_JUMP: {
-                msg = Message.error("You made a single move, even though you can make a jump. Please jump");
-                break;
-            }
-            default: {
-                msg = Message.error("An unknown error has occurred, please contact the developers!");
-            }
+        try {
+            MoveValidator.validateMove(board, player, startRow, startCell, endRow, endCell);
+            msg = Message.info("Move is valid, you can either Backup that move or Submit your turn");
+            game.setPendingMove(startRow, startCell, endRow, endCell);
+        } catch (MoveException me) {
+            msg = me.toMessage();
         }
 
         return gson.toJson(msg, Message.class);

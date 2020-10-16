@@ -1,6 +1,7 @@
 package com.webcheckers.util;
 
 import com.webcheckers.model.*;
+import com.webcheckers.util.exceptions.moves.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,20 +12,6 @@ import java.util.List;
  * @author Mike White
  */
 public class MoveValidator {
-
-	/**
-	 * The result of a move attempt
-	 */
-	public enum MoveResult {
-		OK,                     // The move is valid and can be made
-		PIECE_NULL_ERR,         // There is no piece to move at the start space, so invalid
-		END_OCCUPIED_ERR,       // There is a piece at the end space, so invalid
-		MOVE_DIRECTION_ERR,     // The direction of the move is backwards, so invalid
-		TOO_FAR_ERR,            // The piece moved too far without jumping, so invalid
-		NOT_TURN_ERR,           // It is not the player's turn to move
-		INVALID_JUMP,           // An invalid jump has been made
-		MUST_MAKE_JUMP,         // Player made a single move when a jump is required
-	}
 
 	/**
 	 * Calculates the possible jumps the current player could make
@@ -88,51 +75,49 @@ public class MoveValidator {
 	 *      The ending row to move to, should be within board bounds
 	 * @param endCell
 	 *      The ending cell to move to, should be within board bounds
-	 * @return
-	 *      An enum MoveResult representing how the validation of the move checked out, see MoveResult for details
+	 *
+	 * @throws MoveException The move is not valid
 	 */
-	public static MoveResult validateMove(Board board, Piece.PieceColor player, int startRow, int startCell, int endRow, int endCell) {
+	public static void validateMove(Board board, Piece.PieceColor player, int startRow, int startCell, int endRow, int endCell) throws MoveException {
 
 		List<Move> validJumps = calculateValidJumps(board, player);
 
 		if (!board.hasPieceAt(startRow, startCell)) {   // #1
-			return MoveResult.PIECE_NULL_ERR;
+			throw new PieceNullMoveException();
 		}
 
 		if (board.hasPieceAt(endRow, endCell)) {        // #2
-			return MoveResult.END_OCCUPIED_ERR;
+			throw new EndOccupiedMoveException();
 		}
 
 		Piece.PieceColor color = board.getPieceColorAt(startRow, startCell);
 
 		if (color == Piece.PieceColor.RED && startRow > endRow                                 // #3 (also checks if
 				&& board.getPieceTypeAt(startRow,startCell) == Piece.PieceType.SINGLE) {  //a single piece is used,
-			// it is invalid if so)
-			return MoveResult.MOVE_DIRECTION_ERR;
+			// it is invalid if so
+			throw new MoveDirectionMoveException();
 		}
 		else if (color == Piece.PieceColor.RED && player == Piece.PieceColor.WHITE){     //checking for turn
-			return MoveResult.NOT_TURN_ERR;
+			throw new NotTurnMoveException();
 		}
 		else if (color == Piece.PieceColor.WHITE && startRow < endRow
 				&& board.getPieceTypeAt(startRow,startCell) == Piece.PieceType.SINGLE) {
-			return MoveResult.MOVE_DIRECTION_ERR;
+			throw new MoveDirectionMoveException();
 		}
 		else if (color == Piece.PieceColor.WHITE && player == Piece.PieceColor.RED){    //checking for turn
-			return MoveResult.NOT_TURN_ERR;
+			throw new NotTurnMoveException();
 		}
 		else if (Math.sqrt(Math.pow(endRow - startRow, 2.0) + Math.pow(endCell - startCell, 2.0)) > 1.5) {    // #4
 			if (!validJumps.isEmpty()) { // #5 & #6
 				if (isValidJump(board, player, new Position(startRow, startCell), new Position(endRow, endCell)) == null) {
-					return MoveResult.INVALID_JUMP;
+					throw new InvalidJumpMoveException();
 				} else {
-					return MoveResult.OK;
+					return;
 				}
 			}
-			return MoveResult.TOO_FAR_ERR;
+			throw new TooFarMoveException();
 		} else if (!validJumps.isEmpty()) {
-			return MoveResult.MUST_MAKE_JUMP;
+			throw new MustJumpMoveException();
 		}
-
-		return MoveResult.OK;
 	}
 }
