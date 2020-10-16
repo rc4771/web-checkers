@@ -115,10 +115,17 @@ public class GetGameRoute implements Route{
         modeOptions.put("isGameOver", false);
 
         //checking for end of game
-        if(!game.getActive()){
-            gameCenter.endGame(game);
+        if(!game.getActive()) {
             modeOptions.put("isGameOver", true);
-            modeOptions.put("gameOverMessage", "Game Over.");
+            Game.WinType winType = game.checkWin();
+            //check if sessionPlayer won the game
+            if ((winType.equals(Game.WinType.RED_WIN) && playerColor.equals(Piece.PieceColor.RED)) ||
+                    (winType.equals(Game.WinType.WHITE_WIN) && playerColor.equals(Piece.PieceColor.WHITE))) {
+                modeOptions.put("gameOverMessage", "Game Over! \nYou have won the game!");
+            } else {
+                modeOptions.put("gameOverMessage", "Game Over! \nYou have lost the game.");
+            }
+            gameCenter.endGame(game);
         }
 
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);

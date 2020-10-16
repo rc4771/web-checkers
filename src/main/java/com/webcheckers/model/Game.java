@@ -32,8 +32,8 @@ public class Game {
     }
 
     public enum WinType {
-        RED,
-        WHITE,
+        RED_WIN,
+        WHITE_WIN,
         NO_WIN
     }
 
@@ -268,9 +268,9 @@ public class Game {
     }
 
     /**
-     * Checks the pieces on the board to see if game is over
+     * Checks the pieces on the board to see if all of one color are gone
      * @return
-     *  If game is over, it will return GameOver
+     *  If game is over, it will return a WinType based on what color pieces are gone
      */
     public WinType checkWin(){
 
@@ -278,7 +278,7 @@ public class Game {
         int redPieces = 0;
 
         for(int i = 0; i < 8; i++){
-            for(int j = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
                 if(this.board.hasPieceAt(i, j)){
                     if(this.board.getPieceAt(i, j).getColor() == Piece.PieceColor.RED){
                         redPieces++;
@@ -291,10 +291,10 @@ public class Game {
         }
 
         if(redPieces == 0){
-            return WinType.WHITE;
+            return WinType.WHITE_WIN;
         }
         else if (whitePieces == 0){
-            return WinType.RED;
+            return WinType.RED_WIN;
         }
 
         return WinType.NO_WIN; //game is not over

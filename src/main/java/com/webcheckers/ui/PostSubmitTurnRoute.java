@@ -69,20 +69,20 @@ public class PostSubmitTurnRoute implements Route {
         Player whitePlayer = game.getWhitePlayer();
         Message msg;
 
-        // Set the message type and text based on the move validation result
+        // Set the message type, text and toggle active state based on the result
         switch (winType) {
             case NO_WIN: {
                 msg = Message.info("Move submitted successfully");
                 break;
             }
-            case RED: {
+            case RED_WIN: {
                 msg = Message.info(redPlayer.getName() + "has won the game! \n" + whitePlayer.getName() + "has lost");
-                gameCenter.endGame(game);
+                game.setActive(false);
                 break;
             }
-            case WHITE: {
+            case WHITE_WIN: {
                 msg = Message.info(whitePlayer.getName() + "has won the game! \n" + redPlayer.getName() + "has lost");
-                gameCenter.endGame(game);
+                game.setActive(false);
                 break;
             }
             default: {
