@@ -105,13 +105,14 @@ public class GetGameRoute implements Route{
         }
 
         Piece.PieceColor playerColor = game.getPlayerColor(sessionPlayer);
+        Player activePlayer = game.getRedPlayer().getIsTurn() ? game.getRedPlayer() : game.getWhitePlayer();
 
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);
         vm.put("board",game.getBoard().transposeForColor(playerColor));
         vm.put("viewMode", "PLAY");
         vm.put("redPlayer", game.getRedPlayer());
         vm.put("whitePlayer", game.getWhitePlayer());
-        vm.put("activeColor", playerColor.toString());
+        vm.put("activeColor", game.getPlayerColor(activePlayer).toString());
 
         return templateEngine.render(new ModelAndView(vm, GAME_VIEW));
     }
