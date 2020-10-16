@@ -39,6 +39,9 @@ public class GetGameRoute implements Route{
     static final String TITLE = "Web Checker";
     static final String GAME_ID_ATTR = "gameID";
 
+    static final String WIN_MSG = "Game Over! You have captured all the pieces! You have won the game!";
+    static final String LOSE_MSG = "Game Over! You have lost all your pieces. You have lost the game.";
+
     /**
      * The constructor for the {@code GET /game} route handler.
      *
@@ -121,11 +124,12 @@ public class GetGameRoute implements Route{
             //check if sessionPlayer won the game
             if ((winType.equals(Game.WinType.RED_WIN) && playerColor.equals(Piece.PieceColor.RED)) ||
                     (winType.equals(Game.WinType.WHITE_WIN) && playerColor.equals(Piece.PieceColor.WHITE))) {
-                modeOptions.put("gameOverMessage", "Game Over! \nYou have won the game!");
+                modeOptions.put("gameOverMessage", WIN_MSG);       //notify player that they won
             } else {
-                modeOptions.put("gameOverMessage", "Game Over! \nYou have lost the game.");
+                modeOptions.put("gameOverMessage", LOSE_MSG);      //notify player that they lost
+                redirectHomeWithMessage(response, LOSE_MSG);
             }
-            gameCenter.endGame(game);
+            gameCenter.endGame(game);                             //end the game
         }
 
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);

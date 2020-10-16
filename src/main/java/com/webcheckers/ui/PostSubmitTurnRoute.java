@@ -65,31 +65,16 @@ public class PostSubmitTurnRoute implements Route {
         game.submitMove();
 
         Game.WinType winType = game.checkWin();
-        Player redPlayer = game.getRedPlayer();
-        Player whitePlayer = game.getWhitePlayer();
+
         Message msg;
 
-        // Set the message type, text and toggle active state based on the result
-        switch (winType) {
-            case NO_WIN: {
-                msg = Message.info("Move submitted successfully");
-                break;
-            }
-            case RED_WIN: {
-                msg = Message.info(redPlayer.getName() + "has won the game! \n" + whitePlayer.getName() + "has lost");
-                game.setActive(false);
-                break;
-            }
-            case WHITE_WIN: {
-                msg = Message.info(whitePlayer.getName() + "has won the game! \n" + redPlayer.getName() + "has lost");
-                game.setActive(false);
-                break;
-            }
-            default: {
-                msg = Message.error("An unknown error has occurred, please contact the developers!");
-            }
+        //set game active to false if a player wins
+        if (!winType.equals(Game.WinType.NO_WIN)) {
+            game.setActive(false);
         }
 
+        msg = Message.info("Move submitted successfully");
         return gson.toJson(msg, Message.class);
+
     }
 }
