@@ -14,6 +14,10 @@ public class Player {
      * This player's username
      */
     private String name;
+    /**
+     * Returns true if it's the player's turn
+     */
+    private boolean isTurn;
 
     /**
      * Creates a new player with a username
@@ -35,4 +39,10 @@ public class Player {
     public String getName() {
         return name;
     }
+
+    public boolean getIsTurn() {return isTurn;}
+
+    public void setIsTurn(boolean turn) {
+        this.isTurn = turn;
+}
 }

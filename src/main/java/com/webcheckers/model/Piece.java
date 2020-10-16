@@ -8,7 +8,8 @@ public class Piece {
      * A enum representing the type of piece
      */
     public enum PieceType {
-        SINGLE("SINGLE");
+        SINGLE("SINGLE"),
+        KING("KING");
 
         private String type;
 
@@ -64,4 +65,10 @@ public class Piece {
     public PieceColor getColor() {
         return this.color;
     }
+
+    /**
+     * sets the type of the Piece
+     * @param type the type to set the piece to
+     */
+    public void setType(PieceType type){this.type = type;}
 }

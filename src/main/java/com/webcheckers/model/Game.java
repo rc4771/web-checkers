@@ -21,7 +21,8 @@ public class Game {
         PIECE_NULL_ERR,         // There is no piece to move at the start space, so invalid
         END_OCCUPIED_ERR,       // There is a piece at the end space, so invalid
         MOVE_DIRECTION_ERR,     // The direction of the move is backwards, so invalid
-        TOO_FAR_ERR             // The piece moved too far without jumping, so invalid
+        TOO_FAR_ERR,            // The piece moved too far without jumping, so invalid
+        NOT_TURN_ERR,           // It is not the player's turn to move
     }
 
     public enum GameOverType {
@@ -43,7 +44,9 @@ public class Game {
         this.gameID = gameID;
         this.board = new Board();
         this.redPlayer = redPlayer;
+        this.redPlayer.setIsTurn(true);
         this.whitePlayer = whitePlayer;
+        this.whitePlayer.setIsTurn(false);
 
         pendingMoveStartRow = -1;
         pendingMoveStartCell = -1;
@@ -119,11 +122,22 @@ public class Game {
 
         Piece.PieceColor color = board.getPieceColorAt(startRow, startCell);
 
-        if (color == Piece.PieceColor.RED && startRow > endRow) {   // #3
-            return MoveResult.MOVE_DIRECTION_ERR;
-        } else if (color == Piece.PieceColor.WHITE && startRow < endRow) {
+        if (color == Piece.PieceColor.RED && startRow > endRow                                 // #3 (also checks if
+                && this.board.getPieceTypeAt(startRow,startCell) == Piece.PieceType.SINGLE) {  //a single piece is used,
+                                                                                               // it is invalid if so)
             return MoveResult.MOVE_DIRECTION_ERR;
         }
+        else if (color == Piece.PieceColor.RED && !redPlayer.getIsTurn()){     //checking for turn
+            return MoveResult.NOT_TURN_ERR;
+        }
+        else if (color == Piece.PieceColor.WHITE && startRow < endRow
+                && this.board.getPieceTypeAt(startRow,startCell) == Piece.PieceType.SINGLE) {
+            return MoveResult.MOVE_DIRECTION_ERR;
+        }
+        else if (color == Piece.PieceColor.WHITE && !whitePlayer.getIsTurn()){    //checking for turn
+            return MoveResult.NOT_TURN_ERR;
+        }
+
 
         // TODO Implement jumps & multijumps validation
         if (Math.sqrt(Math.pow(endRow - startRow, 2.0) + Math.pow(endCell - startCell, 2.0)) > 1.5) {    // #4
@@ -171,6 +185,14 @@ public class Game {
         }
 
         board.movePiece(pendingMoveStartRow, pendingMoveStartCell, pendingMoveEndRow, pendingMoveEndCell);
+        if (board.getPieceColorAt(pendingMoveEndRow, pendingMoveEndCell) == Piece.PieceColor.RED) {
+            this.redPlayer.setIsTurn(false);
+            this.whitePlayer.setIsTurn(true);
+        }
+        else{
+            this.whitePlayer.setIsTurn(false);
+            this.redPlayer.setIsTurn(true);
+        }
 
         resetPendingMove();
     }
