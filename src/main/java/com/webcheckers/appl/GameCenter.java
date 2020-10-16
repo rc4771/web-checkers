@@ -122,6 +122,9 @@ public class GameCenter {
      */
     public void endGame(Game currentGame){
         currentGames.remove(currentGame.getGameID());
+
+        //Game over message logic
+
     }
 
     /**
