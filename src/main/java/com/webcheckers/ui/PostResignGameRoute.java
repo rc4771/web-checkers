@@ -13,7 +13,7 @@ public class PostResignGameRoute implements Route {
     private static final Logger LOG = Logger.getLogger(PostResignGameRoute.class.getName());
 
     //String Constants
-    //static final String
+    static final String GAME_ID_ATTR = "gameID";
 
     //private final TemplateEngine templateEngine;
     private final GameCenter gameCenter;
@@ -23,9 +23,9 @@ public class PostResignGameRoute implements Route {
      * The constructor for the {@code POST /resignGame} route handler.
      *
      * @param gameCenter
-     *    The
+     *    Used to handle game logic across the site
      * @param gson
-     *   The
+     *   Used to convert objects to JSON format
      */
     public PostResignGameRoute(GameCenter gameCenter, Gson gson){
         this.gameCenter = gameCenter;
@@ -45,8 +45,8 @@ public class PostResignGameRoute implements Route {
      */
     @Override
     public Object handle(Request request, Response response){
-        //gameCenter.endGame()
-        //gameCenter.getGame()
+        Game game = gameCenter.getGame(Integer.parseInt(request.queryParams(GAME_ID_ATTR)));
+        game.setActive(false);
         return gson.toJson(Message.info("Resigned successfully"), Message.class);
     }
 }
