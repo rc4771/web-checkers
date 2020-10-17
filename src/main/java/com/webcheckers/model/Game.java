@@ -10,6 +10,7 @@ import java.util.LinkedList;
  */
 public class Game {
     private int gameID;
+    private boolean active;
     private Board board;
     private Player redPlayer;
     private Player whitePlayer;
@@ -28,6 +29,12 @@ public class Game {
         NOT_TURN_ERR,           // It is not the player's turn to move
         INVALID_JUMP,           // An invalid jump has been made
         MUST_MAKE_JUMP,         // Player made a single move when a jump is required
+    }
+
+    public enum GameOverType {
+        RED,
+        WHITE,
+        RESIGN
     }
 
     /**
@@ -77,6 +84,14 @@ public class Game {
      */
     public Player getWhitePlayer() {
         return whitePlayer;
+    }
+
+    public boolean getActive(){
+        return active;
+    }
+
+    public void setActive(boolean active){
+        this.active = active;
     }
 
     /**

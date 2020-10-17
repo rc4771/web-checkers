@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.Board;
+import com.webcheckers.model.Piece;
 
 /**
  * An object to coordinate games and game statistics across the site.
@@ -88,7 +90,7 @@ public class GameCenter {
     }
 
     /**
-     * Gets the game a playes is currently in.
+     * Gets the game a player is currently in.
      * @param player
      *      The player in question, must not be null
      * @return
@@ -109,5 +111,53 @@ public class GameCenter {
         }
 
         return -1;
+    }
+
+    /**
+     * Ends current game
+     * @param currentGame
+     *      The game to be ended
+     * @return
+     *
+     */
+    public void endGame(Game currentGame){
+        currentGames.remove(currentGame.getGameID());
+    }
+
+    /**
+     * Checks the pieces on the board to see if game is over
+     * @param gameID
+     *      The gameID for the game to be checked
+     * @return
+     *  If game is over, it will return winning player. Otherwise, it will return null
+     */
+    public Player checkGameOver(int gameID){
+        Game currentGame = getGame(gameID);
+
+        int whitePieces = 0;
+        int redPieces = 0;
+        Board board = getGame(gameID).getBoard();
+
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; i < 8; i++){
+                if(board.hasPieceAt(i, j)){
+                    if(board.getPieceAt(i, j).getColor() == Piece.PieceColor.RED){
+                        redPieces++;
+                    }
+                    else{
+                        whitePieces++;
+                    }
+                }
+            }
+        }
+
+        if(redPieces == 0){
+            return currentGame.getWhitePlayer();
+        }
+        else if (whitePieces == 0){
+            return currentGame.getRedPlayer();
+        }
+
+        return null; //game is not over
     }
 }
