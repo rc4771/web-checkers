@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.webcheckers.appl.GameCenter;
 import com.webcheckers.model.Game;
+import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
 
@@ -33,7 +34,11 @@ public class PostSubmitTurnRoute implements Route {
      * The constructor for the {@code POST /backupMove} route handler.
      *
      * @param gameCenter
+<<<<<<< HEAD
+     *    The game center instance for handling log in related stuff
+=======
      *          the GameCenter used to handle game logic across the site
+>>>>>>> master
      * @param templateEngine
      *          the HTML template rendering engine
      * @param gson
@@ -59,6 +64,17 @@ public class PostSubmitTurnRoute implements Route {
 
         game.submitMove();
 
-        return gson.toJson(Message.info("Move submitted successfully"), Message.class);
+        Game.WinType winType = game.checkWin();
+
+        Message msg;
+
+        //set game active to false if a player wins
+        if (!winType.equals(Game.WinType.NO_WIN)) {
+            game.setActive(false);
+        }
+
+        msg = Message.info("Move submitted successfully");
+        return gson.toJson(msg, Message.class);
+
     }
 }

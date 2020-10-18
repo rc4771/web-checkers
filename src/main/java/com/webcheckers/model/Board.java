@@ -101,6 +101,29 @@ public class Board implements Iterable<Row> {
     }
 
     /**
+     * Checks to see if a given position exists on the board
+     * @param row The row
+     * @param cell The column
+     * @return True if the position is valid on the board
+     */
+    public boolean inBounds(int row, int cell) {
+        return row < 8 && cell < 8 && row >= 0 && cell >= 0;
+    }
+
+    /**
+     * Removes a piece from a given position in the board
+     * @param row The row to remove from
+     * @param cell The column to remove from
+     */
+    public void removePiece(int row, int cell) {
+        if (row < 0 || row >= rows.size() || cell < 0 || cell >= rows.size()) { // Rows & cell size must be equal
+            return;
+        }
+
+        rows.get(row).getSpaces().get(cell).setPiece(null);
+    }
+
+    /**
      * Checks to see if there is a piece at a space
      * @param row
      *      The row to get the piece at, should be within board bounds
@@ -116,16 +139,15 @@ public class Board implements Iterable<Row> {
     /**
      * Moves a piece from one space to another and performs any jumps/captures in the process. This will null check
      * the start and end spaces, if start is null or end isn't null, the move won't happen
-     * @param startRow
-     *      The starting row to move from, should be within board bounds
-     * @param startCell
-     *      The starting cell to move from, should be within board bounds
-     * @param endRow
-     *      The ending row to move to, should be within board bounds
-     * @param endCell
-     *      The endign cell to move to, should be within board bounds
+     * @param move The move to make
      */
-    public void movePiece(int startRow, int startCell, int endRow, int endCell) {
+    public void movePiece(Move move) {
+
+        int startRow = move.getStart().getRow();
+        int startCell = move.getStart().getCell();
+        int endRow = move.getEnd().getRow();
+        int endCell = move.getEnd().getCell();
+
         Piece piece = getPieceAt(startRow, startCell);
         if (piece == null) {
             return;
@@ -138,7 +160,15 @@ public class Board implements Iterable<Row> {
         rows.get(endRow).getSpaces().get(endCell).setPiece(piece);
         rows.get(startRow).getSpaces().get(startCell).setPiece(null);
 
-        // TODO Perform captures in the event of a jump
+        if ((endRow == 7 && piece.getColor() == Piece.PieceColor.RED)              //check if piece is on opposite
+                || (endRow == 0 && piece.getColor() == Piece.PieceColor.WHITE)) {  //end of the board
+            piece.setType(Piece.PieceType.KING);     //convert the piece to a King
+        }
+
+        // remove captured pieces from the board
+        for (Move.PieceCapture capture: move.getCaptures()) {
+            removePiece(capture.getPosition().getRow(), capture.getPosition().getCell());
+        }
     }
 
     /**

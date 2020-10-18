@@ -1,26 +1,40 @@
 package com.webcheckers.model;
 
+import com.webcheckers.ui.PostSubmitTurnRoute;
+
+import java.util.LinkedList;
+
 /**
  * An object to represent an active game of checkers, with a board, between two players. One player is the "red"
  * player and the other one is the "white" player.
  */
 public class Game {
     private int gameID;
+    private boolean active;
     private Board board;
     private Player redPlayer;
     private Player whitePlayer;
 
-    private int pendingMoveStartRow;
-    private int pendingMoveStartCell;
-    private int pendingMoveEndRow;
-    private int pendingMoveEndCell;
+    private Move pendingMove;
+
+    /** The list of valid jumps */
+    private LinkedList<Move> validJumps;
 
     public enum MoveResult {
         OK,                     // The move is valid and can be made
         PIECE_NULL_ERR,         // There is no piece to move at the start space, so invalid
         END_OCCUPIED_ERR,       // There is a piece at the end space, so invalid
         MOVE_DIRECTION_ERR,     // The direction of the move is backwards, so invalid
-        TOO_FAR_ERR             // The piece moved too far without jumping, so invalid
+        TOO_FAR_ERR,            // The piece moved too far without jumping, so invalid
+        NOT_TURN_ERR,           // It is not the player's turn to move
+        INVALID_JUMP,           // An invalid jump has been made
+        MUST_MAKE_JUMP,         // Player made a single move when a jump is required
+    }
+
+    public enum WinType {
+        RED_WIN,
+        WHITE_WIN,
+        NO_WIN
     }
 
     /**
@@ -36,12 +50,13 @@ public class Game {
         this.gameID = gameID;
         this.board = new Board();
         this.redPlayer = redPlayer;
+        this.redPlayer.setIsTurn(true);
         this.whitePlayer = whitePlayer;
+        this.whitePlayer.setIsTurn(false);
+        this.active = true;
 
-        pendingMoveStartRow = -1;
-        pendingMoveStartCell = -1;
-        pendingMoveEndRow = -1;
-        pendingMoveEndCell = -1;
+        this.pendingMove = null;
+        this.validJumps = new LinkedList<>();
     }
 
     /**
@@ -72,15 +87,66 @@ public class Game {
         return whitePlayer;
     }
 
+    public boolean getActive(){
+        return active;
+    }
+
+    public void setActive(boolean active){
+        this.active = active;
+    }
+
+    /**
+     * Calculates the possible jumps the current player could make
+     */
+    public void calculateValidJumps() {
+        validJumps.clear();
+        if (redPlayer.getIsTurn()) {
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (board.getPieceColorAt(i, j) == Piece.PieceColor.RED) {
+                        validJumps.addAll(board.getPieceAt(i, j).getJumps(board, new Position(i, j)));
+                    }
+                }
+            }
+        } else if (whitePlayer.getIsTurn()) {
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (board.getPieceColorAt(i, j) == Piece.PieceColor.WHITE) {
+                        validJumps.addAll(board.getPieceAt(i, j).getJumps(board, new Position(i, j)));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks to see if a jump is valid
+     * If no jumps can be made, then the move is valid
+     * @param start The starting position of the jump
+     * @param end The end position of the jump
+     * @return The move that was made, null if invalid
+     */
+    public Move isValidJump(Position start, Position end) {
+        calculateValidJumps();
+
+        for (Move jump: validJumps) {
+            if (jump.getStart().equals(start) && jump.getEnd().equals(end)) {
+                return jump;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Validates the move of a piece. This validates:
      *      1) There is a piece at this row & cell
      *      2) There isn't a piece at the ending row & cell
      *      3) The direction of the jump according to the piece's color
-     *      4) TODO 1/2 The move only goes 1 square if there are no jumps made
-     *      5) TODO If this move isn't a jump, and the player with the color of this piece CAN make a jump, then that
+     *      4) The move only goes 1 square if there are no jumps made
+     *      5) If this move isn't a jump, and the player with the color of this piece CAN make a jump, then that
      *              jump must be made, so this is an invalid move
-     *      6) TODO If this move is a jump, and there are more jumps to be made after this jump, then those jumps must
+     *      6) If this move is a jump, and there are more jumps to be made after this jump, then those jumps must
      *              be made as well, so this is an invalid move
      * @param startRow
      *      The starting row to move from, should be within board bounds
@@ -94,6 +160,9 @@ public class Game {
      *      An enum MoveResult representing how the validation of the move checked out, see MoveResult for details
      */
     public MoveResult validateMove(int startRow, int startCell, int endRow, int endCell) {
+
+        calculateValidJumps();
+
         if (!board.hasPieceAt(startRow, startCell)) {   // #1
             return MoveResult.PIECE_NULL_ERR;
         }
@@ -104,15 +173,32 @@ public class Game {
 
         Piece.PieceColor color = board.getPieceColorAt(startRow, startCell);
 
-        if (color == Piece.PieceColor.RED && startRow > endRow) {   // #3
-            return MoveResult.MOVE_DIRECTION_ERR;
-        } else if (color == Piece.PieceColor.WHITE && startRow < endRow) {
+        if (color == Piece.PieceColor.RED && startRow > endRow                                 // #3 (also checks if
+                && this.board.getPieceTypeAt(startRow,startCell) == Piece.PieceType.SINGLE) {  //a single piece is used,
+                                                                                               // it is invalid if so)
             return MoveResult.MOVE_DIRECTION_ERR;
         }
-
-        // TODO Implement jumps & multijumps validation
-        if (Math.sqrt(Math.pow(endRow - startRow, 2.0) + Math.pow(endCell - startCell, 2.0)) > 1.5) {    // #4
+        else if (color == Piece.PieceColor.RED && !redPlayer.getIsTurn()){     //checking for turn
+            return MoveResult.NOT_TURN_ERR;
+        }
+        else if (color == Piece.PieceColor.WHITE && startRow < endRow
+                && this.board.getPieceTypeAt(startRow,startCell) == Piece.PieceType.SINGLE) {
+            return MoveResult.MOVE_DIRECTION_ERR;
+        }
+        else if (color == Piece.PieceColor.WHITE && !whitePlayer.getIsTurn()){    //checking for turn
+            return MoveResult.NOT_TURN_ERR;
+        }
+        else if (Math.sqrt(Math.pow(endRow - startRow, 2.0) + Math.pow(endCell - startCell, 2.0)) > 1.5) {    // #4
+            if (!validJumps.isEmpty()) { // #5 & #6
+                if (isValidJump(new Position(startRow, startCell), new Position(endRow, endCell)) == null) {
+                    return MoveResult.INVALID_JUMP;
+                } else {
+                    return MoveResult.OK;
+                }
+            }
             return MoveResult.TOO_FAR_ERR;
+        } else if (!validJumps.isEmpty()) {
+            return MoveResult.MUST_MAKE_JUMP;
         }
 
         return MoveResult.OK;
@@ -130,20 +216,18 @@ public class Game {
      *      The ending cell to move to, should be within board bounds
      */
     public void setPendingMove(int startRow, int startCell, int endRow, int endCell) {
-        pendingMoveStartRow = startRow;
-        pendingMoveStartCell = startCell;
-        pendingMoveEndRow = endRow;
-        pendingMoveEndCell = endCell;
+        if (validJumps.isEmpty()) {
+            pendingMove = new Move(new Position(startRow, startCell), new Position(endRow, endCell));
+        } else {
+            pendingMove = isValidJump(new Position(startRow, startCell), new Position(endRow, endCell));
+        }
     }
 
     /**
      * Resets the pending move for the player who's turn it is, meaning submitMove(..) will return early and do nothing
      */
     public void resetPendingMove() {
-        pendingMoveStartRow = -1;
-        pendingMoveStartCell = -1;
-        pendingMoveEndRow = -1;
-        pendingMoveEndCell = -1;
+        this.pendingMove = null;
     }
 
     /**
@@ -151,11 +235,16 @@ public class Game {
      * set or was reset, no move will happen
      */
     public void submitMove() {
-        if (pendingMoveStartRow < 0 || pendingMoveStartCell < 0 || pendingMoveEndRow < 0 || pendingMoveEndCell < 0) {
+        if (pendingMove == null) {
+            System.out.println("move is null");
             return;
         }
 
-        board.movePiece(pendingMoveStartRow, pendingMoveStartCell, pendingMoveEndRow, pendingMoveEndCell);
+        board.movePiece(pendingMove);
+
+        // toggle turns
+        this.redPlayer.setIsTurn(!this.redPlayer.getIsTurn());
+        this.whitePlayer.setIsTurn(!this.whitePlayer.getIsTurn());
 
         resetPendingMove();
     }
@@ -176,5 +265,38 @@ public class Game {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Checks the pieces on the board to see if all of one color are gone
+     * @return
+     *  If game is over, it will return a WinType based on what color pieces are gone
+     */
+    public WinType checkWin(){
+
+        int whitePieces = 0;
+        int redPieces = 0;
+
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                if(this.board.hasPieceAt(i, j)){
+                    if(this.board.getPieceAt(i, j).getColor() == Piece.PieceColor.RED){
+                        redPieces++;
+                    }
+                    else{
+                        whitePieces++;
+                    }
+                }
+            }
+        }
+
+        if(redPieces == 0){
+            return WinType.WHITE_WIN;
+        }
+        else if (whitePieces == 0){
+            return WinType.RED_WIN;
+        }
+
+        return WinType.NO_WIN; //game is not over
     }
 }

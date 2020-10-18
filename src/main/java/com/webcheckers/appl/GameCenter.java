@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.Board;
+import com.webcheckers.model.Piece;
 
 /**
  * An object to coordinate games and game statistics across the site.
@@ -48,6 +50,14 @@ public class GameCenter {
      *      A new game object (the game ID is found within Game)
      */
     public Game newGame(Player redPlayer, Player whitePlayer) {
+        if (redPlayer == null || whitePlayer == null) {
+            return null;
+        }
+
+        if (isPlayerInGame(redPlayer) || isPlayerInGame(whitePlayer)) {
+            return null;
+        }
+
         LOG.fine(String.format("Created a new game with players '%s' and '%s'", redPlayer.getName(),
                 whitePlayer.getName()));
         int gameID = gameIDCounter++;
@@ -80,13 +90,17 @@ public class GameCenter {
     }
 
     /**
-     * Gets the game a playes is currently in.
+     * Gets the game a player is currently in.
      * @param player
      *      The player in question, must not be null
      * @return
      *      The game ID that the player is currently in. If the player is not in a game, it returns -1
      */
     public int getGameFromPlayer(Player player) {
+        if (player == null) {
+            return -1;
+        }
+
         for (int gameID : currentGames.keySet()) {
             Game game = currentGames.get(gameID);
 
@@ -98,4 +112,16 @@ public class GameCenter {
 
         return -1;
     }
+
+    /**
+     * Ends current game
+     * @param currentGame
+     *      The game to be ended
+     * @return
+     *
+     */
+    public void endGame(Game currentGame){
+        currentGames.remove(currentGame.getGameID());
+    }
+
 }

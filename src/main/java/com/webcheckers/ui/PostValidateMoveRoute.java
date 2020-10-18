@@ -33,8 +33,12 @@ public class PostValidateMoveRoute implements Route {
     /**
      * The constructor for the {@code POST /backupMove} route handler.
      *
+<<<<<<< HEAD:src/main/java/com/webcheckers/ui/PostValidMoveRoute.java
+     * @param gameCenter The game center instance for handling log in related stuff
+=======
      * @param gameCenter
      *          the GameCenter used to handle game logic across the site
+>>>>>>> master:src/main/java/com/webcheckers/ui/PostValidateMoveRoute.java
      * @param templateEngine
      *          the HTML template rendering engine
      * @param gson
@@ -67,7 +71,6 @@ public class PostValidateMoveRoute implements Route {
         int endCell = jsonData.get("end").getAsJsonObject().get("cell").getAsInt();
 
         Game.MoveResult moveResult = game.validateMove(startRow, startCell, endRow, endCell);
-        String type, text;
         Message msg;
 
         // Set the message type and text based on the move validation result
@@ -93,6 +96,16 @@ public class PostValidateMoveRoute implements Route {
             }
             case TOO_FAR_ERR: {
                 msg = Message.error("Your cannot move more than 1 space without jumping");
+                break;
+            }
+            case NOT_TURN_ERR: {
+                msg = Message.error("It is not your turn, please wait for the other player to finish their turn");
+                break;
+            } case INVALID_JUMP: {
+                msg = Message.error("That is not a valid jump move");
+                break;
+            } case MUST_MAKE_JUMP: {
+                msg = Message.error("You made a single move, even though you can make a jump. Please jump");
                 break;
             }
             default: {
