@@ -5,12 +5,13 @@ import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import spark.*;
 
 import static com.webcheckers.ui.GetGameRoute.GAME_ID_ATTR;
 import static com.webcheckers.ui.GetHomeRoute.ERROR_MESSAGE_ATTR;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class GetGameRouteTest {

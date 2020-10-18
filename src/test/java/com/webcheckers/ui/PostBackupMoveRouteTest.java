@@ -69,7 +69,7 @@ public class PostBackupMoveRouteTest {
         center = new GameCenter();
         game = center.newGame(redPlayer, whitePlayer);
 
-        CuT = new PostBackupMoveRoute(center, engine, gson);
+        CuT = new PostBackupMoveRoute(center, gson);
     }
 
     @Test

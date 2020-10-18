@@ -69,7 +69,7 @@ public class PostSubmitTurnRouteTest {
         center = new GameCenter();
         game = center.newGame(redPlayer, whitePlayer);
 
-        CuT = new PostSubmitTurnRoute(center, engine, gson);
+        CuT = new PostSubmitTurnRoute(center, gson);
     }
 
     @Test
