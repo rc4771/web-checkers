@@ -23,6 +23,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Tag("UI-tier")
+/**
+ * Unt testing for PostBackupMoveRoute
+ */
 public class PostBackupMoveRouteTest {
     /**
      * The Component under Test (CuT)
@@ -44,6 +47,9 @@ public class PostBackupMoveRouteTest {
     private TemplateEngine engine;
 
     @BeforeEach
+    /**
+     * Initialization for each test
+     */
     public void setup() {
         request = Mockito.mock(Request.class);
         session = Mockito.mock(Session.class);
@@ -67,6 +73,9 @@ public class PostBackupMoveRouteTest {
     }
 
     @Test
+    /**
+     * Tests the handle method
+     */
     void handleTest(){
         JsonObject actionData = new JsonObject();
         JsonObject start = new JsonObject();
