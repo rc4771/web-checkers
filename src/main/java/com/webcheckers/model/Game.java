@@ -31,10 +31,10 @@ public class Game {
         MUST_MAKE_JUMP,         // Player made a single move when a jump is required
     }
 
-    public enum GameOverType {
-        RED,
-        WHITE,
-        RESIGN
+    public enum WinType {
+        RED_WIN,
+        WHITE_WIN,
+        NO_WIN
     }
 
     /**
@@ -53,6 +53,7 @@ public class Game {
         this.redPlayer.setIsTurn(true);
         this.whitePlayer = whitePlayer;
         this.whitePlayer.setIsTurn(false);
+        this.active = true;
 
         this.pendingMove = null;
         this.validJumps = new LinkedList<>();
@@ -264,5 +265,38 @@ public class Game {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Checks the pieces on the board to see if all of one color are gone
+     * @return
+     *  If game is over, it will return a WinType based on what color pieces are gone
+     */
+    public WinType checkWin(){
+
+        int whitePieces = 0;
+        int redPieces = 0;
+
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                if(this.board.hasPieceAt(i, j)){
+                    if(this.board.getPieceAt(i, j).getColor() == Piece.PieceColor.RED){
+                        redPieces++;
+                    }
+                    else{
+                        whitePieces++;
+                    }
+                }
+            }
+        }
+
+        if(redPieces == 0){
+            return WinType.WHITE_WIN;
+        }
+        else if (whitePieces == 0){
+            return WinType.RED_WIN;
+        }
+
+        return WinType.NO_WIN; //game is not over
     }
 }
