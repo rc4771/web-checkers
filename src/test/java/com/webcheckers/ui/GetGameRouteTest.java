@@ -146,6 +146,13 @@ public class GetGameRouteTest {
         Game g = gameCenter.newGame(p, op);
         when(request.queryParams(GAME_ID_ATTR)).thenReturn(Integer.toString(g.getGameID()));
 
+        final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+
         CuT.handle(request, response);
+
+        testHelper.assertViewModelExists();
+        testHelper.assertViewModelIsaMap();
+        testHelper.assertViewName(GetGameRoute.GAME_VIEW);
     }
 }
