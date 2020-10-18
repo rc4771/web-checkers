@@ -24,6 +24,21 @@ public class PlayerLobby {
     private static final Logger LOG = Logger.getLogger(PlayerLobby.class.getName());
 
     public enum SignInResult {OK, INVALID_USERNAME, USERNAME_TAKEN}
+    public enum SignOutResult {
+        OK("Sign out successful"),
+        NULL_PLAYER("Player object was null"),
+        PLAYER_NOT_LOGGED_IN("Player is not logged in");
+
+        private final String errMsg;
+
+        private SignOutResult(String errMsg) {
+            this.errMsg = errMsg;
+        }
+
+        public String getErrorMessage() {
+            return this.errMsg;
+        }
+    }
 
     /**
      * The grand hashmap containing all players that are signed in, mapped by their username. This username is
@@ -60,6 +75,20 @@ public class PlayerLobby {
         signedInPlayers.put(username, new Player(username));
 
         return SignInResult.OK;
+    }
+
+    public SignOutResult signOutPlayer(Player player) {
+        if (player == null) {
+            return SignOutResult.NULL_PLAYER;
+        }
+
+        if (!signedInPlayers.containsKey(player.getName())) {
+            return SignOutResult.PLAYER_NOT_LOGGED_IN;
+        }
+
+        signedInPlayers.remove(player.getName());
+
+        return SignOutResult.OK;
     }
 
     /**
