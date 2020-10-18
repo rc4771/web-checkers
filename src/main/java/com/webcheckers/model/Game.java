@@ -1,6 +1,5 @@
 package com.webcheckers.model;
 
-import com.webcheckers.ui.PostSubmitTurnRoute;
 import com.webcheckers.util.MoveValidator;
 
 import java.util.LinkedList;
