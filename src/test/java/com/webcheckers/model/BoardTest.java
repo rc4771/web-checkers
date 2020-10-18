@@ -157,9 +157,9 @@ class BoardTest {
 		assertEquals(board1.getPieceColorAt(5, 0), board2.getPieceColorAt(5, 0));
 
 		// Test regular move
-		board1.movePiece(new Move(new Position(0, 1), new Position(3, 1)));
-		assertEquals(board1.getPieceColorAt(3, 1), Piece.PieceColor.RED);
-		assertEquals(board1.getPieceTypeAt(3, 1), Piece.PieceType.SINGLE);
+		board1.movePiece(new Move(new Position(0, 1), new Position(4, 1)));
+		assertEquals(board1.getPieceColorAt(4, 1), Piece.PieceColor.RED);
+		assertEquals(board1.getPieceTypeAt(4, 1), Piece.PieceType.SINGLE);
 	}
 
 	@Test

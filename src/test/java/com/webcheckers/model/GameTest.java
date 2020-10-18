@@ -71,7 +71,7 @@ public class GameTest {
 
 
         // Test where: move is too far away
-        assertThrows(TooFarMoveException.class, () -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.RED, 5, 2, 3, 3));
+        assertThrows(TooFarMoveException.class, () -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.WHITE, 5, 2, 3, 3));
     }
 
     /**
