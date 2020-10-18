@@ -60,6 +60,7 @@ public class GetGameRoute implements Route{
 
     static final String WIN_MSG = "Game Over! You have captured all the pieces! You have won the game!";
     static final String LOSE_MSG = "Game Over! You have lost all your pieces. You have lost the game.";
+    static final String RESIGN_MSG = "Game Over! A player has resigned";
 
     /**
      * The constructor for the {@code GET /game} route handler.
@@ -130,6 +131,7 @@ public class GetGameRoute implements Route{
         }
 
         Piece.PieceColor playerColor = game.getPlayerColor(sessionPlayer);
+        Player activePlayer = game.getRedPlayer().getIsTurn() ? game.getRedPlayer() : game.getWhitePlayer();
 
         final Map<String, Object> modeOptions = new HashMap<>(2);
         modeOptions.put("isGameOver", false);
@@ -142,9 +144,14 @@ public class GetGameRoute implements Route{
             if ((winType.equals(Game.WinType.RED_WIN) && playerColor.equals(Piece.PieceColor.RED)) ||
                     (winType.equals(Game.WinType.WHITE_WIN) && playerColor.equals(Piece.PieceColor.WHITE))) {
                 modeOptions.put("gameOverMessage", WIN_MSG);       //notify player that they won
-            } else {
+            }
+            else if((winType.equals(Game.WinType.RED_WIN) && playerColor.equals(Piece.PieceColor.WHITE)) || (winType.equals(Game.WinType.WHITE_WIN) &&
+                    playerColor.equals(Piece.PieceColor.WHITE))){
                 modeOptions.put("gameOverMessage", LOSE_MSG);      //notify player that they lost
                 redirectHomeWithMessage(response, LOSE_MSG);
+            }
+            else{   //notify resignation
+                modeOptions.put("gameOverMessage", RESIGN_MSG);
             }
             gameCenter.endGame(game);                             //end the game
         }
@@ -155,7 +162,7 @@ public class GetGameRoute implements Route{
         vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
         vm.put("redPlayer", game.getRedPlayer());
         vm.put("whitePlayer", game.getWhitePlayer());
-        vm.put("activeColor", playerColor.toString());
+        vm.put("activeColor", game.getPlayerColor(activePlayer).toString());
 
         return templateEngine.render(new ModelAndView(vm, GAME_VIEW));
     }
