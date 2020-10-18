@@ -116,6 +116,7 @@ public class GetGameRoute implements Route{
         }
 
         Piece.PieceColor playerColor = game.getPlayerColor(sessionPlayer);
+        Player activePlayer = game.getRedPlayer().getIsTurn() ? game.getRedPlayer() : game.getWhitePlayer();
 
         final Map<String, Object> modeOptions = new HashMap<>(2);
         modeOptions.put("isGameOver", false);
@@ -146,7 +147,7 @@ public class GetGameRoute implements Route{
         vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
         vm.put("redPlayer", game.getRedPlayer());
         vm.put("whitePlayer", game.getWhitePlayer());
-        vm.put("activeColor", playerColor.toString());
+        vm.put("activeColor", game.getPlayerColor(activePlayer).toString());
 
         return templateEngine.render(new ModelAndView(vm, GAME_VIEW));
     }
