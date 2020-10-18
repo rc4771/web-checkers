@@ -148,15 +148,15 @@ class BoardTest {
 		Board board2 = new Board();
 
 		// Test move null piece
-		board1.movePiece(0, 0, 4, 5);
+		board1.movePiece(new Move(new Position(0,0), new Position(4,5)));
 		assertFalse(board1.hasPieceAt(4, 5));
 
 		// Test move to taken spot
-		board1.movePiece(0, 1, 5, 0);
+		board1.movePiece(new Move(new Position(0,1), new Position(5,0)));
 		assertEquals(board1.getPieceColorAt(5, 0), board2.getPieceColorAt(5, 0));
 
 		// Test regular move
-		board1.movePiece(0, 1, 3, 1);
+		board1.movePiece(new Move(new Position(0, 1), new Position(3,1)));
 		assertEquals(board1.getPieceColorAt(3, 1), Piece.PieceColor.RED);
 		assertEquals(board1.getPieceTypeAt(3, 1), Piece.PieceType.SINGLE);
 	}
