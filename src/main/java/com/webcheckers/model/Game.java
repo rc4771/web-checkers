@@ -15,6 +15,9 @@ public class Game {
     /** The game ID */
     private int gameID;
 
+    /** Whether or not the game is valid */
+    private boolean active;
+
     /** The board being played on */
     private Board board;
 
@@ -26,6 +29,12 @@ public class Game {
 
     /** The move currently being made */
     private Move pendingMove;
+
+    public enum WinType {
+        RED_WIN,
+        WHITE_WIN,
+        NO_WIN
+    }
 
     /**
      * Creates a new Game object, with a new board and two players to participate
@@ -43,6 +52,7 @@ public class Game {
         this.redPlayer.setIsTurn(true);
         this.whitePlayer = whitePlayer;
         this.whitePlayer.setIsTurn(false);
+        this.active = true;
 
         this.pendingMove = null;
     }
@@ -73,6 +83,14 @@ public class Game {
      */
     public Player getWhitePlayer() {
         return whitePlayer;
+    }
+
+    public boolean getActive(){
+        return active;
+    }
+
+    public void setActive(boolean active){
+        this.active = active;
     }
 
     public Piece.PieceColor getCurrentTurn() {
@@ -143,5 +161,38 @@ public class Game {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Checks the pieces on the board to see if all of one color are gone
+     * @return
+     *  If game is over, it will return a WinType based on what color pieces are gone
+     */
+    public WinType checkWin() {
+
+        int whitePieces = 0;
+        int redPieces = 0;
+
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                if(this.board.hasPieceAt(i, j)){
+                    if(this.board.getPieceAt(i, j).getColor() == Piece.PieceColor.RED){
+                        redPieces++;
+                    }
+                    else{
+                        whitePieces++;
+                    }
+                }
+            }
+        }
+
+        if(redPieces == 0){
+            return WinType.WHITE_WIN;
+        }
+        else if (whitePieces == 0){
+            return WinType.RED_WIN;
+        }
+
+        return WinType.NO_WIN; //game is not over
     }
 }

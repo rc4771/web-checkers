@@ -158,6 +158,10 @@ class BoardTest {
 
 		// Test regular move
 		board1.movePiece(new Move(new Position(0, 1), new Position(3, 1)));
+<<<<<<< HEAD
+=======
+
+>>>>>>> 820a109ad1d9c380ec356b9c521090c7042fa09e
 		assertEquals(board1.getPieceColorAt(3, 1), Piece.PieceColor.RED);
 		assertEquals(board1.getPieceTypeAt(3, 1), Piece.PieceType.SINGLE);
 	}

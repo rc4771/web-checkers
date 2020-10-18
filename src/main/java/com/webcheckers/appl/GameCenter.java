@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.Board;
+import com.webcheckers.model.Piece;
 
 /**
  * An object to coordinate games and game statistics across the site.
@@ -92,7 +94,7 @@ public class GameCenter {
     }
 
     /**
-     * Gets the game a playes is currently in.
+     * Gets the game a player is currently in.
      * @param player
      *      The player in question, must not be null
      * @return
@@ -114,4 +116,16 @@ public class GameCenter {
 
         return -1;
     }
+
+    /**
+     * Ends current game
+     * @param currentGame
+     *      The game to be ended
+     * @return
+     *
+     */
+    public void endGame(Game currentGame){
+        currentGames.remove(currentGame.getGameID());
+    }
+
 }

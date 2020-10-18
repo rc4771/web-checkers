@@ -184,7 +184,7 @@ public class WebServer {
 
     //
     // Shows the game page
-    get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameCenter));
+    get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameCenter, gson));
 
     // All in-game move based handlers
     post(VALID_MOVE_URL, new PostValidateMoveRoute(gameCenter, gson));
