@@ -73,6 +73,8 @@ public class WebServer {
   public static final String BACKUP_MOVE_URL = "/backupMove";
 
   public static final String CHECK_TURN_URL = "/checkTurn";
+  
+  public static final String SIGNOUT_URL = "/signout";
 
   //
   // Attributes
@@ -177,13 +179,16 @@ public class WebServer {
 
     //
     // Shows the game page
-    get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameCenter));
+    get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameCenter, gson));
 
     // All in-game move based handlers
     post(VALID_MOVE_URL, new PostValidateMoveRoute(gameCenter, templateEngine, gson));
     post(SUBMIT_TURN_URL, new PostSubmitTurnRoute(gameCenter, templateEngine, gson));
     post(BACKUP_MOVE_URL, new PostBackupMoveRoute(gameCenter, templateEngine, gson));
+
     post(CHECK_TURN_URL, new PostCheckTurnRoute(gson));
+
+    post(SIGNOUT_URL, new PostSignoutRoute(playerLobby, templateEngine));
 
     //
     LOG.config("WebServer is initialized.");
