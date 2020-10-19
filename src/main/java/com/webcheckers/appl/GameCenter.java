@@ -10,8 +10,12 @@ import com.webcheckers.model.Piece;
 
 /**
  * An object to coordinate games and game statistics across the site.
+ *
+ * @author David Allen
  */
 public class GameCenter {
+
+    /** Handles logging */
     private static final Logger LOG = Logger.getLogger(GameCenter.class.getName());
 
     //Constants
@@ -124,40 +128,4 @@ public class GameCenter {
         currentGames.remove(currentGame.getGameID());
     }
 
-    /**
-     * Checks the pieces on the board to see if game is over
-     * @param gameID
-     *      The gameID for the game to be checked
-     * @return
-     *  If game is over, it will return winning player. Otherwise, it will return null
-     */
-    public Player checkGameOver(int gameID){
-        Game currentGame = getGame(gameID);
-
-        int whitePieces = 0;
-        int redPieces = 0;
-        Board board = getGame(gameID).getBoard();
-
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; i < 8; i++){
-                if(board.hasPieceAt(i, j)){
-                    if(board.getPieceAt(i, j).getColor() == Piece.PieceColor.RED){
-                        redPieces++;
-                    }
-                    else{
-                        whitePieces++;
-                    }
-                }
-            }
-        }
-
-        if(redPieces == 0){
-            return currentGame.getWhitePlayer();
-        }
-        else if (whitePieces == 0){
-            return currentGame.getRedPlayer();
-        }
-
-        return null; //game is not over
-    }
 }

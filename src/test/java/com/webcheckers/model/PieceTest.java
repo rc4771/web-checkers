@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import com.webcheckers.model.pieces.RedSinglePiece;
+import com.webcheckers.model.pieces.WhiteSinglePiece;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -10,7 +12,7 @@ public class PieceTest {
      */
     @Test
     public void colorTestRed() {
-        Piece piece = new Piece(Piece.PieceColor.RED, Piece.PieceType.SINGLE);
+        Piece piece = new RedSinglePiece();
         assertTrue(piece.getColor() == Piece.PieceColor.RED);
     }
 
@@ -19,7 +21,7 @@ public class PieceTest {
      */
     @Test
     public void colorTestWhite() {
-        Piece piece = new Piece(Piece.PieceColor.WHITE, Piece.PieceType.SINGLE);
+        Piece piece = new WhiteSinglePiece();
         assertTrue(piece.getColor() == Piece.PieceColor.WHITE);
     }
 
@@ -28,7 +30,7 @@ public class PieceTest {
      */
     @Test
     public void singleTest() {
-        Piece piece = new Piece(Piece.PieceColor.RED, Piece.PieceType.SINGLE);
+        Piece piece = new RedSinglePiece();
         assertTrue(piece.getType() == Piece.PieceType.SINGLE);
     }
 }

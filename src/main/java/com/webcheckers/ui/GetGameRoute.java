@@ -20,6 +20,11 @@ import static spark.Spark.halt;
 
 import com.webcheckers.appl.PlayerLobby;
 
+/**
+ * Sends the game page to the user
+ *
+ * @author David Allen
+ */
 public class GetGameRoute implements Route{
     private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
@@ -30,14 +35,32 @@ public class GetGameRoute implements Route{
     static final String SINGLE_PIECE_RED = "single-piece-red.svg";
     static final String SINGLE_PIECE_WHITE = "single-piece-red.svg";
 
+    static final String OPPONENT_IN_GAME_ERR_MSG = "That player is already in a game";
+    static final String SESSION_PLAYER_NULL_ERR_MSG = "Player object from session was null, contact the developers!";
+    static final String GAME_OBJECT_NULL_ERR_MSG = "Game object was null, contact the developers!";
+
+    /** Renders the web page */
     private final TemplateEngine templateEngine;
+
+    /** Stores all the players */
     private final PlayerLobby playerLobby;
+
+    /** Stores the games */
     private final GameCenter gameCenter;
     private final Gson gson;
 
+    /** The name of the FTL file */
     static final String GAME_VIEW = "game.ftl";
+
+    /** The name of the page */
     static final String TITLE = "Web Checker";
+
+    /** The GAME ID attribute */
     static final String GAME_ID_ATTR = "gameID";
+
+    static final String WIN_MSG = "Game Over! You have captured all the pieces! You have won the game!";
+    static final String LOSE_MSG = "Game Over! You have lost all your pieces. You have lost the game.";
+    static final String RESIGN_MSG = "Game Over! A player has resigned";
 
     /**
      * The constructor for the {@code GET /game} route handler.
@@ -61,6 +84,12 @@ public class GetGameRoute implements Route{
     public String handle(Request request, Response response) {
         final Session httpSession = request.session();
 
+        // get the current user
+        Player sessionPlayer;
+        if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) == null) {
+            return redirectHomeWithMessage(response, SESSION_PLAYER_NULL_ERR_MSG);
+        }
+
         // If there's no gameID, then check to see if we're providing params to create a game
         // then redirect with the new gameID
         if (request.queryParams(GAME_ID_ATTR) == null) {
@@ -72,12 +101,11 @@ public class GetGameRoute implements Route{
                 return null;
             }
 
-            Player sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY);
             Player opponentPlayer = playerLobby.getPlayer(opponentName);
 
             // If the player selected is already in a game, notify the user
             if (gameCenter.isPlayerInGame(opponentPlayer)) {
-                return redirectHomeWithMessage(response, "That player is already in a game");
+                return redirectHomeWithMessage(response, OPPONENT_IN_GAME_ERR_MSG);
             }
 
             // Successfully created a new game, redirect with that gameID
@@ -89,13 +117,6 @@ public class GetGameRoute implements Route{
 
         final Map<String, Object> vm = new HashMap<>();
 
-
-        // get the current user
-        Player sessionPlayer;
-        if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) == null) {
-            return redirectHomeWithMessage(response, "Player object from session was null, contact the developers!");
-        }
-
         Map<String, Object> vmCurrentUser = new HashMap<>();
         vmCurrentUser.put(CURRENT_USER_NAME_ATTR, sessionPlayer.getName());
         vm.put(CURRENT_USER_ATTR, vmCurrentUser);
@@ -106,19 +127,33 @@ public class GetGameRoute implements Route{
 
         Game game;
         if ((game = gameCenter.getGame(Integer.parseInt(request.queryParams(GAME_ID_ATTR)))) == null) {
-            return redirectHomeWithMessage(response, "Game object was null, contact the developers!");
+            return redirectHomeWithMessage(response, GAME_OBJECT_NULL_ERR_MSG);
         }
 
         Piece.PieceColor playerColor = game.getPlayerColor(sessionPlayer);
+        Player activePlayer = game.getRedPlayer().getIsTurn() ? game.getRedPlayer() : game.getWhitePlayer();
 
         final Map<String, Object> modeOptions = new HashMap<>(2);
         modeOptions.put("isGameOver", false);
 
         //checking for end of game
-        if(!game.getActive()){
-            gameCenter.endGame(game);
+        if(!game.getActive()) {
             modeOptions.put("isGameOver", true);
-            modeOptions.put("gameOverMessage", "Game Over.");
+            Game.WinType winType = game.checkWin();
+            //check if sessionPlayer won the game
+            if ((winType.equals(Game.WinType.RED_WIN) && playerColor.equals(Piece.PieceColor.RED)) ||
+                    (winType.equals(Game.WinType.WHITE_WIN) && playerColor.equals(Piece.PieceColor.WHITE))) {
+                modeOptions.put("gameOverMessage", WIN_MSG);       //notify player that they won
+            }
+            else if((winType.equals(Game.WinType.RED_WIN) && playerColor.equals(Piece.PieceColor.WHITE)) || (winType.equals(Game.WinType.WHITE_WIN) &&
+                    playerColor.equals(Piece.PieceColor.WHITE))){
+                modeOptions.put("gameOverMessage", LOSE_MSG);      //notify player that they lost
+                redirectHomeWithMessage(response, LOSE_MSG);
+            }
+            else{   //notify resignation
+                modeOptions.put("gameOverMessage", RESIGN_MSG);
+            }
+            gameCenter.endGame(game);                             //end the game
         }
 
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);
@@ -127,7 +162,7 @@ public class GetGameRoute implements Route{
         vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
         vm.put("redPlayer", game.getRedPlayer());
         vm.put("whitePlayer", game.getWhitePlayer());
-        vm.put("activeColor", playerColor.toString());
+        vm.put("activeColor", game.getPlayerColor(activePlayer).toString());
 
         return templateEngine.render(new ModelAndView(vm, GAME_VIEW));
     }
@@ -141,5 +176,6 @@ public class GetGameRoute implements Route{
         halt();
         return null;
     }
+
 
 }

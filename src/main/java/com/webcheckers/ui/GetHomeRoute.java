@@ -21,24 +21,50 @@ import static spark.Spark.halt;
  * @author <a href='mailto:bdbvse@rit.edu'>Bryan Basham</a>
  */
 public class GetHomeRoute implements Route {
-  //Values used in the view-model map for rendering home view.
+  /** Values used in the view-model map for rendering home view. */
   static final String TITLE_ATTR = "title";
 
+  /** handles logging */
   private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
+  /** Welcome message */
   private static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
 
+  // Attributes
+
+  /** Homepage FTL file */
   public static final String VIEW_NAME = "home.ftl";
+
+  /** The player count attribute */
   public static final String PLAYER_COUNT_ATTR = "playerCount";
+
+  /** The player list attribute */
   public static final String PLAYER_LIST_ATTR = "playerList";
+
+  /** The current user attribute */
   public static final String CURRENT_USER_ATTR = "currentUser";
+
+  /** The name attribute */
   public static final String CURRENT_USER_NAME_ATTR = "name";
+
+  /** The opponent's name attribute */
   public static final String OPPONENT_USER_ATTR = "opponent";
+
+  /** The error message attribute */
   public static final String ERROR_MESSAGE_ATTR = "errMsg";
+
+  /** The message attribute */
   public static final String MESSAGE_ATTR = "message";
 
+  // State
+
+  /** Stores the players */
   private final PlayerLobby playerLobby;
+
+  /** Stores all the games */
   private final GameCenter gameCenter;
+
+  /** Renders the webpage */
   private final TemplateEngine templateEngine;
 
   /**

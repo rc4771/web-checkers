@@ -1,15 +1,27 @@
 package com.webcheckers.model;
 
-import java.lang.reflect.Array;
+import com.webcheckers.model.pieces.RedSinglePiece;
+import com.webcheckers.model.pieces.SinglePiece;
+import com.webcheckers.model.pieces.WhiteSinglePiece;
+import com.webcheckers.model.spaces.WhiteSpace;
+import com.webcheckers.model.spaces.BlackSpace;
+
 import java.util.ArrayList;
 
 /**
  * An object representing a checkers board in a game
+ *
+ * @author Mike White
  */
 public class Board implements Iterable<Row> {
 
+    /** The rows in the board */
     private ArrayList<Row> rows;
 
+    /**
+     * Creates a custom board
+     * @param rows The rows
+     */
     private Board(ArrayList<Row> rows) {
         this.rows = rows;
     }
@@ -25,30 +37,40 @@ public class Board implements Iterable<Row> {
                 //*
                 if (i == 0 || i == 2) {
                     if (j % 2 == 0) {
-                        spaces.add(new Space(i, j, null));
+                        spaces.add(new WhiteSpace(j));
                     } else {
-                        spaces.add(new Space(i, j, new Piece(Piece.PieceColor.RED, Piece.PieceType.SINGLE)));
+                        spaces.add(new BlackSpace(j, new RedSinglePiece()));
                     }
                 } else if (i == 1) {
                     if (j % 2 == 1) {
-                        spaces.add(new Space(i, j, null));
+                        spaces.add(new WhiteSpace(j));
                     } else {
-                        spaces.add(new Space(i, j, new Piece(Piece.PieceColor.RED, Piece.PieceType.SINGLE)));
+                        spaces.add(new BlackSpace(j, new RedSinglePiece()));
                     }
                 } else if (i == 7 || i == 5) {
                     if (j % 2 == 1) {
-                        spaces.add(new Space(i, j, null));
+                        spaces.add(new WhiteSpace(j));
                     } else {
-                        spaces.add(new Space(i, j, new Piece(Piece.PieceColor.WHITE, Piece.PieceType.SINGLE)));
+                        spaces.add(new BlackSpace(j, new WhiteSinglePiece()));
                     }
                 } else if (i == 6) {
                     if (j % 2 == 0) {
-                        spaces.add(new Space(i, j, null));
+                        spaces.add(new WhiteSpace(j));
                     } else {
-                        spaces.add(new Space(i, j, new Piece(Piece.PieceColor.WHITE, Piece.PieceType.SINGLE)));
+                        spaces.add(new BlackSpace(j, new WhiteSinglePiece()));
+                    }
+                } else if (i == 4) {
+                    if (j % 2 == 0) {
+                        spaces.add(new WhiteSpace(j));
+                    } else {
+                        spaces.add(new BlackSpace(j));
                     }
                 } else {
-                    spaces.add(new Space(i, j, null));
+                    if (j % 2 == 1) {
+                        spaces.add(new WhiteSpace(j));
+                    } else {
+                        spaces.add(new BlackSpace(j));
+                    }
                 }//*/
             }
             rows.add(new Row(i, spaces));
@@ -84,23 +106,6 @@ public class Board implements Iterable<Row> {
     }
 
     /**
-     * Gets the piece at a space on the board
-     * @param row
-     *      The row to get the piece at, should be within board bounds
-     * @param cell
-     *      The cell to get the piece at, should be within board bounds
-     * @return
-     *      The piece at this space, WILL be null if there is no piece at this space
-     */
-    public Piece getPieceAt(int row, int cell) {
-        if (row < 0 || row >= rows.size() || cell < 0 || cell >= rows.size()) { // Rows & cell size must be equal
-            return null;
-        }
-
-        return rows.get(row).getSpaces().get(cell).getPiece();
-    }
-
-    /**
      * Checks to see if a given position exists on the board
      * @param row The row
      * @param cell The column
@@ -111,16 +116,68 @@ public class Board implements Iterable<Row> {
     }
 
     /**
+     * Gets the piece at a space on the board
+     * @param row
+     *      The row to get the piece at, should be within board bounds
+     * @param cell
+     *      The cell to get the piece at, should be within board bounds
+     * @return
+     *      The piece at this space, WILL be null if there is no piece at this space
+     */
+    public Piece getPieceAt(int row, int cell) {
+        if (!inBounds(row, cell)) { // Rows & cell size must be in the board
+            return null; // TODO throw error
+        }
+
+        Space space = rows.get(row).getSpaces().get(cell);
+
+        if (space instanceof WhiteSpace) {
+            return null; // TODO throw error
+        } else {
+            BlackSpace whiteSpace = (BlackSpace) space;
+            return whiteSpace.getPiece();
+        }
+    }
+
+    /**
+     * Sets the piece at a given location
+     * @param row The row number
+     * @param cell The column number
+     * @param piece The piece to set it to
+     */
+    public void setPieceAt(int row, int cell, Piece piece) {
+        if (!inBounds(row, cell)) { // Rows & cell size must be in the board
+            return; // TODO throw error
+        }
+
+        Space space = rows.get(row).getSpaces().get(cell);
+
+        if (space instanceof WhiteSpace) {
+            return; // TODO throw error
+        } else {
+            BlackSpace whiteSpace = (BlackSpace) space;
+            whiteSpace.setPiece(piece);
+        }
+    }
+
+    /**
      * Removes a piece from a given position in the board
      * @param row The row to remove from
      * @param cell The column to remove from
      */
     public void removePiece(int row, int cell) {
-        if (row < 0 || row >= rows.size() || cell < 0 || cell >= rows.size()) { // Rows & cell size must be equal
-            return;
+        if (!inBounds(row, cell)) { // Rows & cell size must be in the board
+            return; // TODO throw error
         }
 
-        rows.get(row).getSpaces().get(cell).setPiece(null);
+        Space space = rows.get(row).getSpaces().get(cell);
+
+        if (space instanceof WhiteSpace) {
+            return; // TODO throw error
+        } else {
+            BlackSpace whiteSpace = (BlackSpace) space;
+            whiteSpace.setPiece(null);
+        }
     }
 
     /**
@@ -157,12 +214,23 @@ public class Board implements Iterable<Row> {
             return;
         }
 
-        rows.get(endRow).getSpaces().get(endCell).setPiece(piece);
-        rows.get(startRow).getSpaces().get(startCell).setPiece(null);
+        Space endSpace = rows.get(endRow).getSpaces().get(endCell);
+        Space startSpace = rows.get(startRow).getSpaces().get(startCell);
 
-        if ((endRow == 7 && piece.getColor() == Piece.PieceColor.RED)              //check if piece is on opposite
-                || (endRow == 0 && piece.getColor() == Piece.PieceColor.WHITE)) {  //end of the board
-            piece.setType(Piece.PieceType.KING);     //convert the piece to a King
+        if (endSpace instanceof WhiteSpace || startSpace instanceof WhiteSpace) {
+            return; // TODO throw error
+        } else {
+            BlackSpace endSpaceWhite = (BlackSpace) endSpace;
+            BlackSpace startSpaceWhite = (BlackSpace) startSpace;
+            endSpaceWhite.setPiece(piece);
+            startSpaceWhite.setPiece(null);
+        }
+
+        if (((endRow == 7 && piece.getColor() == Piece.PieceColor.RED)              //check if piece is on opposite
+                || (endRow == 0 && piece.getColor() == Piece.PieceColor.WHITE)) &&  //end of the board
+                piece.getType() == Piece.PieceType.SINGLE) { // make sure it's single
+            SinglePiece single = (SinglePiece) piece;
+            setPieceAt(endRow, endCell, single.promote());     //convert the piece to a King
         }
 
         // remove captured pieces from the board

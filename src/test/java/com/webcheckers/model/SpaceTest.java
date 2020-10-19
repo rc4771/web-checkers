@@ -1,5 +1,8 @@
 package com.webcheckers.model;
 
+import com.webcheckers.model.pieces.RedSinglePiece;
+import com.webcheckers.model.pieces.WhiteSinglePiece;
+import com.webcheckers.model.spaces.BlackSpace;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Tag;
@@ -7,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 @Tag ("Model-tier")
 public class SpaceTest {
-    private Space CuT;
+    private BlackSpace CuT;
     private int cellIdx;
     private int rowIdx;
     private Piece piece;
@@ -16,8 +19,8 @@ public class SpaceTest {
     public void setup(){
         cellIdx = 0;
         rowIdx = 0;
-        piece = new Piece(Piece.PieceColor.RED, Piece.PieceType.SINGLE);
-        CuT = new Space(cellIdx, rowIdx, piece);
+        piece = new RedSinglePiece();
+        CuT = new BlackSpace(cellIdx, piece);
     }
 
     @Test
@@ -32,7 +35,7 @@ public class SpaceTest {
 
     @Test
     public void testSetPiece(){
-        Piece testPiece = new Piece(Piece.PieceColor.WHITE, Piece.PieceType.SINGLE);
+        Piece testPiece = new WhiteSinglePiece();
         CuT.setPiece(testPiece);
         assertEquals(CuT.getPiece(), testPiece);
     }

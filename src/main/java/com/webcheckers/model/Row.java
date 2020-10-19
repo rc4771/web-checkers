@@ -1,10 +1,13 @@
 package com.webcheckers.model;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
  * A row on a checkers board
+ *
+ * @author Mike White
  */
 public class Row implements Iterable<Space> {
 	private int index;
@@ -12,6 +15,9 @@ public class Row implements Iterable<Space> {
 
 	/**
 	 * Creates a new board row
+	 *
+	 * @param index The row index
+	 * @param spaces The spaces in the row
 	 */
 	public Row(int index, ArrayList<Space> spaces) {
 		this.spaces = spaces;

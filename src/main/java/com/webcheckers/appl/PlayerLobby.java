@@ -1,6 +1,7 @@
 package com.webcheckers.appl;
 
 import com.webcheckers.model.Player;
+import com.webcheckers.util.NameValidator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,12 +19,29 @@ public class PlayerLobby {
     //Attributes
     //
 
-    //Gamecenter for quick call.
+    /// Gamecenter for quick call.
     private GameCenter gameCenter;
 
+    /** Handles logging */
     private static final Logger LOG = Logger.getLogger(PlayerLobby.class.getName());
 
+    /** The result of the sign-in attempt */
     public enum SignInResult {OK, INVALID_USERNAME, USERNAME_TAKEN}
+    public enum SignOutResult {
+        OK("Sign out successful"),
+        NULL_PLAYER("Player object was null"),
+        PLAYER_NOT_LOGGED_IN("Player is not logged in");
+
+        private final String errMsg;
+
+        private SignOutResult(String errMsg) {
+            this.errMsg = errMsg;
+        }
+
+        public String getErrorMessage() {
+            return this.errMsg;
+        }
+    }
 
     /**
      * The grand hashmap containing all players that are signed in, mapped by their username. This username is
@@ -49,7 +67,7 @@ public class PlayerLobby {
      *      USERNAME_TAKEN      - If the username is already taken by another player
      */
     public SignInResult signInPlayer(String username) {
-        if (!isValidUsername(username)) {
+        if (!NameValidator.isValidUsername(username)) {
             return SignInResult.INVALID_USERNAME;
         }
 
@@ -60,6 +78,20 @@ public class PlayerLobby {
         signedInPlayers.put(username, new Player(username));
 
         return SignInResult.OK;
+    }
+
+    public SignOutResult signOutPlayer(Player player) {
+        if (player == null) {
+            return SignOutResult.NULL_PLAYER;
+        }
+
+        if (!signedInPlayers.containsKey(player.getName())) {
+            return SignOutResult.PLAYER_NOT_LOGGED_IN;
+        }
+
+        signedInPlayers.remove(player.getName());
+
+        return SignOutResult.OK;
     }
 
     /**
@@ -110,20 +142,5 @@ public class PlayerLobby {
      */
     public Player getPlayer(String username) {
         return signedInPlayers.get(username);
-    }
-
-    /**
-     * Checks if a string is a valid username, checks to make sure it's not null, not empty, not blank, and only
-     * contains alphanumeric characters and spaces.
-     * @param username
-     *      The username string to test
-     * @return
-     *      A boolean for if the username is valid or not
-     */
-    private boolean isValidUsername(String username) {
-        if (username == null)
-            return false;
-
-        return !username.isBlank() && !username.isEmpty() && username.matches("^[a-zA-Z0-9_ ]*$");
     }
 }
