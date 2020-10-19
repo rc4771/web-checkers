@@ -20,6 +20,11 @@ import static spark.Spark.halt;
 
 import com.webcheckers.appl.PlayerLobby;
 
+/**
+ * Sends the game page to the user
+ *
+ * @author David Allen
+ */
 public class GetGameRoute implements Route{
     private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
@@ -34,13 +39,23 @@ public class GetGameRoute implements Route{
     static final String SESSION_PLAYER_NULL_ERR_MSG = "Player object from session was null, contact the developers!";
     static final String GAME_OBJECT_NULL_ERR_MSG = "Game object was null, contact the developers!";
 
+    /** Renders the web page */
     private final TemplateEngine templateEngine;
+
+    /** Stores all the players */
     private final PlayerLobby playerLobby;
+
+    /** Stores the games */
     private final GameCenter gameCenter;
     private final Gson gson;
 
+    /** The name of the FTL file */
     static final String GAME_VIEW = "game.ftl";
+
+    /** The name of the page */
     static final String TITLE = "Web Checker";
+
+    /** The GAME ID attribute */
     static final String GAME_ID_ATTR = "gameID";
 
     static final String WIN_MSG = "Game Over! You have captured all the pieces! You have won the game!";

@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import com.webcheckers.util.MoveValidator;
+import com.webcheckers.util.exceptions.moves.*;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,17 +61,17 @@ public class GameTest {
         final Game CuT = createTestGameInstance();
 
         // Test where: valid where start has a valid piece and end is empty
-        assertEquals(Game.MoveResult.OK, CuT.validateMove(2, 7, 3, 6));
+        assertDoesNotThrow(() -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.RED, 2, 7, 3, 6));
 
         CuT.setPendingMove(2, 7, 3, 6);
         CuT.submitMove();
 
-        assertEquals(Game.MoveResult.PIECE_NULL_ERR, CuT.validateMove(3, 7, 4, 5));
-        assertEquals(Game.MoveResult.END_OCCUPIED_ERR, CuT.validateMove(2, 5, 3, 6));
+        assertThrows(PieceNullMoveException.class, () -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.RED, 3, 7, 4, 5));
+        assertThrows(EndOccupiedMoveException.class, () -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.RED, 2, 5, 3, 6));
 
 
         // Test where: move is too far away
-        assertEquals(Game.MoveResult.TOO_FAR_ERR, CuT.validateMove(5, 2, 3, 3));
+        assertThrows(TooFarMoveException.class, () -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.WHITE, 5, 2, 3, 3));
     }
 
     /**
@@ -80,16 +82,16 @@ public class GameTest {
         final Game CuT = createTestGameInstance();
 
         // Red player side
-        assertEquals(Game.MoveResult.OK, CuT.validateMove(2, 7, 3, 6));
+        assertDoesNotThrow(() -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.RED, 2, 7, 3, 6));
         CuT.setPendingMove(2, 7, 3, 6);
         CuT.submitMove();
-        assertEquals(Game.MoveResult.MOVE_DIRECTION_ERR, CuT.validateMove(3, 6, 2, 7));
+        assertThrows(MoveDirectionMoveException.class, () -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.RED, 3, 6, 2, 7));
 
         // White player side
-        assertEquals(Game.MoveResult.OK, CuT.validateMove(5, 2, 4, 3));
+        assertDoesNotThrow(() -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.WHITE, 5, 2, 4, 3));
         CuT.setPendingMove(5, 2, 4, 3);
         CuT.submitMove();
-        assertEquals(Game.MoveResult.MOVE_DIRECTION_ERR, CuT.validateMove(4, 3, 5, 2));
+        assertThrows(MoveDirectionMoveException.class, () -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.WHITE, 4, 3, 5, 2));
     }
 
     /**
@@ -98,8 +100,8 @@ public class GameTest {
     @Test
     void testMoveValidationDistance() {
         final Game CuT = createTestGameInstance();
-        assertEquals(Game.MoveResult.OK, CuT.validateMove(2, 5, 3, 4));
-        assertEquals(Game.MoveResult.TOO_FAR_ERR, CuT.validateMove(2, 5, 4, 3));
+        assertDoesNotThrow(() -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.RED, 2, 5, 3, 4));
+        assertThrows(TooFarMoveException.class, () -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.RED, 2, 5, 4, 3));
     }
 
     /**
@@ -111,19 +113,19 @@ public class GameTest {
 
         // Red player side
         assertTrue(CuT.getRedPlayer().getIsTurn());
-        assertEquals(Game.MoveResult.OK, CuT.validateMove(2, 7, 3, 6));
+        assertDoesNotThrow(() -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.RED, 2, 7, 3, 6));
         CuT.setPendingMove(2, 7, 3, 6);
         CuT.submitMove();
         assertFalse(CuT.getRedPlayer().getIsTurn());
-        assertEquals(Game.MoveResult.NOT_TURN_ERR, CuT.validateMove(3, 6, 4, 5));
+        assertThrows(NotTurnMoveException.class, () -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.WHITE, 3, 6, 4, 5));
 
         // White player side
         assertTrue(CuT.getWhitePlayer().getIsTurn());
-        assertEquals(Game.MoveResult.OK, CuT.validateMove(5, 2, 4, 3));
+        assertDoesNotThrow(() -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.WHITE, 5, 2, 4, 3));
         CuT.setPendingMove(5, 2, 4, 3);
         CuT.submitMove();
         assertFalse(CuT.getWhitePlayer().getIsTurn());
-        assertEquals(Game.MoveResult.NOT_TURN_ERR, CuT.validateMove(4, 3, 3, 2));
+        assertThrows(NotTurnMoveException.class, () -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.RED, 4, 3, 3, 2));
     }
 
     /**

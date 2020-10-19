@@ -17,7 +17,7 @@ public class PlayerLobbyTest {
     public void testSignInPlayer_validUsername() {
         PlayerLobby pl = createPlayerLobby();
 
-        String[] usernames = {"DavidTheFighter", "RIT", "can have spaces", "NUMBERS123", "CoMbO 123"};
+        String[] usernames = {"DavidTheF", "RIT", "can spaces", "NUMBERS123", "CoMbO 123"};
         for (String username : usernames) {
             assertEquals(PlayerLobby.SignInResult.OK, pl.signInPlayer(username));
         }
@@ -27,7 +27,7 @@ public class PlayerLobbyTest {
     public void testSignInPlayer_nonAlphaNumeric() {
         PlayerLobby pl = createPlayerLobby();
 
-        String[] usernames = {"symbols !@#$%^&*()-=[];'../", "slightly less symbols /*-+", "simple error!", "question?"};
+        String[] usernames = {"s@#$%^&(=;'.", "less /*-+", "simple error!", "question?"};
         for (String username : usernames) {
             assertEquals(PlayerLobby.SignInResult.INVALID_USERNAME, pl.signInPlayer(username));
         }
@@ -76,7 +76,7 @@ public class PlayerLobbyTest {
 
         assertEquals(0, pl.getPlayerCount());
 
-        String[] usernames = {"DavidTheFighter", "RIT", "can have spaces", "NUMBERS123", "CoMbO 123"};
+        String[] usernames = {"DavidTheF", "RIT", "can spaces", "NUMBERS123", "CoMbO 123"};
         for (String username : usernames) {
             pl.signInPlayer(username);
         }
@@ -97,7 +97,7 @@ public class PlayerLobbyTest {
 
         assertEquals(0, pl.getPlayerCount());
 
-        String[] validUsernames = {"DavidTheFighter", "RIT", "can have spaces", "NUMBERS123", "CoMbO 123"};
+        String[] validUsernames = {"DavidTheF", "RIT", "can spaces", "NUMBERS123", "CoMbO 123"};
         for (String username : validUsernames) {
             pl.signInPlayer(username);
         }
@@ -109,7 +109,7 @@ public class PlayerLobbyTest {
     public void testGetPlayerUsernames() {
         PlayerLobby pl = createPlayerLobby();
 
-        String[] usernames = {"DavidTheFighter", "RIT", "can have spaces", "NUMBERS123", "CoMbO 123"};
+        String[] usernames = {"DavidTheF", "RIT", "can spaces", "NUMBERS123", "CoMbO 123"};
         for (String username : usernames) {
             pl.signInPlayer(username);
         }
@@ -128,7 +128,7 @@ public class PlayerLobbyTest {
     public void testGetPlayerUsernames_excl() { // Test getting all usernames EXCEPT one
         PlayerLobby pl = createPlayerLobby();
 
-        ArrayList<String> usernames = new ArrayList<>(Arrays.asList("DavidTheFighter", "RIT", "can have spaces", "NUMBERS123", "CoMbO 123"));
+        ArrayList<String> usernames = new ArrayList<>(Arrays.asList("DavidTheF", "RIT", "can spaces", "NUMBERS123", "CoMbO 123"));
         for (String username : usernames) {
             pl.signInPlayer(username);
         }
@@ -153,7 +153,7 @@ public class PlayerLobbyTest {
     @Test
     public void testGetPlayer() {
         PlayerLobby pl = createPlayerLobby();
-        String[] usernames = {"DavidTheFighter", "RIT", "can have spaces", "NUMBERS123", "CoMbO 123"};
+        String[] usernames = {"DavidTheF", "RIT", "can spaces", "NUMBERS123", "CoMbO 123"};
         for (String username : usernames) {
             pl.signInPlayer(username);
         }

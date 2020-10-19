@@ -1,5 +1,9 @@
 package com.webcheckers.model;
 
+import com.webcheckers.model.pieces.RedSinglePiece;
+import com.webcheckers.model.pieces.WhiteSinglePiece;
+import com.webcheckers.model.spaces.BlackSpace;
+import com.webcheckers.model.spaces.WhiteSpace;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -14,9 +18,9 @@ class SpaceIteratorTest {
 	private static ArrayList<Space> testList = new ArrayList<>();
 
 	static {
-		testList.add(new Space(0, 0, null));
-		testList.add(new Space(0, 1, new Piece(Piece.PieceColor.RED, Piece.PieceType.SINGLE)));
-		testList.add(new Space(0, 2, new Piece(Piece.PieceColor.WHITE, Piece.PieceType.SINGLE)));
+		testList.add(new WhiteSpace(0));
+		testList.add(new BlackSpace(1, new RedSinglePiece()));
+		testList.add(new BlackSpace(2, new WhiteSinglePiece()));
 	}
 
 	@Test
@@ -25,11 +29,11 @@ class SpaceIteratorTest {
 	void next_first() {
 		final SpaceIterator CuT = new SpaceIterator(testList);
 		final Space spaceActual = CuT.next();
-		final Piece pieceActual = spaceActual.getPiece();
-		final Space spaceExpected = testList.get(0);
 
+		assertTrue(spaceActual instanceof WhiteSpace);
+
+		final Space spaceExpected = testList.get(0);
 		assertEquals(spaceExpected.getCellIdx(), spaceActual.getCellIdx());
-		assertNull(pieceActual);
 	}
 
 	@Test
@@ -53,15 +57,21 @@ class SpaceIteratorTest {
 
 		for (int i = 1; i < testList.size(); i++) {
 			Space spaceActual = CuT.next();
-			Piece pieceActual = spaceActual.getPiece();
 			Space spaceExpected = testList.get(i);
-			Piece pieceExpected = spaceExpected.getPiece();
+			if (spaceExpected instanceof BlackSpace) {
+				BlackSpace blackSpaceActual = (BlackSpace) spaceActual;
+				Piece pieceActual = blackSpaceActual.getPiece();
+				BlackSpace blackSpaceExpected = (BlackSpace) spaceExpected;
+				Piece pieceExpected = blackSpaceExpected.getPiece();
 
-			assertEquals(spaceExpected.getCellIdx(), spaceActual.getCellIdx());
-			assertEquals(pieceExpected.getType(), pieceActual.getType());
-			assertEquals(pieceExpected.getColor(), pieceActual.getColor());
+				assertEquals(spaceExpected.getCellIdx(), spaceActual.getCellIdx());
+				assertEquals(pieceExpected.getType(), pieceActual.getType());
+				assertEquals(pieceExpected.getColor(), pieceActual.getColor());
+			} else {
+				assertTrue(spaceActual instanceof WhiteSpace);
+			}
 		}
 
-		assertThrows(NoSuchElementException.class, () -> CuT.next());
+		assertThrows(NoSuchElementException.class, CuT::next);
 	}
 }

@@ -16,12 +16,20 @@ import static spark.Spark.halt;
  * @author <a href='mailto:dja7394@rit.edu'>David Allen</a>
  */
 public class PostSignInRoute implements Route {
+
+  /** Handles logging */
   private static final Logger LOG = Logger.getLogger(PostSignInRoute.class.getName());
 
+  /** The key for the username value */
   public static final String USERNAME_PARAM = "username";
+
+  /** The key for the player session attribute */
   public static final String PLAYER_SESSION_KEY = "currentUser";
 
+  /**Stores all of the players */
   private final PlayerLobby playerLobby;
+
+  /** Renders the webpage */
   private final TemplateEngine templateEngine;
 
   /**

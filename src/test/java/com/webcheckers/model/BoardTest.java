@@ -1,5 +1,6 @@
 package com.webcheckers.model;
 
+import com.webcheckers.model.spaces.BlackSpace;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -156,10 +157,9 @@ class BoardTest {
 		assertEquals(board1.getPieceColorAt(5, 0), board2.getPieceColorAt(5, 0));
 
 		// Test regular move
-		board1.movePiece(new Move(new Position(0, 1), new Position(3, 1)));
-
-		assertEquals(board1.getPieceColorAt(3, 1), Piece.PieceColor.RED);
-		assertEquals(board1.getPieceTypeAt(3, 1), Piece.PieceType.SINGLE);
+		board1.movePiece(new Move(new Position(0, 1), new Position(4, 1)));
+		assertEquals(board1.getPieceColorAt(4, 1), Piece.PieceColor.RED);
+		assertEquals(board1.getPieceTypeAt(4, 1), Piece.PieceType.SINGLE);
 	}
 
 	@Test
@@ -189,11 +189,14 @@ class BoardTest {
 		for (int i = 0; i < 8; i++) {
 			ArrayList<Space> actual = iterator.next().getSpaces();
 			for (int j = 0; j < 8; j++) {
-				if (actual.get(j).getPiece() == null) {
-					assertNull(board.getPieceAt(i, j));
-				} else {
-					assertEquals(board.getPieceColorAt(i, j), actual.get(j).getPiece().getColor());
-					assertEquals(board.getPieceTypeAt(i, j), actual.get(j).getPiece().getType());
+				if (actual.get(j) instanceof BlackSpace) {
+					BlackSpace space = (BlackSpace) actual.get(j);
+					if (space.getPiece() == null) {
+						assertNull(board.getPieceAt(i, j));
+					} else {
+						assertEquals(board.getPieceColorAt(i, j), space.getPiece().getColor());
+						assertEquals(board.getPieceTypeAt(i, j), space.getPiece().getType());
+					}
 				}
 			}
 		}

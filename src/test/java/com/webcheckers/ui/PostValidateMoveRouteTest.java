@@ -62,7 +62,7 @@ class PostValidateMoveRouteTest {
 		center = new GameCenter();
 		game = center.newGame(redPlayer, whitePlayer);
 
-		CuT = new PostValidateMoveRoute(center, engine, gson);
+		CuT = new PostValidateMoveRoute(center, gson);
 	}
 
 	@Test

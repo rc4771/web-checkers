@@ -66,10 +66,19 @@ public class WebServer {
    */
   public static final String GAME_URL = "/game";
 
+  /**
+   * The URL pattern to check to see if a move is valid
+   */
   public static final String VALID_MOVE_URL = "/validateMove";
 
+  /**
+   * The URL pattern to submit a turn
+   */
   public static final String SUBMIT_TURN_URL = "/submitTurn";
 
+  /**
+   * The URL pattern to reverse a turn
+   */
   public static final String BACKUP_MOVE_URL = "/backupMove";
 
   public static final String CHECK_TURN_URL = "/checkTurn";
@@ -184,12 +193,10 @@ public class WebServer {
     get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameCenter, gson));
 
     // All in-game move based handlers
-    post(VALID_MOVE_URL, new PostValidateMoveRoute(gameCenter, templateEngine, gson));
-    post(SUBMIT_TURN_URL, new PostSubmitTurnRoute(gameCenter, templateEngine, gson));
-    post(BACKUP_MOVE_URL, new PostBackupMoveRoute(gameCenter, templateEngine, gson));
-
+    post(VALID_MOVE_URL, new PostValidateMoveRoute(gameCenter, gson));
+    post(SUBMIT_TURN_URL, new PostSubmitTurnRoute(gameCenter, gson));
+    post(BACKUP_MOVE_URL, new PostBackupMoveRoute(gameCenter, gson));
     post(CHECK_TURN_URL, new PostCheckTurnRoute(gson));
-
     post(SIGNOUT_URL, new PostSignoutRoute(playerLobby, templateEngine));
 
     //Resigns player from game
