@@ -3,7 +3,7 @@ package com.webcheckers.model;
 import java.util.logging.Logger;
 
 /**
- *
+ * Represents a player
  *
  * @author <a href='mailto:dja7394@rit.edu'>David Allen</a>
  */
@@ -40,8 +40,16 @@ public class Player {
         return name;
     }
 
+    /**
+     * Checks if it is the current player's turn
+     * @return True if it is
+     */
     public boolean getIsTurn() {return isTurn;}
 
+    /**
+     * Sets whether or not it's the player's turn
+     * @param turn The value to set it to
+     */
     public void setIsTurn(boolean turn) {
         this.isTurn = turn;
 }

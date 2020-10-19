@@ -2,6 +2,8 @@ package com.webcheckers.model;
 
 /**
  * A class that represents a position on the board.
+ *
+ * @author Rafeed Choudhury
  */
 public class Position {
     /**
@@ -35,6 +37,11 @@ public class Position {
      */
     public int getCell() {return this.cell;}
 
+    /**
+     * Checks if this position is equal to another position
+     * @param o The object to compare to
+     * @return True if they are equal
+     */
     public boolean equals(Object o) {
         if (o instanceof Position) {
             Position other = (Position) o;

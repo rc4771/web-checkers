@@ -14,11 +14,17 @@ import java.util.logging.Logger;
  * @author <a href='mailto:dja7394@rit.edu'>David Allen</a>
  */
 public class GetSignInRoute implements Route {
+
+  /** Handles logging */
   private static final Logger LOG = Logger.getLogger(GetSignInRoute.class.getName());
 
+  /** The name of the FTL file for the webpage */
   public static final String VIEW_NAME = "signin.ftl";
+
+  /** The error message attribute */
   public static final String ERROR_MESSAGE_ATTR = "errorMsg";
 
+  /** Renders the webpage */
   private final TemplateEngine templateEngine;
 
   /**

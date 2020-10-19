@@ -7,6 +7,8 @@ import java.util.NoSuchElementException;
 
 /**
  * An iterator class for iterating over a row's spaces (mainly for spark)
+ *
+ * @author Mike White
  */
 public class RowIterator implements Iterator<Row> {
 
@@ -25,6 +27,8 @@ public class RowIterator implements Iterator<Row> {
 
 	/**
 	 * Gets the next row and increments the iterator
+	 *
+	 * @return The next row
 	 */
 	public Row next() {
 		if (this.hasNext()) {
@@ -38,6 +42,8 @@ public class RowIterator implements Iterator<Row> {
 
 	/**
 	 * Returns if this iterator has another row to iterate to
+	 *
+	 * @return True if there is a next row
 	 */
 	public boolean hasNext() {
 		return currentIdx < rows.size();
