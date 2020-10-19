@@ -156,10 +156,8 @@ public class Game {
     public Piece.PieceColor getPlayerColor(Player player) {
         if (player.getName().equals(redPlayer.getName())) {
             return Piece.PieceColor.RED;
-        } else if (player.getName().equals(whitePlayer.getName())) {
-            return Piece.PieceColor.WHITE;
         } else {
-            return null;
+            return Piece.PieceColor.WHITE;
         }
     }
 
