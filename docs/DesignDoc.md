@@ -185,3 +185,11 @@ other user is sent to the home page without an error.
 We hope to meet the code coverage requirements listed on the rubric, which is 90%. We currently have 94% of instructions
 covered and 91% of branches covered. All of our unit tests pass. For Sprint 3, our strategy will be to write the unit
 tests before we write the code.  
+
+![Overall coverage](overall_coverage.PNG)
+
+![Application tier coverage](appltier_coverage.PNG)
+
+![Model tier coverage](modeltier_coverage.PNG)
+
+![UI Tier coverage](uitier_coverage.PNG)
