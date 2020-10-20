@@ -41,6 +41,7 @@ public class PostSignInRouteTest {
     @BeforeEach
     public void setup() {
         request = Mockito.mock(Request.class);
+        response = mock(Response.class);
         session = Mockito.mock(Session.class);
         when(request.session()).thenReturn(session);
         engine = mock(TemplateEngine.class);
@@ -75,6 +76,7 @@ public class PostSignInRouteTest {
     @Test
     void testHandle_InvalidUserName(){
         final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
         final String INVALID_USERNAME = "!@#(*#%)+";
         when(request.queryParams(CuT.USERNAME_PARAM)).thenReturn(INVALID_USERNAME);
 
@@ -93,8 +95,10 @@ public class PostSignInRouteTest {
     @Test
     void testHandle_UsernameTaken(){
         final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
         final String VALID_USERNAME = "Username";
         lobby.signInPlayer(VALID_USERNAME);
+        when(request.queryParams(eq(PostSignInRoute.USERNAME_PARAM))).thenReturn(VALID_USERNAME);
 
         try {
             CuT.handle(request, response);
