@@ -42,14 +42,20 @@ This section describes the features of the application.
 > maybe Epics and critical Stories._
 
 ### Definition of MVP
-> _Provide a simple description of the Minimum Viable Product._
+The Minimum Viable Product of Web Checkers is an app that allows two players to play a full game of checkers together
+with the American rules. 
 
 ### MVP Features
-> _Provide a list of top-level Epics and/or Stories of the MVP._
+* Sign in/out
+* Select another player to enter a game with
+* Move pieces
+* Jump and take opponent's pieces
+* Create kings by pieces to the opposite side of the board
+* Win/lose a game when a player's pieces are all gone
 
 ### Roadmap of Enhancements
-> _Provide a list of top-level features in the order you plan to consider them._
-
+* An AI player for the user to play against
+* A spectator mode that allows the user to see a match between two other players
 
 ## Application Domain
 
@@ -101,64 +107,81 @@ they go back to the Homepage.
 
 
 ### UI Tier
-> _Provide a summary of the Server-side UI tier of your architecture.
-> Describe the types of components in the tier and describe their
-> responsibilities.  This should be a narrative description, i.e. it has
-> a flow or "story line" that the reader can follow._
 
-> _At appropriate places as part of this narrative provide one or more
-> static models (UML class structure or object diagrams) with some
-> details such as critical attributes and methods._
+The UI tier follows a relatively simple architecture. Each class handles its own route (eg POST /signin). The route will
+perform some logic, getting and sending data to and from the application tier, and either render a page for the user
+to see or redirecting them to a new route where that route will then take over. 
 
-> _You must also provide any dynamic models, such as statechart and
-> sequence diagrams, as is relevant to a particular aspect of the design
-> that you are describing.  For example, in WebCheckers you might create
-> a sequence diagram of the `POST /validateMove` HTTP request processing
-> or you might show a statechart diagram if the Game component uses a
-> state machine to manage the game._
+When the user first opens the web application, they will get the home page via `GET /`. The GetHomeRoute handler looks in
+the application tier to see if the user is signed in. Because the user isn't, they will be shown a link to `GET /signin`
+where they can sign in, and will only be shown a number of players for privacy reasons. The GetSignInRoute handler will
+render the sign in page for the user, and provide a text box for them to enter a username. The sign-in button will perform
+a `POST /signin`, where the PostSignInHandler will interact with the HTTP session and the PlayerLobby to attempt to 
+sign in the player. If successful, they're redirected to the home page. If not, they're sent back to the sign-in page.
 
-> _If a dynamic model, such as a statechart describes a feature that is
-> not mostly in this tier and cuts across multiple tiers, you can
-> consider placing the narrative description of that feature in a
-> separate section for describing significant features. Place this after
-> you describe the design of the three tiers._
+Back in the home page, the user has two options. They can sign back out, performing a `POST /signout` where the
+PostSignOutRoute handler will interact with `PlayerLobby` to sign the user out. They can also select a player from a
+list of signed-in players to start a match with. If the user is already in a match, they'll be shown an error message.
+Otherwise, it will perform a `GET /game` and interact with `GameCenter` to start a match between the user and another player.
 
+In the match, the user will check to see if it's their turn via `POST /checkTurn`. This route handler will perform that
+check by interacting with `GameCenter`. If it's the user's turn, they'll be able
+to move a piece. When the user moves a piece, it'll perform a `POST /validateMove` to check if the move is valid (eg. if
+the player performed any necessary jumps). If the move isn't valid, it will put the piece back and describe why. If it was
+valid, they'll have to option to either submit the move or back up, performing a `POST /submitTurn` or `POST /backupMove`
+respectively. These route handlers all interact with `GameCenter` and `Board` to perform these operations. 
+
+Eventually, one player's pieces will all be gone. Checks in the `PostCheckTurnRoute` will look for this and notify the
+user of their win or loss. They will then have the option to go back to the home screen.
 
 ### Application Tier
-> _Provide a summary of the Application tier of your architecture. This
-> section will follow the same instructions that are given for the UI
-> Tier above._
 
+There are two classes that allow the route handlers to interact with the model tier and perform game logic. The user
+will initially interact with the `PlayerLobby`, where all player and sign-in related features are handled. When a user 
+signs in, signs out, or selects another player to create a match with, the `PlayerLobby` will handle these. The `PlayerLobby`
+itself interacts with Model tier through `Player`. 
+
+During a match, the user (and therefore the route handlers in the UI tier) interact with `GameCenter`. This class performs
+all game related operations, from creating a game to providing methods to move pieces. The `GameCenter` interacts with the
+rest of the Model tier (eg. `Board`, `Game`, `Piece`, etc). 
 
 ### Model Tier
-> _Provide a summary of the Application tier of your architecture. This
-> section will follow the same instructions that are given for the UI
-> Tier above._
+
+The Model tier holds the classes for the application's data and logic. 
+
+The `Game` class represents a match, and has two `Player`'s and a `Board`. The `Board` has a list of `Row`s, and each row has
+a list of `Space`s. Each `Space` has a color, and can either be an empty `WhiteSpace` or a `BlackSpace` with or without
+a `Piece` on it. Each `Piece` has a `Position` and can be either a `RedKingPiece`, `WhiteKingPiece`, `RedSinglePiece`,
+or `RedKingPiece`. A move by the player is represented by the `Move` class.
+
+![Model tier class diagram](model_tier.png)
 
 ### Design Improvements
-> _Discuss design improvements that you would make if the project were
-> to continue. These improvement should be based on your direct
-> analysis of where there are problems in the code base which could be
-> addressed with design changes, and describe those suggested design
-> improvements. After completion of the Code metrics exercise, you
+> After completion of the Code metrics exercise, you
 > will also discuss the resutling metric measurements.  Indicate the
 > hot spots the metrics identified in your code base, and your
 > suggested design improvements to address those hot spots._
 
+* Remove the use of enumerations in the `Piece` class
+* Remove the WinType enumeration
+* Utilize the `Position` class more throughout the code base
+* Refactor the `Move` class to make it less abusable
+* Fix a number of Law of Demeter violations, but without overcomplicating classes
+* Move some of the logic from the route handlers to the application tier or model tier
+
 ## Testing
-> _This section will provide information about the testing performed
-> and the results of the testing._
+
+We have 184 unit tests and they all pass. We also run the application ourselves and play through games of checkers to
+make sure they play correctly. 
 
 ### Acceptance Testing
-> _Report on the number of user stories that have passed all their
-> acceptance criteria tests, the number that have some acceptance
-> criteria tests failing, and the number of user stories that
-> have not had any testing yet. Highlight the issues found during
-> acceptance testing and if there are any concerns._
+
+We have 10 user stories, 41 acceptance testing criteria and all of them passes without issue. All of the user stories
+had acceptance testing done. Our only concern is that when a game ends, only one user can see that the game ended. The
+other user is sent to the home page without an error.
 
 ### Unit Testing and Code Coverage
-> _Discuss your unit testing strategy. Report on the code coverage
-> achieved from unit testing of the code base. Discuss the team's
-> coverage targets, why you selected those values, and how well your
-> code coverage met your targets. If there are any anomalies, discuss
-> those._
+
+We hope to meet the code coverage requirements listed on the rubric, which is 90%. We currently have 94% of instructions
+covered and 91% of branches covered. All of our unit tests pass. For Sprint 3, our strategy will be to write the unit
+tests before we write the code.  
