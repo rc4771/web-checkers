@@ -33,4 +33,18 @@ public class CheckersMinimaxAlgorithm {
 
 		return value;
 	}
+
+	/**
+	 * Calculates the value of the board after a move is made
+	 * @param board The board the move is made on
+	 * @param move The move to make
+	 * @param player The player to calculate the value for
+	 * @return The new value of the board after the move
+	 */
+	public static int calculateMoveValue(Board board, Move move, Piece.PieceColor player) {
+		Board newBoard = new Board(board);
+		newBoard.movePiece(move);
+
+		return calculateBoardValue(newBoard, player);
+	}
 }
