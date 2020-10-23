@@ -27,6 +27,17 @@ public class Board implements Iterable<Row> {
     }
 
     /**
+     * Creates a copy of a board
+     * @param board The board to copy
+     */
+    public Board(Board board) {
+        this.rows = new ArrayList<>(8);
+        for (int i = 0; i < 8; i++) {
+            rows.add(new Row(board.rows.get(i)));
+        }
+    }
+
+    /**
      * Creates a new checkers board, setup in the starting configuration
      */
     public Board() {
