@@ -18,6 +18,68 @@ import static org.mockito.Mockito.when;
 class WhiteSinglePieceTest {
 
 	@Test
+	public void testAll_singleMoves() {
+		Board board = new Board();
+
+		SinglePiece piece = (SinglePiece) board.getPieceAt(5, 6);
+
+		List<Move> moves = piece.getSingleMoves(board, new Position(5, 6));
+		assertEquals(2, moves.size());
+
+		assertTrue(moves.get(0).getCaptures().isEmpty());
+		assertTrue(moves.get(1).getCaptures().isEmpty());
+	}
+
+	@Test
+	public void testLeftCorner_singleMoves() {
+		Board board = new Board();
+
+		SinglePiece piece = (SinglePiece) board.getPieceAt(7, 0);
+
+		List<Move> moves = piece.getSingleMoves(board, new Position(7, 0));
+		assertTrue(moves.isEmpty());
+	}
+
+	@Test
+	public void testRightCorner_singleMoves() {
+		Board board = new Board();
+
+		SinglePiece piece = (SinglePiece) board.getPieceAt(6, 7);
+
+		List<Move> moves = piece.getSingleMoves(board, new Position(6, 7));
+		assertTrue(moves.isEmpty());
+	}
+
+	@Test
+	public void testWhiteLeft_singleMoves() {
+		Board board = new Board();
+
+		SinglePiece piece = (SinglePiece) board.getPieceAt(5, 0);
+
+		List<Move> moves = piece.getSingleMoves(board, new Position(5, 0));
+		assertEquals(1, moves.size());
+		Move move = moves.get(0);
+
+		assertEquals(new Position(5, 0), move.getStart());
+		assertEquals(new Position(4, 1), move.getEnd());
+	}
+
+	@Test
+	public void testWhiteRight_singleMoves() {
+		Board board = new Board();
+
+		SinglePiece piece = (SinglePiece) board.getPieceAt(6, 1);
+		board.setPieceAt(4, 7, piece);
+
+		List<Move> moves = piece.getSingleMoves(board, new Position(4, 7));
+		assertEquals(1, moves.size());
+		Move move = moves.get(0);
+
+		assertEquals(new Position(4, 7), move.getStart());
+		assertEquals(new Position(3, 6), move.getEnd());
+	}
+
+	@Test
 	public void test_promote() {
 		WhiteSinglePiece CuT = new WhiteSinglePiece();
 		assertTrue(CuT.promote() instanceof WhiteKingPiece);

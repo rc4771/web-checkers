@@ -96,6 +96,14 @@ public abstract class Piece {
     public abstract PieceColor getColor();
 
     /**
+     * Gets the possible moves that the piece can make
+     * @param board The board being played on
+     * @param position The position of the piece
+     * @return The list of valid single moves
+     */
+    public abstract LinkedList<Move> getSingleMoves(Board board, Position position);
+
+    /**
      * Gets the possible jumps that could be made by this piece
      * @param board The board being played on
      * @param position The position of the piece

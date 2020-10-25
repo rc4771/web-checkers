@@ -14,6 +14,29 @@ import java.util.List;
 public class MoveValidator {
 
 	/**
+	 * Creates a list of all of the moves that a player could make
+	 * @param board The board being played on
+	 * @param player The player whose turn it is
+	 * @return The list of possible moves
+	 */
+	public static List<Move> calculateValidMoves(Board board, Piece.PieceColor player) {
+		List<Move> jumps = calculateValidJumps(board, player);
+
+		// if the list of jumps is empty, check single moves
+		if (jumps.isEmpty()) {
+			for (int i = 0; i < 8; i++) {
+				for (int j = 0; j < 8; j++) {
+					if (board.getPieceColorAt(i, j) == player) {
+						jumps.addAll(board.getPieceAt(i, j).getSingleMoves(board, new Position(i, j)));
+					}
+				}
+			}
+		}
+
+		return jumps;
+	}
+
+	/**
 	 * Calculates the possible jumps the current player could make
 	 *
 	 * @param board The board being played on

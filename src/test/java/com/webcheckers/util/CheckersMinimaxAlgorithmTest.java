@@ -9,11 +9,26 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * test the minimax algoritgm
+ * test the minimax algorithm
  *
  * @author Mike White
  */
 class CheckersMinimaxAlgorithmTest {
+
+	@Test
+	// not much depends on the minimax function being good, and it's impossible to test
+	// robust tests are not necessary
+	public void testSpeed_bestMove() {
+		Board board = new Board();
+		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, Piece.PieceColor.RED, 0).getMove());
+		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, Piece.PieceColor.WHITE, 1).getMove());
+		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, Piece.PieceColor.RED, 2).getMove());
+		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, Piece.PieceColor.WHITE, 3).getMove());
+		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, Piece.PieceColor.RED, 4).getMove());
+		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, Piece.PieceColor.WHITE, 5).getMove());
+		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, Piece.PieceColor.RED, 6).getMove());
+		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, Piece.PieceColor.WHITE, 7).getMove());
+	}
 
 	@Test
 	public void test_calculateBoardValue() {

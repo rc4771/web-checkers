@@ -37,6 +37,28 @@ public class RedSinglePiece extends SinglePiece {
 	}
 
 	/**
+	 * Gets the possible moves that the red piece can make
+	 * @param board The board being played on
+	 * @param position The position of the piece
+	 * @return The list of valid single moves
+	 */
+	public LinkedList<Move> getSingleMoves(Board board, Position position) {
+		LinkedList<Move> moves = new LinkedList<>();
+		int row = position.getRow();
+		int cell = position.getCell();
+
+		if (!board.hasPieceAt(row + 1, cell + 1) &&
+				board.inBounds(row + 1, cell + 1)) {
+			moves.add(new Move(position, new Position(row + 1, cell + 1)));
+		} if (!board.hasPieceAt(row + 1, cell - 1) &&
+				board.inBounds(row + 1, cell - 1)) {
+			moves.add(new Move(position, new Position(row + 1, cell - 1)));
+		}
+
+		return moves;
+	}
+
+	/**
 	 * Gets the possible jumps that could be made by this piece
 	 * @param board The board being played on
 	 * @param position The position of the piece
