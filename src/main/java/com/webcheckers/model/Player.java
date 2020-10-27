@@ -7,7 +7,7 @@ import java.util.logging.Logger;
  *
  * @author <a href='mailto:dja7394@rit.edu'>David Allen</a>
  */
-public class Player {
+public class Player implements Comparable<Player> {
     private static final Logger LOG = Logger.getLogger(Player.class.getName());
     private int wins;
     private int losses;
@@ -76,5 +76,14 @@ public class Player {
      */
     public void loseGame() {
         losses++;
+    }
+
+    /**
+     * Compares two players by their score
+     * @param player The player to compare to
+     * @return A positive number is the score is greater, a negative number if less, and a zero if equal
+     */
+    public int compareTo(Player player) {
+        return (int) Math.round((this.score() - player.score()) * 1_000_000_000);
     }
 }
