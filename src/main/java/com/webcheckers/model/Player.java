@@ -9,6 +9,8 @@ import java.util.logging.Logger;
  */
 public class Player {
     private static final Logger LOG = Logger.getLogger(Player.class.getName());
+    private int wins;
+    private int losses;
 
     /**
      * This player's username
@@ -53,4 +55,26 @@ public class Player {
     public void setIsTurn(boolean turn) {
         this.isTurn = turn;
 }
+
+    /**
+     * Get the ranking of the player
+     * @return The win ration of the player
+     */
+    public double score() {
+        return (double) wins / (double) (wins + losses);
+    }
+
+    /**
+     * Indicate that the player has won a game
+     */
+    public void winGame() {
+        wins++;
+    }
+
+    /**
+     * Indicate that a player has lost a game
+     */
+    public void loseGame() {
+        losses++;
+    }
 }
