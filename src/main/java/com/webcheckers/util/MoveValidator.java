@@ -57,6 +57,26 @@ public class MoveValidator {
 	}
 
 	/**
+	 * Checks if a move is valid
+	 * @param board The board being played on
+	 * @param player The player whose turn it is
+	 * @param start The starting position of the piece
+	 * @param end The end position of the piece
+	 * @return Whether or not the move is valid
+	 */
+	public static boolean isValidMove(Board board, Piece.PieceColor player, Position start, Position end) {
+		List<Move> moves = calculateValidMoves(board, player);
+
+		for (Move move: moves) {
+			if (move.getStart().equals(start) && move.getEnd().equals(end)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Checks to see if a jump is valid
 	 * If no jumps can be made, then the move is valid
 	 *
