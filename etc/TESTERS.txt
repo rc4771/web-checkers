@@ -1,0 +1,5 @@
+1)Open command line and navigate to the project folder 
+2)Enter "mvn compile exec:java" and wait for it to compile.
+3)When it's finished, go to two different web browsers and type in "localhost:4567" as a URL in each. This simulates two players logging on.
+4)When you get to the home page, click sign in, enter a username, and then when you'll be redirected to the home page. Once you've done this on both sessions, you'll
+be able to see the "other player" on the home page. Click on the name to start a game.
