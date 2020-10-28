@@ -61,7 +61,11 @@ public class Player implements Comparable<Player> {
      * @return The win ration of the player
      */
     public double score() {
-        return (double) wins / (double) (wins + losses);
+        if (wins + losses > 0) {
+            return (double) wins / (double) (wins + losses);
+        } else {
+            return 0;
+        }
     }
 
     /**

@@ -123,6 +123,7 @@ public class PlayerLobby {
         List<String> usernames = new ArrayList<>();
         ArrayList<Player> playerList = new ArrayList<>(signedInPlayers.values());
         Collections.sort(playerList);
+        Collections.reverse(playerList);
 
         for (final Player player : playerList) {
             if (excludingUsername != null && excludingUsername.equals(player.getName()))
