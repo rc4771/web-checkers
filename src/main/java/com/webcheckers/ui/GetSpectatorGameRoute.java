@@ -47,7 +47,7 @@ public class GetSpectatorGameRoute implements Route {
      * @param   gameCenter
      *          {@link GameCenter} used to handle game logic across the site
      */
-    GetSpectatorGameRoute(final TemplateEngine templateEngine, final GameCenter gameCenter, final Gson gson) {
+    public GetSpectatorGameRoute(final TemplateEngine templateEngine, final GameCenter gameCenter, final Gson gson) {
         this.templateEngine = Objects.requireNonNull(templateEngine,"templateEngine must not be null");
         this.gameCenter = Objects.requireNonNull(gameCenter, "gameCenter must not be null");
         this.gson = Objects.requireNonNull(gson, "gson is required");

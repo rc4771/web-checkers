@@ -88,6 +88,8 @@ public class WebServer {
   public static final String SIGNOUT_URL = "/signout";
 
   public static final String SPECTATOR_GAME_URL = "/spectator/game";
+
+  public static final String SPECTATOR_STOP_URL = "/spectator/stopWatching";
   //
   // Attributes
   //
@@ -205,6 +207,9 @@ public class WebServer {
 
     //gets game from spectator view
     get(SPECTATOR_GAME_URL, new GetSpectatorGameRoute(templateEngine, gameCenter, gson));
+
+    //gets home once spectator stops watching
+    get(SPECTATOR_STOP_URL, new GetSpectatorStopWatchingRoute(playerLobby, gameCenter, templateEngine));
 
     //
     LOG.config("WebServer is initialized.");
