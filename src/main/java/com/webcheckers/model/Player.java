@@ -88,6 +88,6 @@ public class Player implements Comparable<Player> {
      * @return A positive number is the score is greater, a negative number if less, and a zero if equal
      */
     public int compareTo(Player player) {
-        return (int) Math.round((this.score() - player.score()) * 1_000_000_000);
+        return (int) Math.round((this.score() - player.score()) * Integer.MAX_VALUE);
     }
 }
