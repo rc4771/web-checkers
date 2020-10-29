@@ -81,7 +81,7 @@ public class PostResignGameRoute implements Route {
      * Redirects with a message to the home page. This is mainly useful for an error, but also for if the player
      * selects another player to start a game with, but that player is already in a game.
      */
-    private String redirectHomeWithMessage(Response response, String message) {
+    private String redirectHomeWithMessage(Response response, final String message) {
         response.redirect(String.format("%s?%s=%s", WebServer.HOME_URL, ERROR_MESSAGE_ATTR, message));
         halt();
         return null;
