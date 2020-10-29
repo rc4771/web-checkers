@@ -1,9 +1,6 @@
 package com.webcheckers.ui;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Logger;
 
 import com.webcheckers.appl.GameCenter;
@@ -55,6 +52,14 @@ public class GetHomeRoute implements Route {
 
   /** The message attribute */
   public static final String MESSAGE_ATTR = "message";
+
+  /** The AI player's index attribute (if there is an AI player) */
+  public static final String AI_OPPONENT_ATTR = "aiplayer";
+
+  /** The list of AI player names (w/ the emoji) */
+  public static final String[] AI_NAMES = {"\uD83E\uDD16Mrs. Hudson", "\uD83E\uDD16Inspector Lestrade",
+          "\uD83E\uDD16Doctor Watson", "\uD83E\uDD16Enola Holmes", "\uD83E\uDD16Mycroft Holmes",
+          "\uD83E\uDD16Professor Moriarty", "\uD83E\uDD16Sherlock Holmes"};
 
   // State
 
@@ -127,10 +132,27 @@ public class GetHomeRoute implements Route {
       vm.put(CURRENT_USER_ATTR, vmCurrentUser);
 
       // Build and display the list of players, excluding the current one, to the home page
-      List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayer.getName());
-      vm.put(PLAYER_LIST_ATTR, playerUsernames.size() > 0 ? playerUsernames : null);
+      List<String[]> displayList = getDisplayList(sessionPlayer.getName());
+      vm.put(PLAYER_LIST_ATTR, displayList.size() > 0 ? displayList : null);
     }
 
     return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+  }
+
+  private List<String[]> getDisplayList(String sessionPlayerName) {
+    List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayerName);
+    List<String[]> displayList = new ArrayList<>();
+
+    for (int i = 0; i < AI_NAMES.length; i++) {
+      float score = (i + 1) / (float) AI_NAMES.length;
+      displayList.add(new String[] {AI_NAMES[i], String.format("%s?%s=%d", WebServer.GAME_URL, AI_OPPONENT_ATTR, i), Float.toString(score)});
+    }
+
+    for (String username : playerUsernames) {
+      float score = new Random().nextFloat();
+      displayList.add(new String[] {username, String.format("/game?%s=%s", OPPONENT_USER_ATTR, username), Float.toString(score)});
+    }
+
+    return displayList;
   }
 }
