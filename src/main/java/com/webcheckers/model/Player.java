@@ -62,7 +62,7 @@ public class Player implements Comparable<Player> {
      */
     public double score() {
         if (wins + losses > 0) {
-            return (double) wins / (double) (wins + losses);
+            return ((double) wins) / ((double) (wins + losses));
         } else {
             return 0;
         }
