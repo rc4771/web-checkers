@@ -143,6 +143,10 @@ public class Game {
         this.whitePlayer.setIsTurn(!this.whitePlayer.getIsTurn());
 
         resetPendingMove();
+
+        if (whitePlayer.getIsTurn() && whitePlayer instanceof AIPlayer) {
+            ((AIPlayer) whitePlayer).performTurn(this);
+        }
     }
 
     /**

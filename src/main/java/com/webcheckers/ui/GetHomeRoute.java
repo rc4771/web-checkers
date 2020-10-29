@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.AIPlayer;
 import com.webcheckers.model.Player;
 import spark.*;
 
@@ -55,11 +56,6 @@ public class GetHomeRoute implements Route {
 
   /** The AI player's index attribute (if there is an AI player) */
   public static final String AI_OPPONENT_ATTR = "aiplayer";
-
-  /** The list of AI player names (w/ the emoji) */
-  public static final String[] AI_NAMES = {"\uD83E\uDD16Mrs. Hudson", "\uD83E\uDD16Inspector Lestrade",
-          "\uD83E\uDD16Doctor Watson", "\uD83E\uDD16Enola Holmes", "\uD83E\uDD16Mycroft Holmes",
-          "\uD83E\uDD16Professor Moriarty", "\uD83E\uDD16Sherlock Holmes"};
 
   // State
 
@@ -143,9 +139,9 @@ public class GetHomeRoute implements Route {
     List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayerName);
     List<String[]> displayList = new ArrayList<>();
 
-    for (int i = 0; i < AI_NAMES.length; i++) {
-      float score = (i + 1) / (float) AI_NAMES.length;
-      displayList.add(new String[] {AI_NAMES[i], String.format("%s?%s=%d", WebServer.GAME_URL, AI_OPPONENT_ATTR, i), Float.toString(score)});
+    for (int i = 0; i < AIPlayer.AI_NAMES.length; i++) {
+      float score = (i + 1) / (float) AIPlayer.AI_NAMES.length;
+      displayList.add(new String[] {AIPlayer.ROBOT_EMOJI + AIPlayer.AI_NAMES[i], String.format("%s?%s=%d", WebServer.GAME_URL, AI_OPPONENT_ATTR, i), Float.toString(score)});
     }
 
     for (String username : playerUsernames) {

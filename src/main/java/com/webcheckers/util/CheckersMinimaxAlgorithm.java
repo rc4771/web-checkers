@@ -19,7 +19,7 @@ public class CheckersMinimaxAlgorithm {
 	 *
 	 * @author Mike White
 	 */
-	static class MovePossibility {
+	public static class MovePossibility {
 		private Move move;
 		private int value;
 
