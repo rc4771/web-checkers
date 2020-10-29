@@ -37,6 +37,9 @@ public class GetSpectatorGameRoute implements Route {
     /** The GAME ID attribute */
     static final String GAME_ID_ATTR = "gameID";
 
+    /** The name of the page */
+    static final String TITLE = "Web Checker";
+
     private final Gson gson;
 
     /**
@@ -64,6 +67,8 @@ public class GetSpectatorGameRoute implements Route {
         Map<String, Object> vmCurrentUser = new HashMap<>();
         vmCurrentUser.put(CURRENT_USER_NAME_ATTR, sessionPlayer.getName());
         vm.put(CURRENT_USER_ATTR, vmCurrentUser);
+
+        vm.put(GetHomeRoute.TITLE_ATTR,TITLE);
         vm.put("board",game.getBoard().transposeForColor(game.getCurrentTurn()));
         vm.put("redPlayer", game.getRedPlayer());
         vm.put("whitePlayer", game.getWhitePlayer());
