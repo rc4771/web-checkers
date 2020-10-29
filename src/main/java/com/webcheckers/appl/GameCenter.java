@@ -108,24 +108,13 @@ public class GameCenter {
         for (int gameID : currentGames.keySet()) {
             Game game = currentGames.get(gameID);
 
-            if (game.getRedPlayer().getName().equals(player.getName())
-                    || game.getWhitePlayer().getName().equals(player.getName())) {
+            if ((game.getRedPlayer().getName().equals(player.getName())
+                    || game.getWhitePlayer().getName().equals(player.getName()))
+                    && game.getActive()) {
                 return gameID;
             }
         }
 
         return -1;
     }
-
-    /**
-     * Ends current game
-     * @param currentGame
-     *      The game to be ended
-     * @return
-     *
-     */
-    public void endGame(Game currentGame){
-        currentGames.remove(currentGame.getGameID());
-    }
-
 }
