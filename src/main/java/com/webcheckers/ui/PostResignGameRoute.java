@@ -64,9 +64,9 @@ public class PostResignGameRoute implements Route {
         Player sessionPlayer;
         if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) == null) {
             return redirectHomeWithMessage(response, SESSION_PLAYER_NULL_ERR_MSG);
+        } else {
+            sessionPlayer.loseGame(); // add to losses
         }
-
-        sessionPlayer.loseGame(); // add to losses
 
         Game game;
         if ((game = gameCenter.getGame(Integer.parseInt(request.queryParams(GAME_ID_ATTR)))) == null) {
