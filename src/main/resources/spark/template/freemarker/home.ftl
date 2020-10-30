@@ -31,6 +31,14 @@
           <a href="/game?opponent=${user}">${user}</a>
           <br/>
         </#list>
+        <br />
+        <br />
+        List of games currently being played:
+        <br />
+        <br />
+        <#list gameList as game>
+          <a href="/spectator/game?gameID=${game.gameID}">${game.name}</a>
+        </#list>
       <#else>
         No other players current logged in
       </#if>
