@@ -28,7 +28,7 @@ public class PostSignoutRouteTest {
     // Setup BEFORE EACH test
     @BeforeEach
     public void setup() {
-        playerLobby = new PlayerLobby();
+        playerLobby = mock(PlayerLobby.class);
         engine = mock(TemplateEngine.class);
         response = mock(Response.class);
         session = mock(Session.class);
@@ -57,12 +57,15 @@ public class PostSignoutRouteTest {
     @Test
     public void testHandle() {
         // Setup signed in player
-        Player p = new Player("Test123");
-        assertEquals(PlayerLobby.SignInResult.OK, playerLobby.signInPlayer(p.getName()));
+        Player player = mock(Player.class);
+        when(player.getName()).thenReturn("TestPlayer123");
+        when(playerLobby.signInPlayer(player.getName())).thenReturn(PlayerLobby.SignInResult.OK);
+        assertEquals(PlayerLobby.SignInResult.OK, playerLobby.signInPlayer(player.getName()));
 
         // Because this is a mock object we can't set the attribute directly, we need to do this
         // when/then format
-        when(request.session().attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(p);
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
+        when(playerLobby.signOutPlayer(player)).thenReturn(PlayerLobby.SignOutResult.OK);
 
         try {
             CuT.handle(request, response);
@@ -89,11 +92,12 @@ public class PostSignoutRouteTest {
 
     @Test
     public void testHandle_playerNotLoggedIn() {
-        Player p = new Player("Test123");
+        Player player = mock(Player.class);
 
         // Because this is a mock object we can't set the attribute directly, we need to do this
         // when/then format
-        when(request.session().attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(p);
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
+        when(playerLobby.signOutPlayer(player)).thenReturn(PlayerLobby.SignOutResult.PLAYER_NOT_LOGGED_IN);
 
         try {
             CuT.handle(request, response);

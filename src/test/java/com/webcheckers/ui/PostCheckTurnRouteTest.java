@@ -10,8 +10,7 @@ import spark.Response;
 import spark.Session;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class PostCheckTurnRouteTest {
 
@@ -20,6 +19,7 @@ public class PostCheckTurnRouteTest {
     private Request request;
     private Session session;
     private Response response;
+    private Player player;
 
     @BeforeEach
     public void setup() {
@@ -27,6 +27,7 @@ public class PostCheckTurnRouteTest {
         session = mock(Session.class);
         request = mock(Request.class);
         gson = new Gson();
+        player = mock(Player.class);
         CuT = new PostCheckTurnRoute(gson);
 
         when(request.session()).thenReturn(session);
@@ -49,19 +50,16 @@ public class PostCheckTurnRouteTest {
 
     @Test
     public void testHandle_inactivePlayer() {
-        Player p = new Player("Test123");
-        p.setIsTurn(false);
-
-        when(request.session().attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(p);
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
+        player.setIsTurn(false);
         assertEquals(gson.toJson(Message.info("false")), CuT.handle(request, response));
     }
 
     @Test
     public void testHandle_activePlayer() {
-        Player p = new Player("Test123");
-        p.setIsTurn(true);
-
-        when(request.session().attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(p);
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
+        player.setIsTurn(true);
+        when(player.getIsTurn()).thenReturn(true);
         assertEquals(gson.toJson(Message.info("true")), CuT.handle(request, response));
     }
 }

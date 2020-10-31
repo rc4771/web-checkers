@@ -39,7 +39,7 @@ class GetHomeRouteTest {
 
     @BeforeEach
     public void SetUp(){
-        playerLobby = new PlayerLobby();
+        playerLobby =  mock(PlayerLobby.class);
         gameCenter = mock(GameCenter.class);
         engine = mock(TemplateEngine.class);
         response = mock(Response.class);

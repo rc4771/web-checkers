@@ -38,8 +38,6 @@ public class PostSubmitTurnRouteTest {
     private PlayerLobby lobby;
     private Gson gson;
 
-    private Player redPlayer;
-    private Player whitePlayer;
 
     private Request request;
     private Response response;
@@ -57,17 +55,17 @@ public class PostSubmitTurnRouteTest {
         engine = mock(TemplateEngine.class);
         gson = new Gson();
 
-        lobby = new PlayerLobby();
+        lobby = mock(PlayerLobby.class);
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(lobby);
+
+        when(lobby.signInPlayer("rafeed")).thenReturn(PlayerLobby.SignInResult.OK);
+        when(lobby.signInPlayer("rafe")).thenReturn(PlayerLobby.SignInResult.OK);
 
         lobby.signInPlayer("rafeed");
         lobby.signInPlayer("rafe");
 
-        redPlayer = lobby.getPlayer("rafeed");
-        whitePlayer = lobby.getPlayer("rafe");
-
-        center = new GameCenter();
-        game = center.newGame(redPlayer, whitePlayer);
+        center = mock(GameCenter.class);
+        game = mock(Game.class);
 
         CuT = new PostSubmitTurnRoute(center, gson);
     }
@@ -89,6 +87,8 @@ public class PostSubmitTurnRouteTest {
 
         when(request.queryParams(eq("actionData"))).thenReturn(actionData.toString());
         when(request.queryParams(eq("gameID"))).thenReturn("0");
+        when(center.getGame(0)).thenReturn(game);
+        when(game.checkWin()).thenReturn(Game.WinType.NO_WIN);
 
         Message message = gson.fromJson((String) CuT.handle(request, response), Message.class);
         assertEquals(Message.Type.INFO, message.getType());

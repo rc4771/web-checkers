@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.ValidableAnswer;
 import spark.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,7 +46,7 @@ public class PostSignInRouteTest {
         session = Mockito.mock(Session.class);
         when(request.session()).thenReturn(session);
         engine = mock(TemplateEngine.class);
-        lobby = new PlayerLobby();
+        lobby = mock(PlayerLobby.class);
         CuT = new PostSignInRoute(lobby, engine);
     }
 
@@ -62,7 +63,10 @@ public class PostSignInRouteTest {
     @Test
     void testHandle_ValidUserName(){
         final String VALID_USERNAME = "Username";
+        Player player = mock(Player.class);
         when(request.queryParams(CuT.USERNAME_PARAM)).thenReturn(VALID_USERNAME);
+        when(lobby.signInPlayer(VALID_USERNAME)).thenReturn(PlayerLobby.SignInResult.OK);
+        when(lobby.getPlayer(VALID_USERNAME)).thenReturn(player);
 
         try {
             CuT.handle(request, response);
@@ -75,10 +79,13 @@ public class PostSignInRouteTest {
 
     @Test
     void testHandle_InvalidUserName(){
+        Player player = mock(Player.class);
         final TemplateEngineTester testHelper = new TemplateEngineTester();
         when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
         final String INVALID_USERNAME = "!@#(*#%)+";
         when(request.queryParams(CuT.USERNAME_PARAM)).thenReturn(INVALID_USERNAME);
+        when(lobby.signInPlayer(INVALID_USERNAME)).thenReturn(PlayerLobby.SignInResult.INVALID_USERNAME);
+        when(lobby.getPlayer(INVALID_USERNAME)).thenReturn(player);
 
         try {
             CuT.handle(request, response);
@@ -97,6 +104,7 @@ public class PostSignInRouteTest {
         final TemplateEngineTester testHelper = new TemplateEngineTester();
         when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
         final String VALID_USERNAME = "Username";
+        when(lobby.signInPlayer(VALID_USERNAME)).thenReturn(PlayerLobby.SignInResult.USERNAME_TAKEN);
         lobby.signInPlayer(VALID_USERNAME);
         when(request.queryParams(eq(PostSignInRoute.USERNAME_PARAM))).thenReturn(VALID_USERNAME);
 
