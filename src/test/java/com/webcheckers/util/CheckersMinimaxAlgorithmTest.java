@@ -3,6 +3,7 @@ package com.webcheckers.util;
 import com.webcheckers.model.Board;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Piece;
+import com.webcheckers.model.Piece.PieceColor;
 import com.webcheckers.model.Position;
 import org.junit.jupiter.api.Test;
 
@@ -23,13 +24,13 @@ class CheckersMinimaxAlgorithmTest {
 	public void testSpeed_bestMove() {
 		Board board = new Board();
 		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, RED, 0).getMove());
-		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, Piece.PieceColor.WHITE, 1).getMove());
+		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, WHITE, 1).getMove());
 		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, RED, 2).getMove());
-		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, Piece.PieceColor.WHITE, 3).getMove());
+		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, WHITE, 3).getMove());
 		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, RED, 4).getMove());
-		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, Piece.PieceColor.WHITE, 5).getMove());
+		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, WHITE, 5).getMove());
 		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, RED, 6).getMove());
-		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, Piece.PieceColor.WHITE, 7).getMove());
+		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, WHITE, 7).getMove());
 	}
 
 	@Test
@@ -40,7 +41,7 @@ class CheckersMinimaxAlgorithmTest {
 			Move move = CheckersMinimaxAlgorithm.bestMove(board, RED, i).getMove();
 			assertTrue(MoveValidator.isValidMove(board, RED, move.getStart(), move.getEnd()));
 			board.movePiece(move);
-			move = CheckersMinimaxAlgorithm.bestMove(board, Piece.PieceColor.WHITE, i).getMove();
+			move = CheckersMinimaxAlgorithm.bestMove(board, WHITE, i).getMove();
 			assertTrue(MoveValidator.isValidMove(board, WHITE, move.getStart(), move.getEnd()));
 			board.movePiece(move);
 		}
@@ -51,18 +52,18 @@ class CheckersMinimaxAlgorithmTest {
 		Board board = new Board();
 
 		assertEquals(0, CheckersMinimaxAlgorithm.calculateBoardValue(board, RED));
-		assertEquals(0, CheckersMinimaxAlgorithm.calculateBoardValue(board, Piece.PieceColor.WHITE));
+		assertEquals(0, CheckersMinimaxAlgorithm.calculateBoardValue(board, WHITE));
 
 		board.removePiece(0, 1);
 
 		assertEquals(-1, CheckersMinimaxAlgorithm.calculateBoardValue(board, RED));
-		assertEquals(1, CheckersMinimaxAlgorithm.calculateBoardValue(board, Piece.PieceColor.WHITE));
+		assertEquals(1, CheckersMinimaxAlgorithm.calculateBoardValue(board, WHITE));
 
 		board.removePiece(7, 0);
 		board.removePiece(7, 2);
 
 		assertEquals(1, CheckersMinimaxAlgorithm.calculateBoardValue(board, RED));
-		assertEquals(-1, CheckersMinimaxAlgorithm.calculateBoardValue(board, Piece.PieceColor.WHITE));
+		assertEquals(-1, CheckersMinimaxAlgorithm.calculateBoardValue(board, WHITE));
 	}
 
 	@Test
@@ -73,6 +74,6 @@ class CheckersMinimaxAlgorithmTest {
 		Move move1 = new Move(new Position(2, 1), new Position(4, 3), new Move.PieceCapture(board.getPieceAt(3, 2), new Position(3, 2)));
 
 		assertEquals(1, CheckersMinimaxAlgorithm.calculateMoveValue(board, move1, RED));
-		assertEquals(-1, CheckersMinimaxAlgorithm.calculateMoveValue(board, move1, Piece.PieceColor.WHITE));
+		assertEquals(-1, CheckersMinimaxAlgorithm.calculateMoveValue(board, move1, WHITE));
 	}
 }

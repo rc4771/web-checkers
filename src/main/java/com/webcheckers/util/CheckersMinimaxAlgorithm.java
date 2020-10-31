@@ -59,19 +59,28 @@ public class CheckersMinimaxAlgorithm {
 	 */
 	public static MovePossibility bestMove(Board board, Piece.PieceColor player, int movesToLookAhead) {
 		List<Move> moveList = MoveValidator.calculateValidMoves(board, player);
+
+		if (moveList.isEmpty()) {
+			return null;
+		}
+
 		List<Integer> moveValues = new ArrayList<>(moveList.size());
 
 		// calculate move values
 		if (movesToLookAhead == 0) {
-			for (int i = 0; i < moveList.size(); i++) {
-				moveValues.add(calculateMoveValue(board, moveList.get(i), player));
+			for (Move move : moveList) {
+				moveValues.add(calculateMoveValue(board, move, player));
 			}
 		} else {
-			for (int i = 0; i < moveList.size(); i++) {
+			for (Move move : moveList) {
 				Board newBoard = new Board(board);
-				newBoard.movePiece(moveList.get(i));
+				newBoard.movePiece(move);
 				MovePossibility bestMove = bestMove(newBoard, player.opposite(), movesToLookAhead - 1);
-				moveValues.add(-bestMove.getValue());
+				if (bestMove == null) {
+					moveValues.add(calculateMoveValue(board, move, player));
+				} else {
+					moveValues.add(-bestMove.getValue());
+				}
 			}
 		}
 
