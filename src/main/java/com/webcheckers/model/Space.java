@@ -15,15 +15,9 @@ public abstract class Space {
      * @param cellIdx
      *      The cell index on the board
      */
-    protected Space(int cellIdx) {
+    public Space(int cellIdx) {
         this.cellIdx = cellIdx;
     }
-
-    /**
-     * Creates a copy of a space
-     * @param space The space to copy
-     */
-    protected Space(Space space) {this.cellIdx = space.cellIdx;}
 
     /**
      * Gets this space's cell index
@@ -37,9 +31,4 @@ public abstract class Space {
      * A piece is valid if it's white and no no pieces on it already
      */
     public abstract boolean isValid();
-
-    /**
-     * Creates a copy of the space
-     */
-    public abstract Space copy();
 }

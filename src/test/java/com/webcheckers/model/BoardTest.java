@@ -300,28 +300,4 @@ class BoardTest {
 		assertEquals(Piece.PieceType.KING, CuT.getPieceTypeAt(7,2));
 		assertEquals(Piece.PieceType.KING, CuT.getPieceTypeAt(0,1));
 	}
-
-	@Test
-	public void test_copy() {
-		Board board1 = new Board();
-		Board board2 = new Board(board1);
-
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				assertEquals(board1.getPieceColorAt(i, j), board2.getPieceColorAt(i, j));
-				assertEquals(board1.getPieceTypeAt(i, j), board2.getPieceTypeAt(i, j));
-			}
-		}
-
-		board2.removePiece(0, 1);
-		board2.removePiece(6, 5);
-		Board board3 = new Board(board2);
-
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				assertEquals(board2.getPieceColorAt(i, j), board3.getPieceColorAt(i, j));
-				assertEquals(board2.getPieceTypeAt(i, j), board3.getPieceTypeAt(i, j));
-			}
-		}
-	}
 }
