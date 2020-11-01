@@ -85,6 +85,14 @@ public class Game {
         return whitePlayer;
     }
 
+    /**
+     * Returns the name of a game as "redplayer vs whiteplayer
+     * @return The name of the game
+     */
+    public String getName() {
+        return redPlayer.getName() + " vs " + whitePlayer.getName();
+    }
+
     public boolean getActive(){
         return active;
     }
@@ -156,10 +164,8 @@ public class Game {
     public Piece.PieceColor getPlayerColor(Player player) {
         if (player.getName().equals(redPlayer.getName())) {
             return Piece.PieceColor.RED;
-        } else if (player.getName().equals(whitePlayer.getName())) {
-            return Piece.PieceColor.WHITE;
         } else {
-            return null;
+            return Piece.PieceColor.WHITE;
         }
     }
 

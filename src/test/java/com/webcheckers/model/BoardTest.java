@@ -1,5 +1,8 @@
 package com.webcheckers.model;
 
+import com.webcheckers.model.pieces.RedKingPiece;
+import com.webcheckers.model.pieces.RedSinglePiece;
+import com.webcheckers.model.pieces.WhiteSinglePiece;
 import com.webcheckers.model.spaces.BlackSpace;
 import org.junit.jupiter.api.Test;
 
@@ -160,6 +163,14 @@ class BoardTest {
 		board1.movePiece(new Move(new Position(0, 1), new Position(4, 1)));
 		assertEquals(board1.getPieceColorAt(4, 1), Piece.PieceColor.RED);
 		assertEquals(board1.getPieceTypeAt(4, 1), Piece.PieceType.SINGLE);
+
+		// Test move to whitespace
+		board1.movePiece(new Move(new Position(2,0), new Position(3, 1)));
+		assertNull(board1.getPieceAt(3,1));
+		board1.movePiece(new Move(new Position(4,1), new Position(5, 1)));
+		assertNull(board1.getPieceAt(5, 1));
+		board1.movePiece(new Move(new Position(2,0), new Position(3,0)));
+		assertNull(board1.getPieceAt(2, 0));
 	}
 
 	@Test
@@ -202,5 +213,91 @@ class BoardTest {
 		}
 
 		assertFalse(iterator.hasNext()); // There should be no more rows
+	}
+
+	/**
+	 * Test to check inBounds method
+	 */
+	@Test
+	void inBoundsTest(){
+		Board CuT = new Board();
+
+		assertTrue(CuT.inBounds(0, 5));
+
+		assertFalse(CuT.inBounds(9,10));
+	}
+
+	/**
+	 * Test for setPieceAt method
+	 */
+	@Test
+	void setPieceAtTest(){
+		Board CuT = new Board();
+
+		// Test for out of bounds
+		CuT.setPieceAt(9, 8, new RedSinglePiece());
+		assertFalse(CuT.hasPieceAt(9, 8));
+
+		// Test for WhiteSpace
+		CuT.setPieceAt(4,0, new RedSinglePiece());
+		assertFalse(CuT.hasPieceAt(4,0));
+
+		// Test for piece being set
+		CuT.setPieceAt(4,1, new RedSinglePiece());
+		assertTrue(CuT.hasPieceAt(4,1));
+	}
+
+	/**
+	 * Test for removePiece method
+	 */
+	@Test
+	void removePieceTest(){
+		Board CuT = new Board();
+
+		// Test for out of bounds
+		CuT.removePiece(9, 10);
+		assertNull(CuT.getPieceAt(9,10));
+
+		// Test for WhiteSpace
+		CuT.removePiece(4,0);
+		assertNull(CuT.getPieceAt(4,0));
+
+		// Test for piece removed
+		CuT.removePiece(1,0);
+		assertFalse(CuT.hasPieceAt(1,0));
+	}
+
+	/**
+	 * Test for Simple and King Piece instances
+	 */
+	@Test
+	void kingTest(){
+		Board CuT = new Board();
+		for (int i = 0; i < 8; i++){
+			for (int j = 0; j < 8; j++) {
+				if (CuT.hasPieceAt(i, j)) {
+					CuT.removePiece(i, j);
+					CuT.setPieceAt(i, j,null);
+				}
+			}
+		}
+
+		CuT.setPieceAt(6, 1, new RedSinglePiece());
+		CuT.setPieceAt(1,2, new WhiteSinglePiece());
+
+		assertTrue(CuT.hasPieceAt(6,1));
+		assertTrue(CuT.hasPieceAt(1,2));
+
+		assertEquals(Piece.PieceColor.RED, CuT.getPieceColorAt(6,1));
+		assertEquals(Piece.PieceColor.WHITE, CuT.getPieceColorAt(1, 2));
+
+		CuT.movePiece(new Move(new Position(6,1), new Position(7,2)));
+		CuT.movePiece(new Move(new Position(1,2), new Position(0,1)));
+
+		assertTrue(CuT.hasPieceAt(7,2));
+		assertTrue(CuT.hasPieceAt(0,1));
+
+		assertEquals(Piece.PieceType.KING, CuT.getPieceTypeAt(7,2));
+		assertEquals(Piece.PieceType.KING, CuT.getPieceTypeAt(0,1));
 	}
 }

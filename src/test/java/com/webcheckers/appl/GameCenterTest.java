@@ -1,6 +1,8 @@
 package com.webcheckers.appl;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
@@ -179,7 +181,9 @@ public class GameCenterTest {
     }
 
     private Player createDummyPlayer(int id) {
-        return new Player(String.format("dummyPlayer#%d", id));
+        Player player = mock(Player.class);
+        when(player.getName()).thenReturn(String.format("dummyPlayer#%d", id));
+        return player;
     }
 
     private GameCenter createGameCenter() {

@@ -7,6 +7,5 @@
     </form>
   <#else>
     <a href="/signin">sign in</a>
-    <a href="/game"> Game</a>
   </#if>
  </div>

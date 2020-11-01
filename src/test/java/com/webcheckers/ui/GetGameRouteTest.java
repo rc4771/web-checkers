@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Game;
+import com.webcheckers.model.Piece;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -145,6 +146,124 @@ public class GetGameRouteTest {
         Player op = playerLobby.getPlayer("Test1234");
 
         Game g = gameCenter.newGame(p, op);
+        when(request.queryParams(GAME_ID_ATTR)).thenReturn(Integer.toString(g.getGameID()));
+
+        final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+
+        CuT.handle(request, response);
+
+        testHelper.assertViewModelExists();
+        testHelper.assertViewModelIsaMap();
+        testHelper.assertViewName(GetGameRoute.GAME_VIEW);
+    }
+
+    @Test
+    public void testHandle_gameInactive_resignation() {
+        Player p = playerLobby.getPlayer(testPlayer);
+        playerLobby.signInPlayer("Test1234");
+        Player op = playerLobby.getPlayer("Test1234");
+
+        Game g = gameCenter.newGame(p, op);
+        g.setActive(false);
+
+        when(request.queryParams(GAME_ID_ATTR)).thenReturn(Integer.toString(g.getGameID()));
+
+        final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+
+        CuT.handle(request, response);
+
+        testHelper.assertViewModelExists();
+        testHelper.assertViewModelIsaMap();
+        testHelper.assertViewName(GetGameRoute.GAME_VIEW);
+    }
+
+    @Test
+    public void testHandle_gameInactive_redWin_redPlayer() {
+        Player p = playerLobby.getPlayer(testPlayer);
+        playerLobby.signInPlayer("Test1234");
+        Player op = playerLobby.getPlayer("Test1234");
+
+        Game g = gameCenter.newGame(p, op);
+
+        // Clear white pieces
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                if(g.getBoard().hasPieceAt(i, j) && g.getBoard().getPieceColorAt(i, j) == Piece.PieceColor.WHITE){
+                    g.getBoard().setPieceAt(i, j, null);
+                }
+            }
+        }
+        g.checkWin();
+
+        g.setActive(false);
+
+        when(request.queryParams(GAME_ID_ATTR)).thenReturn(Integer.toString(g.getGameID()));
+
+        final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+
+        CuT.handle(request, response);
+
+        testHelper.assertViewModelExists();
+        testHelper.assertViewModelIsaMap();
+        testHelper.assertViewName(GetGameRoute.GAME_VIEW);
+    }
+
+    @Test
+    public void testHandle_gameInactive_redWin_whitePlayer() {
+        Player p = playerLobby.getPlayer(testPlayer);
+        playerLobby.signInPlayer("Test1234");
+        Player op = playerLobby.getPlayer("Test1234");
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(op);
+
+        Game g = gameCenter.newGame(p, op);
+
+        // Clear white pieces
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                if(g.getBoard().hasPieceAt(i, j) && g.getBoard().getPieceColorAt(i, j) == Piece.PieceColor.WHITE){
+                    g.getBoard().setPieceAt(i, j, null);
+                }
+            }
+        }
+        g.checkWin();
+
+        g.setActive(false);
+
+        when(request.queryParams(GAME_ID_ATTR)).thenReturn(Integer.toString(g.getGameID()));
+
+        final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+
+        try {
+            CuT.handle(request, response);
+        } catch (HaltException e) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testHandle_gameInactive_whiteWin() {
+        Player p = playerLobby.getPlayer(testPlayer);
+        playerLobby.signInPlayer("Test1234");
+        Player op = playerLobby.getPlayer("Test1234");
+
+        Game g = gameCenter.newGame(p, op);
+
+        // Clear white pieces
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                if(g.getBoard().hasPieceAt(i, j) && g.getBoard().getPieceColorAt(i, j) == Piece.PieceColor.RED){
+                    g.getBoard().setPieceAt(i, j, null);
+                }
+            }
+        }
+        g.checkWin();
+
+        g.setActive(false);
+
         when(request.queryParams(GAME_ID_ATTR)).thenReturn(Integer.toString(g.getGameID()));
 
         final TemplateEngineTester testHelper = new TemplateEngineTester();

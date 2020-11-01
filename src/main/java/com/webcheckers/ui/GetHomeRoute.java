@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
 import spark.*;
 
@@ -40,6 +41,9 @@ public class GetHomeRoute implements Route {
 
   /** The player list attribute */
   public static final String PLAYER_LIST_ATTR = "playerList";
+
+  /** The game list attribute */
+  public static final String GAME_LIST_ATTR = "gameList";
 
   /** The current user attribute */
   public static final String CURRENT_USER_ATTR = "currentUser";
@@ -129,6 +133,10 @@ public class GetHomeRoute implements Route {
       // Build and display the list of players, excluding the current one, to the home page
       List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayer.getName());
       vm.put(PLAYER_LIST_ATTR, playerUsernames.size() > 0 ? playerUsernames : null);
+
+      // show the list of games
+      List<Game> gameList = gameCenter.getGameList();
+      vm.put(GAME_LIST_ATTR, gameList);
     }
 
     return templateEngine.render(new ModelAndView(vm, VIEW_NAME));

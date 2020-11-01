@@ -138,4 +138,5 @@ public class Move {
         captures.add(capture);
         return new Move(this.start, end, captures);
     }
+
 }
