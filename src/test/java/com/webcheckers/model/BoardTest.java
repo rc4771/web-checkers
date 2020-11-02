@@ -7,6 +7,7 @@ import com.webcheckers.model.spaces.BlackSpace;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -213,6 +214,7 @@ class BoardTest {
 		}
 
 		assertFalse(iterator.hasNext()); // There should be no more rows
+		assertThrows(NoSuchElementException.class, iterator::next);
 	}
 
 	/**
