@@ -1,6 +1,7 @@
 package com.webcheckers.model;
 
 import com.webcheckers.model.pieces.RedSinglePiece;
+import com.webcheckers.model.pieces.WhiteKingPiece;
 import com.webcheckers.model.pieces.WhiteSinglePiece;
 import com.webcheckers.model.spaces.BlackSpace;
 import com.webcheckers.model.spaces.WhiteSpace;
@@ -53,5 +54,28 @@ public class SpaceTest {
         s.setPiece(p);
         
         assertEquals(p, s.getPiece());
+    }
+
+    @Test
+    public void test_copy() {
+        BlackSpace b1 = new BlackSpace(0, new RedSinglePiece());
+        BlackSpace b2 = new BlackSpace(1, new WhiteKingPiece());
+        WhiteSpace w1 = new WhiteSpace(0);
+        WhiteSpace w2 = new WhiteSpace(1);
+
+        // test cell indexes are equal
+        assertEquals(b1.copy().getCellIdx(), b1.getCellIdx());
+        assertEquals(b2.copy().getCellIdx(), b2.getCellIdx());
+        assertEquals(w1.copy().getCellIdx(), w1.getCellIdx());
+        assertEquals(w2.copy().getCellIdx(), w2.getCellIdx());
+
+        BlackSpace b1c = (BlackSpace) b1.copy();
+        BlackSpace b2c = (BlackSpace) b2.copy();
+
+        // test pieces are equal
+        assertEquals(b1c.getPiece().getColor(), b1.getPiece().getColor());
+        assertEquals(b1c.getPiece().getType(), b1.getPiece().getType());
+        assertEquals(b2c.getPiece().getType(), b2.getPiece().getType());
+        assertEquals(b2c.getPiece().getColor(), b2.getPiece().getColor());
     }
 }
