@@ -2,29 +2,48 @@ package com.webcheckers.model;
 
 import com.webcheckers.util.MoveValidator;
 import com.webcheckers.util.exceptions.moves.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 @Tag("Model-tier")
 public class GameTest {
+
+    private Game CuT;
+    private Player redPlayer;
+    private Player whitePlayer;
+
+    @BeforeEach
+    void setup(){
+        redPlayer = mock(Player.class);
+        when(redPlayer.getName()).thenReturn("testPlayerRed");
+        when(redPlayer.getIsTurn()).thenReturn(true);
+        whitePlayer = mock(Player.class);
+        when(whitePlayer.getName()).thenReturn("testWhitePlayer");
+        when(whitePlayer.getIsTurn()).thenReturn(true);
+        CuT = new Game(0, redPlayer, whitePlayer);
+    }
 
     /**
      * creates a Game for the tests
      *
      * @return Game
      */
-    Game createTestGameInstance() {
-        Player redPlayer = new Player("testPlayerRed");
-        Player whitePlayer = new Player("testPlayerWhite");
-        return new Game(0, redPlayer, whitePlayer);
-    }
+//    Game createTestGameInstance() {
+//        Player redPlayer = new Player("testPlayerRed");
+//
+//        Player whitePlayer = new Player("testPlayerWhite");
+//        return new Game(0, redPlayer, whitePlayer);
+//    }
 
     /**
      * Tests if submitting moves works or not
      */
     @Test
     void testMoveSubmission() {
-        final Game CuT = createTestGameInstance();
+        //final Game CuT = createTestGameInstance();
 
         assertTrue(CuT.getBoard().hasPieceAt(2, 7));
         assertFalse(CuT.getBoard().hasPieceAt(3, 6));
@@ -41,7 +60,7 @@ public class GameTest {
      */
     @Test
     void testMoveBackup() {
-        final Game CuT = createTestGameInstance();
+        //final Game CuT = createTestGameInstance();
 
         assertTrue(CuT.getBoard().hasPieceAt(2, 7));
         assertFalse(CuT.getBoard().hasPieceAt(3, 6));
@@ -60,7 +79,7 @@ public class GameTest {
      */
     @Test
     void testGetPlayerColor() {
-        final Game CuT = createTestGameInstance();
+        //final Game CuT = createTestGameInstance();
 
         assertEquals(Piece.PieceColor.RED, CuT.getPlayerColor(CuT.getRedPlayer()));
         assertEquals(Piece.PieceColor.WHITE, CuT.getPlayerColor(CuT.getWhitePlayer()));
@@ -72,7 +91,7 @@ public class GameTest {
      */
     @Test
     void testSetIsActive() {
-        final Game CuT = createTestGameInstance();
+        //final Game CuT = createTestGameInstance();
 
         CuT.setActive(false);
         assertFalse(CuT.getActive());
@@ -83,7 +102,7 @@ public class GameTest {
      */
     @Test
     void testSetPendingMoveJump() {
-        final Game CuT = createTestGameInstance();
+        //final Game CuT = createTestGameInstance();
 
         CuT.setPendingMove(2, 7, 3, 6);
         CuT.submitMove();
@@ -101,7 +120,7 @@ public class GameTest {
      */
     @Test
     void testCheckWhiteWin() {
-        Game CuT = createTestGameInstance();
+        //Game CuT = createTestGameInstance();
 
         Board board = CuT.getBoard();
 
@@ -124,7 +143,7 @@ public class GameTest {
      */
     @Test
     void testCheckRedWin() {
-        Game CuT = createTestGameInstance();
+        //Game CuT = createTestGameInstance();
 
         Board board = CuT.getBoard();
 
