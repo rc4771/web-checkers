@@ -324,4 +324,12 @@ class BoardTest {
 			}
 		}
 	}
+
+	@Test
+	public void isValidTest() {
+		Board cut = new Board();
+		assertTrue(cut.spaceIsValidAt(3, 4)); // empty black space is valid
+		assertFalse(cut.spaceIsValidAt(3, 3)); // white space is invalid
+		assertFalse(cut.spaceIsValidAt(0, 1)); // taken space is invalid
+	}
 }

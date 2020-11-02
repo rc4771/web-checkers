@@ -5,6 +5,7 @@ import com.webcheckers.model.Move;
 import com.webcheckers.model.Position;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A red single piece
@@ -47,13 +48,8 @@ public class RedSinglePiece extends SinglePiece {
 		int row = position.getRow();
 		int cell = position.getCell();
 
-		if (!board.hasPieceAt(row + 1, cell + 1) &&
-				board.inBounds(row + 1, cell + 1)) {
-			moves.add(new Move(position, new Position(row + 1, cell + 1)));
-		} if (!board.hasPieceAt(row + 1, cell - 1) &&
-				board.inBounds(row + 1, cell - 1)) {
-			moves.add(new Move(position, new Position(row + 1, cell - 1)));
-		}
+		checkSingleMove(moves, board, position, new Position(row + 1, cell + 1));
+		checkSingleMove(moves, board, position, new Position(row + 1, cell - 1));
 
 		return moves;
 	}

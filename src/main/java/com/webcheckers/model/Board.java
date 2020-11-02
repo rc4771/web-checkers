@@ -117,6 +117,21 @@ public class Board implements Iterable<Row> {
     }
 
     /**
+     * Checks if a space is valid
+     * @param row The row index
+     * @param cell The column number
+     * @return True is the space is possible to land on, false otherwise
+     */
+    public boolean spaceIsValidAt(int row, int cell) {
+        if (inBounds(row, cell)) {
+            Space space = rows.get(row).getSpaces().get(cell);
+            return space.isValid();
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Checks to see if a given position exists on the board
      * @param row The row
      * @param cell The column

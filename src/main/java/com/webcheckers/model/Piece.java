@@ -1,6 +1,7 @@
 package com.webcheckers.model;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A class to represent a checkers piece on the board.
@@ -110,4 +111,19 @@ public abstract class Piece {
      * @return The list of jumps that can be made
      */
     public abstract LinkedList<Move> getJumps(Board board, Position position);
+
+    /**
+     * Checks that a single move is valid
+     * It's valid if the ending space is valid
+     * Adds the new move to the list of moves if it's possible
+     * @param moves The list of moves to add to
+     * @param board The board the move is being made on
+     * @param start The starting position of the piece
+     * @param end The end position of the piece
+     */
+    protected void checkSingleMove(List<Move> moves, Board board, Position start, Position end) {
+        if (board.spaceIsValidAt(end.getRow(), end.getCell())) {
+            moves.add(new Move(start, end));
+        }
+    }
 }
