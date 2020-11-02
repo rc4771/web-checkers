@@ -61,43 +61,9 @@ public class WhiteSinglePiece extends SinglePiece {
 	 */
 	public LinkedList<Move> getJumps(Board board, Position position) {
 		LinkedList<Move> jumps = new LinkedList<>();
-		int row = position.getRow();
-		int cell = position.getCell();
 
-		if (board.getPieceColorAt(row - 1, cell + 1) == PieceColor.RED &&
-				!board.hasPieceAt(row - 2, cell + 2) &&
-				board.inBounds(row - 2, cell + 2)) {
-			Move newMove = new Move(position,
-					new Position(row - 2, cell + 2),
-					new Move.PieceCapture(
-							board.getPieceAt(row - 1, cell + 1),
-							new Position(row - 1, cell + 1)
-					)
-			);
-			LinkedList<Move> newJumps = getJumps(board, new Position(row - 2, cell + 2), newMove);
-			if (newJumps.isEmpty()) {
-				jumps.add(newMove);
-			} else {
-				jumps.addAll(newJumps);
-			}
-		}
-		if (board.getPieceColorAt(row - 1, cell - 1) == PieceColor.RED &&
-				!board.hasPieceAt(row - 2, cell - 2) &&
-				board.inBounds(row - 2, cell - 2)) {
-			Move newMove = new Move(position,
-					new Position(row - 2, cell - 2),
-					new Move.PieceCapture(
-							board.getPieceAt(row - 1, cell - 1),
-							new Position(row - 1, cell - 1)
-					)
-			);
-			LinkedList<Move> newJumps = getJumps(board, new Position(row - 2, cell - 2), newMove);
-			if (newJumps.isEmpty()) {
-				jumps.add(newMove);
-			} else {
-				jumps.addAll(newJumps);
-			}
-		}
+		checkJump(jumps, board, position, -1, +1);
+		checkJump(jumps, board, position, -1, -1);
 
 		return jumps;
 	}
@@ -111,45 +77,9 @@ public class WhiteSinglePiece extends SinglePiece {
 	 */
 	public LinkedList<Move> getJumps(Board board, Position position, Move move) {
 		LinkedList<Move> jumps = new LinkedList<>();
-		int row = position.getRow();
-		int cell = position.getCell();
 
-		if (board.getPieceColorAt(row - 1, cell + 1) == PieceColor.RED &&
-				!board.hasPieceAt(row - 2, cell + 2) &&
-				!move.pieceCaptured(new Position(row - 1, cell + 1)) &&
-				board.inBounds(row - 2, cell + 2)) {
-			Move newMove = move.addMove(
-					new Position(row - 2, cell + 2),
-					new Move.PieceCapture(
-							board.getPieceAt(row - 1, cell + 1),
-							new Position(row - 1, cell + 1)
-					)
-			);
-			LinkedList<Move> newJumps = getJumps(board, new Position(row - 2, cell + 2), newMove);
-			if (newJumps.isEmpty()) {
-				jumps.add(newMove);
-			} else {
-				jumps.addAll(newJumps);
-			}
-		}
-		if (board.getPieceColorAt(row - 1, cell - 1) == PieceColor.RED &&
-				!board.hasPieceAt(row - 2, cell - 2) &&
-				!move.pieceCaptured(new Position(row - 1, cell - 1)) &&
-				board.inBounds(row - 2, cell - 2)) {
-			Move newMove = move.addMove(
-					new Position(row - 2, cell - 2),
-					new Move.PieceCapture(
-							board.getPieceAt(row - 1, cell - 1),
-							new Position(row - 1, cell - 1)
-					)
-			);
-			LinkedList<Move> newJumps = getJumps(board, new Position(row - 2, cell - 2), newMove);
-			if (newJumps.isEmpty()) {
-				jumps.add(newMove);
-			} else {
-				jumps.addAll(newJumps);
-			}
-		}
+		checkJump(jumps, board, position, -1, +1, move);
+		checkJump(jumps, board, position, -1, -1, move);
 
 		return jumps;
 	}
