@@ -136,9 +136,9 @@ public class PlayerLobby {
     }
 
     /**
-     * Gets a player instance by it's username.
+     * Gets a player instance by it's username. Does NOT work for AI players.
      * @param username
-     *      The username of the player to get
+     *      The username of the player to get, CANNOT be an AI player
      * @return
      *      The instance of the player. Will be null if there is no player by this username
      */
