@@ -25,6 +25,15 @@ public class BlackSpace extends Space {
 	}
 
 	/**
+	 * Creates a copy of the space
+	 * @param space
+	 */
+	private BlackSpace(BlackSpace space) {
+		super(space);
+		this.piece = space.piece;
+	}
+
+	/**
 	 * Creates a new space object with no pieces on it
 	 * @param cellIdx
 	 *      The cell index on the board
@@ -55,5 +64,13 @@ public class BlackSpace extends Space {
 	 */
 	public boolean isValid() {
 		return piece == null;
+	}
+
+	/**
+	 * Creates a copy of this space
+	 * @return a new space
+	 */
+	public Space copy() {
+		return new BlackSpace(this);
 	}
 }

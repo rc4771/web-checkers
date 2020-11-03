@@ -14,6 +14,80 @@ import static org.junit.jupiter.api.Assertions.*;
 @Tag("Model-tier")
 class RedSinglePieceTest {
 
+	/**
+	 * Test if the piece has the red color.
+	 */
+	@Test
+	public void colorTestRed() {
+		Piece piece = new RedSinglePiece();
+		assertTrue(piece.getColor() == Piece.PieceColor.RED);
+	}
+
+	@Test
+	public void testAll_singleMoves() {
+		Board board = new Board();
+
+		board.movePiece(new Move(new Position(0, 1), new Position(3, 4)));
+		board.removePiece(2, 3);
+		board.removePiece(2, 5);
+		SinglePiece piece = (SinglePiece) board.getPieceAt(3, 4);
+		board.setPieceAt(3, 4, piece);
+
+		List<Move> moves = piece.getSingleMoves(board, new Position(3, 4));
+		assertEquals(2, moves.size());
+
+		assertTrue(moves.get(0).getCaptures().isEmpty());
+		assertTrue(moves.get(1).getCaptures().isEmpty());
+	}
+
+	@Test
+	public void testLeftCorner_singleMoves() {
+		Board board = new Board();
+
+		SinglePiece piece = (SinglePiece) board.getPieceAt(1, 0);
+
+		List<Move> moves = piece.getSingleMoves(board, new Position(1, 0));
+		assertTrue(moves.isEmpty());
+	}
+
+	@Test
+	public void testRightCorner_singleMoves() {
+		Board board = new Board();
+
+		SinglePiece piece = (SinglePiece) board.getPieceAt(0, 7);
+
+		List<Move> moves = piece.getSingleMoves(board, new Position(0, 7));
+		assertTrue(moves.isEmpty());
+	}
+
+	@Test
+	public void testRedLeft_singleMoves() {
+		Board board = new Board();
+
+		SinglePiece piece = (SinglePiece) board.getPieceAt(2, 7);
+
+		List<Move> moves = piece.getSingleMoves(board, new Position(2, 7));
+		assertEquals(1, moves.size());
+		Move move = moves.get(0);
+
+		assertEquals(new Position(2, 7), move.getStart());
+		assertEquals(new Position(3, 6), move.getEnd());
+	}
+
+	@Test
+	public void testRedRight_singleMoves() {
+		Board board = new Board();
+
+		SinglePiece piece = (SinglePiece) board.getPieceAt(2, 1);
+
+		List<Move> moves = piece.getSingleMoves(board, new Position(3, 0));
+		assertEquals(1, moves.size());
+		Move move = moves.get(0);
+
+		assertEquals(new Position(3, 0), move.getStart());
+		assertEquals(new Position(4, 1), move.getEnd());
+	}
+
 	@Test
 	public void test_promote() {
 		RedSinglePiece CuT = new RedSinglePiece();

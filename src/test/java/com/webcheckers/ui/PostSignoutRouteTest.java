@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static spark.Spark.halt;
 
+import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,7 @@ public class PostSignoutRouteTest {
     private Response response;
     private TemplateEngine engine;
     private PlayerLobby playerLobby;
+    private GameCenter gameCenter;
 
     // Setup BEFORE EACH test
     @BeforeEach
@@ -33,7 +35,8 @@ public class PostSignoutRouteTest {
         response = mock(Response.class);
         session = mock(Session.class);
         request = mock(Request.class);
-        CuT = new PostSignoutRoute(playerLobby, engine);
+        gameCenter = mock(GameCenter.class);
+        CuT = new PostSignoutRoute(gameCenter, playerLobby, engine);
 
         when(request.session()).thenReturn(session);
     }
@@ -41,17 +44,22 @@ public class PostSignoutRouteTest {
     @Test
     public void testConstructor() {
         // This shouldn't throw a null pointer exception if it works, that's the "assertion"
-        new PostSignoutRoute(playerLobby, engine);
+        new PostSignoutRoute(gameCenter, playerLobby, engine);
     }
 
     @Test
     public void testConstructor_nullTE() {
-        assertThrows(NullPointerException.class, () -> new PostSignoutRoute(playerLobby, null));
+        assertThrows(NullPointerException.class, () -> new PostSignoutRoute(gameCenter, playerLobby, null));
     }
 
     @Test
     public void testConstructor_nullPlayerLobby() {
-        assertThrows(NullPointerException.class, () -> new PostSignoutRoute(null, engine));
+        assertThrows(NullPointerException.class, () -> new PostSignoutRoute(gameCenter, null, engine));
+    }
+
+    @Test
+    public void testConstructor_nullGameCenter() {
+        assertThrows(NullPointerException.class, () -> new PostSignoutRoute(null, playerLobby, engine));
     }
 
     @Test

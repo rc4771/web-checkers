@@ -94,14 +94,19 @@ public class GetGameRoute implements Route{
         // then redirect with the new gameID
         if (request.queryParams(GAME_ID_ATTR) == null) {
             // Ensure there's an opponent player to create a new game with, otherwise just go back to home
+            Player opponentPlayer;
             String opponentName;
-            if ((opponentName = request.queryParams(GetHomeRoute.OPPONENT_USER_ATTR)) == null) {
+
+            if ((opponentName = request.queryParams(AI_OPPONENT_ATTR)) != null) {
+                opponentPlayer = new AIPlayer(Integer.parseInt(opponentName));
+            }
+            else if ((opponentName = request.queryParams(GetHomeRoute.OPPONENT_USER_ATTR)) != null) {
+                opponentPlayer = playerLobby.getPlayer(opponentName);
+            } else {
                 response.redirect(String.format("%s?%s=Something invalid happened", WebServer.HOME_URL, ERROR_MESSAGE_ATTR));
                 halt();
                 return null;
             }
-
-            Player opponentPlayer = playerLobby.getPlayer(opponentName);
 
             // If the player selected is already in a game, notify the user
             if (gameCenter.isPlayerInGame(opponentPlayer)) {
@@ -146,14 +151,13 @@ public class GetGameRoute implements Route{
                 modeOptions.put("gameOverMessage", WIN_MSG);       //notify player that they won
             }
             else if((winType.equals(Game.WinType.RED_WIN) && playerColor.equals(Piece.PieceColor.WHITE)) || (winType.equals(Game.WinType.WHITE_WIN) &&
-                    playerColor.equals(Piece.PieceColor.WHITE))){
+                    playerColor.equals(Piece.PieceColor.RED))){
                 modeOptions.put("gameOverMessage", LOSE_MSG);      //notify player that they lost
                 redirectHomeWithMessage(response, LOSE_MSG);
             }
             else{   //notify resignation
                 modeOptions.put("gameOverMessage", RESIGN_MSG);
-            }
-            gameCenter.endGame(game);                             //end the game
+            }                           //end the game
         }
 
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);

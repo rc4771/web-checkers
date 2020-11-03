@@ -1,14 +1,14 @@
 package com.webcheckers.ui;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Logger;
 
 import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.PlayerLobby;
+
 import com.webcheckers.model.Game;
+
+import com.webcheckers.model.AIPlayer;
 import com.webcheckers.model.Player;
 import spark.*;
 
@@ -59,6 +59,9 @@ public class GetHomeRoute implements Route {
 
   /** The message attribute */
   public static final String MESSAGE_ATTR = "message";
+
+  /** The AI player's index attribute (if there is an AI player) */
+  public static final String AI_OPPONENT_ATTR = "aiplayer";
 
   // State
 
@@ -118,7 +121,7 @@ public class GetHomeRoute implements Route {
     if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) != null) {
       // Check to see if the player is in a game, in which case redirect them to it
       int gameID;
-      if ((gameID = gameCenter.getGameFromPlayer(sessionPlayer)) != -1) {
+      if ((gameID = gameCenter.getGameFromPlayer(sessionPlayer)) != -1 && gameCenter.getGame(gameID).getActive()) {
         response.redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GetGameRoute.GAME_ID_ATTR, gameID));
         halt();
         return null;
@@ -130,15 +133,32 @@ public class GetHomeRoute implements Route {
       vmCurrentUser.put(CURRENT_USER_NAME_ATTR, sessionPlayer.getName());
       vm.put(CURRENT_USER_ATTR, vmCurrentUser);
 
-      // Build and display the list of players, excluding the current one, to the home page
-      List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayer.getName());
-      vm.put(PLAYER_LIST_ATTR, playerUsernames.size() > 0 ? playerUsernames : null);
-
       // show the list of games
       List<Game> gameList = gameCenter.getGameList();
       vm.put(GAME_LIST_ATTR, gameList);
+
+      // Build and display the list of players, excluding the current one, to the home page
+      List<String[]> displayList = getDisplayList(sessionPlayer.getName());
+      vm.put(PLAYER_LIST_ATTR, displayList.size() > 0 ? displayList : null);
     }
 
     return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+  }
+
+  private List<String[]> getDisplayList(String sessionPlayerName) {
+    List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayerName);
+    List<String[]> displayList = new ArrayList<>();
+
+    for (int i = 0; i < AIPlayer.AI_NAMES.length; i++) {
+      float score = (i + 1) / (float) AIPlayer.AI_NAMES.length;
+      displayList.add(new String[] {AIPlayer.ROBOT_EMOJI + AIPlayer.AI_NAMES[i], String.format("%s?%s=%d", WebServer.GAME_URL, AI_OPPONENT_ATTR, i), Float.toString(score)});
+    }
+
+    for (String username : playerUsernames) {
+      float score = new Random().nextFloat();
+      displayList.add(new String[] {username, String.format("/game?%s=%s", OPPONENT_USER_ATTR, username), Float.toString(score)});
+    }
+
+    return displayList;
   }
 }

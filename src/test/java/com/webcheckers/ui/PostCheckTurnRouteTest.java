@@ -1,6 +1,8 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
+import com.webcheckers.appl.GameCenter;
+import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +22,7 @@ public class PostCheckTurnRouteTest {
     private Session session;
     private Response response;
     private Player player;
+    private GameCenter gameCenter;
 
     @BeforeEach
     public void setup() {
@@ -28,19 +31,25 @@ public class PostCheckTurnRouteTest {
         request = mock(Request.class);
         gson = new Gson();
         player = mock(Player.class);
-        CuT = new PostCheckTurnRoute(gson);
+        gameCenter = mock(GameCenter.class);
+        CuT = new PostCheckTurnRoute(gameCenter, gson);
 
         when(request.session()).thenReturn(session);
     }
 
     @Test
     public void testConstructor() {
-        new PostCheckTurnRoute(new Gson());
+        new PostCheckTurnRoute(gameCenter, gson);
     }
 
     @Test
     public void testConstructor_nullGson() {
-        assertThrows(NullPointerException.class, () -> new PostCheckTurnRoute(null));
+        assertThrows(NullPointerException.class, () -> new PostCheckTurnRoute(gameCenter, null));
+    }
+
+    @Test
+    public void testConstructor_nullGameCenter() {
+        assertThrows(NullPointerException.class, () -> new PostCheckTurnRoute(null, gson));
     }
 
     @Test
@@ -51,7 +60,11 @@ public class PostCheckTurnRouteTest {
     @Test
     public void testHandle_inactivePlayer() {
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
+        Game game = mock(Game.class);
+        when(gameCenter.getGame(gameCenter.getGameFromPlayer(player))).thenReturn(game);
+        when(game.getActive()).thenReturn(true);
         player.setIsTurn(false);
+        when(player.getIsTurn()).thenReturn(false);
         assertEquals(gson.toJson(Message.info("false")), CuT.handle(request, response));
     }
 
