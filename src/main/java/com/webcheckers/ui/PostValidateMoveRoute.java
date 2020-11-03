@@ -65,10 +65,12 @@ public class PostValidateMoveRoute implements Route {
         Piece.PieceColor player = game.getCurrentTurn();
 
         JsonObject jsonData = gson.fromJson(request.queryParams("actionData"), JsonObject.class);
-        int startRow = jsonData.get("start").getAsJsonObject().get("row").getAsInt();
-        int startCell = jsonData.get("start").getAsJsonObject().get("cell").getAsInt();
-        int endRow = jsonData.get("end").getAsJsonObject().get("row").getAsInt();
-        int endCell = jsonData.get("end").getAsJsonObject().get("cell").getAsInt();
+        JsonObject start = jsonData.get("start").getAsJsonObject();
+        JsonObject end = jsonData.get("end").getAsJsonObject();
+        int startRow = start.get("row").getAsInt();
+        int startCell = start.get("cell").getAsInt();
+        int endRow = end.get("row").getAsInt();
+        int endCell = end.get("cell").getAsInt();
 
         Message msg;
         try {
