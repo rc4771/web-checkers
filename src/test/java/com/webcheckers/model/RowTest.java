@@ -1,6 +1,8 @@
 package com.webcheckers.model;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.webcheckers.model.pieces.RedSinglePiece;
+import com.webcheckers.model.spaces.BlackSpace;
 import com.webcheckers.model.spaces.WhiteSpace;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -32,5 +34,21 @@ public class RowTest {
     @Test
     public void testIterator(){
         assertNotNull(CuT.iterator());
+    }
+
+    @Test
+    public void testCopy() {
+        ArrayList<Space> spaces = new ArrayList<>();
+        Row row = new Row(0, spaces);
+        assertTrue(row.getSpaces().isEmpty());
+        assertEquals(0, row.getIndex());
+
+        row = new Row(1, spaces);
+        assertEquals(1, row.getIndex());
+
+        Space space = new BlackSpace(0);
+        spaces.add(space);
+        row = new Row(1, spaces);
+        assertEquals(space, row.getSpaces().get(0));
     }
 }

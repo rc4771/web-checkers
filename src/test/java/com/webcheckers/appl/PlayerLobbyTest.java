@@ -14,26 +14,6 @@ import java.util.List;
 public class PlayerLobbyTest {
 
     @Test
-    public void testSignInPlayer_validUsername() {
-        PlayerLobby pl = createPlayerLobby();
-
-        String[] usernames = {"DavidTheF", "RIT", "can spaces", "NUMBERS123", "CoMbO 123"};
-        for (String username : usernames) {
-            assertEquals(PlayerLobby.SignInResult.OK, pl.signInPlayer(username));
-        }
-    }
-
-    @Test
-    public void testSignInPlayer_nonAlphaNumeric() {
-        PlayerLobby pl = createPlayerLobby();
-
-        String[] usernames = {"s@#$%^&(=;'.", "less /*-+", "simple error!", "question?"};
-        for (String username : usernames) {
-            assertEquals(PlayerLobby.SignInResult.INVALID_USERNAME, pl.signInPlayer(username));
-        }
-    }
-
-    @Test
     public void testSignInPlayer_takenUsername() {
         PlayerLobby pl = createPlayerLobby();
 

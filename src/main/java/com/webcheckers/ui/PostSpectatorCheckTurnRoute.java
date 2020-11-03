@@ -37,12 +37,13 @@ public class PostSpectatorCheckTurnRoute implements Route {
     public Object handle(Request request, Response response) {
         final Game game = gameCenter.getGame(Integer.parseInt(request.queryParams(GAME_ID_ATTR)));
         Player redPlayer = game.getRedPlayer();
+        Player whitePlayer = game.getWhitePlayer();
         final Session httpSession = request.session();
 
         Message msg = Message.error("false");
         Player sessionPlayer;
         if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) != null) {
-            msg = Message.info(redPlayer.getIsTurn() ? "true" : "false");
+            msg = Message.info(redPlayer.getIsTurn() || whitePlayer.getIsTurn() ? "true" : "false");
         }
 
         return gson.toJson(msg, Message.class);
