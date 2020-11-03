@@ -1,6 +1,7 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
+import com.webcheckers.appl.GameCenter;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,19 +28,18 @@ public class PostCheckTurnRouteTest {
         session = mock(Session.class);
         request = mock(Request.class);
         gson = new Gson();
-        CuT = new PostCheckTurnRoute(gson);
-
+        CuT = new PostCheckTurnRoute(mock(GameCenter.class), gson);
         when(request.session()).thenReturn(session);
     }
 
     @Test
     public void testConstructor() {
-        new PostCheckTurnRoute(new Gson());
+        new PostCheckTurnRoute(mock(GameCenter.class), new Gson());
     }
 
     @Test
     public void testConstructor_nullGson() {
-        assertThrows(NullPointerException.class, () -> new PostCheckTurnRoute(null));
+        assertThrows(NullPointerException.class, () -> new PostCheckTurnRoute(mock(GameCenter.class), null));
     }
 
     @Test

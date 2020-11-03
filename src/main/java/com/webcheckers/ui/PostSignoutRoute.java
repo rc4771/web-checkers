@@ -1,6 +1,8 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
 import spark.*;
 
@@ -22,6 +24,7 @@ public class PostSignoutRoute implements Route {
 
     static final String NO_SESSION_LAYER_ERROR_MESSAGE = "You are not signed in so you cannot log out (no Player in session)";
 
+    private final GameCenter gameCenter;
     private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
 
@@ -33,7 +36,8 @@ public class PostSignoutRoute implements Route {
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public PostSignoutRoute(PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+    public PostSignoutRoute(GameCenter gameCenter, PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+        this.gameCenter = Objects.requireNonNull(gameCenter, "gameCenter is required");
         this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby is required");
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
 
@@ -60,6 +64,11 @@ public class PostSignoutRoute implements Route {
         Player sessionPlayer;
         if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) == null) {
             return redirectHomeWithMessage(response, NO_SESSION_LAYER_ERROR_MESSAGE);
+        }
+
+        Game game;
+        if ((game = gameCenter.getGame(gameCenter.getGameFromPlayer(sessionPlayer))) != null) {
+            game.setActive(false);
         }
 
         httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY, null);

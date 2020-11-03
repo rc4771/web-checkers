@@ -121,7 +121,7 @@ public class GetHomeRoute implements Route {
     if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) != null) {
       // Check to see if the player is in a game, in which case redirect them to it
       int gameID;
-      if ((gameID = gameCenter.getGameFromPlayer(sessionPlayer)) != -1) {
+      if ((gameID = gameCenter.getGameFromPlayer(sessionPlayer)) != -1 && gameCenter.getGame(gameID).getActive()) {
         response.redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GetGameRoute.GAME_ID_ATTR, gameID));
         halt();
         return null;

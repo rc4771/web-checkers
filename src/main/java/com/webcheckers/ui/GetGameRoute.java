@@ -151,14 +151,13 @@ public class GetGameRoute implements Route{
                 modeOptions.put("gameOverMessage", WIN_MSG);       //notify player that they won
             }
             else if((winType.equals(Game.WinType.RED_WIN) && playerColor.equals(Piece.PieceColor.WHITE)) || (winType.equals(Game.WinType.WHITE_WIN) &&
-                    playerColor.equals(Piece.PieceColor.WHITE))){
+                    playerColor.equals(Piece.PieceColor.RED))){
                 modeOptions.put("gameOverMessage", LOSE_MSG);      //notify player that they lost
                 redirectHomeWithMessage(response, LOSE_MSG);
             }
             else{   //notify resignation
                 modeOptions.put("gameOverMessage", RESIGN_MSG);
-            }
-            gameCenter.endGame(game);                             //end the game
+            }                           //end the game
         }
 
         vm.put(GetHomeRoute.TITLE_ATTR,TITLE);
