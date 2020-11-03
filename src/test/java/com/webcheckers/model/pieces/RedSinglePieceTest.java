@@ -14,6 +14,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @Tag("Model-tier")
 class RedSinglePieceTest {
 
+	/**
+	 * Test if the piece has the red color.
+	 */
+	@Test
+	public void colorTestRed() {
+		Piece piece = new RedSinglePiece();
+		assertTrue(piece.getColor() == Piece.PieceColor.RED);
+	}
+
 	@Test
 	public void test_promote() {
 		RedSinglePiece CuT = new RedSinglePiece();

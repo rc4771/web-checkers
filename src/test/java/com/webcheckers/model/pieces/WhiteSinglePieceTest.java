@@ -17,6 +17,15 @@ import static org.mockito.Mockito.when;
 @Tag("Model-tier")
 class WhiteSinglePieceTest {
 
+	/**
+	 * Test if the piece has the white color.
+	 */
+	@Test
+	public void colorTestWhite() {
+		Piece piece = new WhiteSinglePiece();
+		assertTrue(piece.getColor() == Piece.PieceColor.WHITE);
+	}
+
 	@Test
 	public void test_promote() {
 		WhiteSinglePiece CuT = new WhiteSinglePiece();

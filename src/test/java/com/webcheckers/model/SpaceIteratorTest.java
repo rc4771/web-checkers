@@ -6,21 +6,36 @@ import com.webcheckers.model.spaces.BlackSpace;
 import com.webcheckers.model.spaces.WhiteSpace;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @Tag("Model-tier")
 class SpaceIteratorTest {
 
-	private static ArrayList<Space> testList = new ArrayList<>();
+	private static ArrayList<Space> testList;
 
-	static {
-		testList.add(new WhiteSpace(0));
-		testList.add(new BlackSpace(1, new RedSinglePiece()));
-		testList.add(new BlackSpace(2, new WhiteSinglePiece()));
+	static
+	{
+		//testList.add(new WhiteSpace(0));
+		//testList.add(new BlackSpace(1, new RedSinglePiece()));
+		//testList.add(new BlackSpace(2, new WhiteSinglePiece()));
+		testList = new ArrayList<Space>();
+		WhiteSpace firstWhiteSpace = mock(WhiteSpace.class);
+		when(firstWhiteSpace.getCellIdx()).thenReturn(0);
+		BlackSpace firstBlackSpace = mock(BlackSpace.class);
+		when(firstBlackSpace.getCellIdx()).thenReturn(1);
+		when(firstBlackSpace.getPiece()).thenReturn(mock(RedSinglePiece.class));
+		BlackSpace secondBlackSpace = mock(BlackSpace.class);
+		when(secondBlackSpace.getCellIdx()).thenReturn(2);
+		when(secondBlackSpace.getPiece()).thenReturn(mock(WhiteSinglePiece.class));
+		testList.add(firstWhiteSpace);
+		testList.add(firstBlackSpace);
+		testList.add(secondBlackSpace);
 	}
 
 	@Test
