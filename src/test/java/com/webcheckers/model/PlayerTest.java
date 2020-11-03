@@ -3,7 +3,11 @@ package com.webcheckers.model;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PlayerTest {
 
@@ -34,6 +38,56 @@ public class PlayerTest {
 
 
     }
+
+    @Test
+    public void score_noGames() {
+        Player CuT = new Player(VALID_NAME);
+        assertEquals(0, CuT.score());
+    }
+
+    @Test
+    public void score_loseGame() {
+        Player CuT = new Player(VALID_NAME);
+        CuT.loseGame();
+        assertEquals(0, CuT.score());
+    }
+
+    @Test
+    public void score_winGame() {
+        Player CuT = new Player(VALID_NAME);
+        CuT.winGame();
+        assertEquals(1, CuT.score());
+    }
+
+    @Test
+    public void compareTo_equal() {
+        Player CuT1 = new Player(VALID_NAME);
+        Player CuT2 = new Player(VALID_NAME);
+        CuT1.winGame();
+        CuT2.winGame();
+        assertEquals(0, CuT1.compareTo(CuT2));
+    }
+
+    @Test
+    public void compareTo_greater() {
+        Player CuT1 = new Player(VALID_NAME);
+        Player CuT2 = new Player(VALID_NAME);
+        CuT1.winGame();
+        CuT2.loseGame();
+        CuT2.winGame();
+        assertTrue(CuT1.compareTo(CuT2) > 0);
+    }
+
+    @Test
+    public void compareTo_less() {
+        Player CuT1 = new Player(VALID_NAME);
+        Player CuT2 = new Player(VALID_NAME);
+        CuT1.winGame();
+        CuT1.loseGame();
+        CuT2.winGame();
+        assertTrue(CuT1.compareTo(CuT2) < 0);
+    }
+
     /**
      * Tests if username is invalid
      */

@@ -64,6 +64,13 @@ public class PostSubmitTurnRoute implements Route {
 
         //set game active to false if a player wins
         if (!winType.equals(Game.WinType.NO_WIN)) {
+            if (winType.equals(Game.WinType.RED_WIN)) {
+                game.getRedPlayer().winGame();
+                game.getWhitePlayer().loseGame();
+            } else {
+                game.getWhitePlayer().winGame();
+                game.getRedPlayer().loseGame();
+            }
             game.setActive(false);
         }
 

@@ -7,8 +7,10 @@ import java.util.logging.Logger;
  *
  * @author <a href='mailto:dja7394@rit.edu'>David Allen</a>
  */
-public class Player {
+public class Player implements Comparable<Player> {
     private static final Logger LOG = Logger.getLogger(Player.class.getName());
+    private int wins;
+    private int losses;
 
     /**
      * This player's username
@@ -53,4 +55,39 @@ public class Player {
     public void setIsTurn(boolean turn) {
         this.isTurn = turn;
 }
+
+    /**
+     * Get the ranking of the player
+     * @return The win ration of the player
+     */
+    public double score() {
+        if (wins + losses > 0) {
+            return ((double) wins) / ((double) (wins + losses));
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Indicate that the player has won a game
+     */
+    public void winGame() {
+        wins++;
+    }
+
+    /**
+     * Indicate that a player has lost a game
+     */
+    public void loseGame() {
+        losses++;
+    }
+
+    /**
+     * Compares two players by their score
+     * @param player The player to compare to
+     * @return A positive number is the score is greater, a negative number if less, and a zero if equal
+     */
+    public int compareTo(Player player) {
+        return (int) Math.round((this.score() - player.score()) * Integer.MAX_VALUE);
+    }
 }

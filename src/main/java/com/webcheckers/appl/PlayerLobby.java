@@ -3,9 +3,7 @@ package com.webcheckers.appl;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.NameValidator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -123,7 +121,11 @@ public class PlayerLobby {
      */
     public List<String> getPlayerUsernames(String excludingUsername) {
         List<String> usernames = new ArrayList<>();
-        for (final Player player : signedInPlayers.values()) {
+        ArrayList<Player> playerList = new ArrayList<>(signedInPlayers.values());
+        Collections.sort(playerList);
+        Collections.reverse(playerList);
+
+        for (final Player player : playerList) {
             if (excludingUsername != null && excludingUsername.equals(player.getName()))
                 continue;
 
@@ -134,9 +136,9 @@ public class PlayerLobby {
     }
 
     /**
-     * Gets a player instance by it's username.
+     * Gets a player instance by it's username. Does NOT work for AI players.
      * @param username
-     *      The username of the player to get
+     *      The username of the player to get, CANNOT be an AI player
      * @return
      *      The instance of the player. Will be null if there is no player by this username
      */

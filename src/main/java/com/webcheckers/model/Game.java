@@ -85,6 +85,14 @@ public class Game {
         return whitePlayer;
     }
 
+    /**
+     * Returns the name of a game as "redplayer vs whiteplayer
+     * @return The name of the game
+     */
+    public String getName() {
+        return redPlayer.getName() + " vs " + whitePlayer.getName();
+    }
+
     public boolean getActive(){
         return active;
     }
@@ -143,6 +151,10 @@ public class Game {
         this.whitePlayer.setIsTurn(!this.whitePlayer.getIsTurn());
 
         resetPendingMove();
+
+        if (whitePlayer.getIsTurn() && whitePlayer instanceof AIPlayer) {
+            ((AIPlayer) whitePlayer).performTurn(this);
+        }
     }
 
     /**
