@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import spark.*;
 
 import static com.webcheckers.ui.GetGameRoute.GAME_ID_ATTR;
+import static com.webcheckers.ui.GetGameRoute.LOSE_MSG;
 import static com.webcheckers.ui.GetHomeRoute.ERROR_MESSAGE_ATTR;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -188,9 +189,9 @@ public class GetGameRouteTest {
         Game g = gameCenter.newGame(p, op);
 
         // Clear white pieces
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                if(g.getBoard().hasPieceAt(i, j) && g.getBoard().getPieceColorAt(i, j) == Piece.PieceColor.WHITE){
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (g.getBoard().hasPieceAt(i, j) && g.getBoard().getPieceColorAt(i, j) == Piece.PieceColor.WHITE) {
                     g.getBoard().setPieceAt(i, j, null);
                 }
             }
@@ -221,9 +222,9 @@ public class GetGameRouteTest {
         Game g = gameCenter.newGame(p, op);
 
         // Clear white pieces
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                if(g.getBoard().hasPieceAt(i, j) && g.getBoard().getPieceColorAt(i, j) == Piece.PieceColor.WHITE){
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (g.getBoard().hasPieceAt(i, j) && g.getBoard().getPieceColorAt(i, j) == Piece.PieceColor.WHITE) {
                     g.getBoard().setPieceAt(i, j, null);
                 }
             }
@@ -242,20 +243,53 @@ public class GetGameRouteTest {
         } catch (HaltException e) {
             // expected
         }
+        verify(response).redirect(String.format("%s?%s=%s", WebServer.HOME_URL, ERROR_MESSAGE_ATTR, LOSE_MSG));
     }
 
     @Test
-    public void testHandle_gameInactive_whiteWin() {
+    public void testHandle_gameInactive_whiteWin_redPlayer() {
         Player p = playerLobby.getPlayer(testPlayer);
         playerLobby.signInPlayer("Test1234");
         Player op = playerLobby.getPlayer("Test1234");
 
         Game g = gameCenter.newGame(p, op);
 
-        // Clear white pieces
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                if(g.getBoard().hasPieceAt(i, j) && g.getBoard().getPieceColorAt(i, j) == Piece.PieceColor.RED){
+        // Clear red pieces
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (g.getBoard().hasPieceAt(i, j) && g.getBoard().getPieceColorAt(i, j) == Piece.PieceColor.RED) {
+                    g.getBoard().setPieceAt(i, j, null);
+                }
+            }
+        }
+        g.checkWin();
+
+        g.setActive(false);
+
+        when(request.queryParams(GAME_ID_ATTR)).thenReturn(Integer.toString(g.getGameID()));
+
+        final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+
+        try {
+            CuT.handle(request, response);
+        } catch (HaltException e) { //expected
+        }
+        verify(response).redirect(String.format("%s?%s=%s", WebServer.HOME_URL, ERROR_MESSAGE_ATTR, LOSE_MSG));
+    }
+
+    @Test
+    void testHandle_gameInactive_whiteWin_whitePlayer(){
+        Player p = playerLobby.getPlayer(testPlayer);
+        playerLobby.signInPlayer("Test1234");
+        Player op = playerLobby.getPlayer("Test1234");
+
+        Game g = gameCenter.newGame(op, p);
+
+        // Clear red pieces
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (g.getBoard().hasPieceAt(i, j) && g.getBoard().getPieceColorAt(i, j) == Piece.PieceColor.RED) {
                     g.getBoard().setPieceAt(i, j, null);
                 }
             }

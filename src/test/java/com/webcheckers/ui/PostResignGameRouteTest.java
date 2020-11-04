@@ -19,6 +19,7 @@ public class PostResignGameRouteTest {
     private Response response;
     private GameCenter gameCenter;
     private Gson gson;
+    private Player sessionPlayer;
 
     @BeforeEach
     public void setup() {
@@ -28,6 +29,8 @@ public class PostResignGameRouteTest {
         gameCenter = mock(GameCenter.class);
         gson = new Gson();
         CuT = new PostResignGameRoute(gameCenter, gson);
+
+        sessionPlayer = mock(Player.class);
 
         when(request.session()).thenReturn(session);
     }
@@ -48,9 +51,11 @@ public class PostResignGameRouteTest {
     }
 
     @Test
-    public void testHandle_noGame() {
+    public void testHandle_noGame(){
         when(request.queryParams(GAME_ID_ATTR)).thenReturn("0");
-        assertEquals(CuT.handle(request, response), gson.toJson(Message.error(PostResignGameRoute.NO_GAME_FOUND_ERR_MSG), Message.class));
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
+
+        assertEquals(gson.toJson(Message.error(PostResignGameRoute.NO_GAME_FOUND_ERR_MSG), Message.class), CuT.handle(request, response));
     }
 
     @Test
@@ -59,6 +64,7 @@ public class PostResignGameRouteTest {
         when(g.getGameID()).thenReturn(0);
         when(request.queryParams(GAME_ID_ATTR)).thenReturn("0");
         when(gameCenter.getGame(Integer.parseInt(request.queryParams(GAME_ID_ATTR)))).thenReturn(g);
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
 
         when(g.getActive()).thenReturn(false);
         assertEquals(CuT.handle(request, response), gson.toJson(Message.info(PostResignGameRoute.RESIGN_SUCCESSFUL_MSG), Message.class));

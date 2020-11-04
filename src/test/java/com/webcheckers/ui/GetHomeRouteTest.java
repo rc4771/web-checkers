@@ -82,6 +82,10 @@ class GetHomeRouteTest {
     @Test
     void testHandle_SessionPlayer(){
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
+        Game game = mock(Game.class);
+        when(gameCenter.getGameFromPlayer(sessionPlayer)).thenReturn(0);
+        when(gameCenter.getGame(0)).thenReturn(game);
+        when(gameCenter.getGame(0).getActive()).thenReturn(true);
 
         try {
             CuT.handle(request, response);
@@ -89,8 +93,7 @@ class GetHomeRouteTest {
             // expected
         }
 
-        verify(gameCenter).getGameFromPlayer(ArgumentMatchers.any(Player.class));
-        //verify(sessionPlayer).getName();
+        verify(response).redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GetGameRoute.GAME_ID_ATTR, 0));
     }
 
     @Test
