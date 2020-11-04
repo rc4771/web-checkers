@@ -97,6 +97,17 @@ class GetHomeRouteTest {
     }
 
     @Test
+    void testHandle_ErrorMsg(){
+        when(request.queryParams(ERROR_MESSAGE_ATTR)).thenReturn("error");
+        final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+        CuT.handle(request, response);
+        testHelper.assertViewModelExists();
+        testHelper.assertViewModelIsaMap();
+        testHelper.assertViewName(GetHomeRoute.VIEW_NAME);
+    }
+
+    @Test
     void testHandle_InvalidGameID(){
         when(request.queryParams(GAME_ID_ATTR)).thenReturn("-1");
 
@@ -111,6 +122,68 @@ class GetHomeRouteTest {
     }
 
     @Test
+    void testHandle_validGameID_activeGame(){
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
+        Game game = mock(Game.class);
+        when(gameCenter.getGameFromPlayer(sessionPlayer)).thenReturn(0);
+        when(gameCenter.getGame(0)).thenReturn(game);
+        when(game.getActive()).thenReturn(true);
+        try{
+            CuT.handle(request, response);
+        }
+        catch (HaltException e){
+            //expected
+        }
+        verify(response).redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GetGameRoute.GAME_ID_ATTR, 0));
+    }
+
+    @Test
+    void testHandle_invalidGameID_activeGame(){
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
+        Game game = mock(Game.class);
+        when(gameCenter.getGameFromPlayer(sessionPlayer)).thenReturn(-1);
+        when(gameCenter.getGame(0)).thenReturn(game);
+        when(game.getActive()).thenReturn(true);
+        CuT.handle(request, response);
+        final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+        CuT.handle(request, response);
+        testHelper.assertViewModelExists();
+        testHelper.assertViewModelIsaMap();
+        testHelper.assertViewName(GetHomeRoute.VIEW_NAME);
+    }
+
+    @Test
+    void testHandle_validGameID_inactiveGame(){
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
+        Game game = mock(Game.class);
+        when(gameCenter.getGameFromPlayer(sessionPlayer)).thenReturn(0);
+        when(gameCenter.getGame(0)).thenReturn(game);
+        when(game.getActive()).thenReturn(false);
+        CuT.handle(request, response);
+        final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+        CuT.handle(request, response);
+        testHelper.assertViewModelExists();
+        testHelper.assertViewModelIsaMap();
+    }
+
+    @Test
+    void testHandle_invalidGameID_inactiveGame(){
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
+        Game game = mock(Game.class);
+        when(gameCenter.getGameFromPlayer(sessionPlayer)).thenReturn(-1);
+        when(gameCenter.getGame(0)).thenReturn(game);
+        when(game.getActive()).thenReturn(false);
+        CuT.handle(request, response);
+        final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+        CuT.handle(request, response);
+        testHelper.assertViewModelExists();
+        testHelper.assertViewModelIsaMap();
+    }
+
+    @Test
     void testView(){
         final TemplateEngineTester testHelper = new TemplateEngineTester();
         when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
@@ -118,5 +191,15 @@ class GetHomeRouteTest {
         testHelper.assertViewModelExists();
         testHelper.assertViewModelIsaMap();
         testHelper.assertViewName(GetHomeRoute.VIEW_NAME);
+    }
+
+    @Test
+    void tesHandle(){
+
+    }
+
+    @Test
+    void testGetDisplayList(){
+
     }
 }

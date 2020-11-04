@@ -75,4 +75,64 @@ public class PostCheckTurnRouteTest {
         when(player.getIsTurn()).thenReturn(true);
         assertEquals(gson.toJson(Message.info("true")), CuT.handle(request, response));
     }
+
+    @Test
+    public void testHandle_inactiveGame(){
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
+        player.setIsTurn(true);
+        when(player.getIsTurn()).thenReturn(true);
+        Game game = mock(Game.class);
+        when(gameCenter.getGameFromPlayer(player)).thenReturn(0);
+        when(gameCenter.getGame(0)).thenReturn(game);
+        when(game.getActive()).thenReturn(false);
+        assertEquals(gson.toJson(Message.info("true")), CuT.handle(request, response));
+    }
+
+    @Test
+    public void testHandle_NullGame(){
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
+        player.setIsTurn(true);
+        when(player.getIsTurn()).thenReturn(true);
+        Game game = mock(Game.class);
+        when(gameCenter.getGameFromPlayer(player)).thenReturn(0);
+        when(gameCenter.getGame(0)).thenReturn(null);
+        when(game.getActive()).thenReturn(true);
+        assertEquals(gson.toJson(Message.info("true")), CuT.handle(request, response));
+    }
+
+    @Test
+    public void testHandle_NullGame_InactiveGame(){
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
+        player.setIsTurn(true);
+        when(player.getIsTurn()).thenReturn(true);
+        Game game = mock(Game.class);
+        when(gameCenter.getGameFromPlayer(player)).thenReturn(0);
+        when(gameCenter.getGame(0)).thenReturn(null);
+        when(game.getActive()).thenReturn(false);
+        assertEquals(gson.toJson(Message.info("true")), CuT.handle(request, response));
+    }
+
+    @Test
+    public void testHandle_activeGame_existingGame_true(){
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
+        player.setIsTurn(false);
+        when(player.getIsTurn()).thenReturn(false);
+        Game game = mock(Game.class);
+        when(gameCenter.getGameFromPlayer(player)).thenReturn(0);
+        when(gameCenter.getGame(0)).thenReturn(game);
+        when(game.getActive()).thenReturn(true);
+        assertEquals(gson.toJson(Message.info("false")), CuT.handle(request, response));
+    }
+
+    @Test
+    public void testHandle_activeGame_existingGame_false(){
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
+        player.setIsTurn(true);
+        when(player.getIsTurn()).thenReturn(true);
+        Game game = mock(Game.class);
+        when(gameCenter.getGameFromPlayer(player)).thenReturn(0);
+        when(gameCenter.getGame(0)).thenReturn(game);
+        when(game.getActive()).thenReturn(true);
+        assertEquals(gson.toJson(Message.info("true")), CuT.handle(request, response));
+    }
 }

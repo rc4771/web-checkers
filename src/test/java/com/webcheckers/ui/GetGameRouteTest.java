@@ -12,6 +12,7 @@ import spark.*;
 
 import static com.webcheckers.ui.GetGameRoute.GAME_ID_ATTR;
 import static com.webcheckers.ui.GetGameRoute.LOSE_MSG;
+import static com.webcheckers.ui.GetHomeRoute.AI_OPPONENT_ATTR;
 import static com.webcheckers.ui.GetHomeRoute.ERROR_MESSAGE_ATTR;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -148,6 +149,47 @@ public class GetGameRouteTest {
 
         Game g = gameCenter.newGame(p, op);
         when(request.queryParams(GAME_ID_ATTR)).thenReturn(Integer.toString(g.getGameID()));
+
+        final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+
+        CuT.handle(request, response);
+
+        testHelper.assertViewModelExists();
+        testHelper.assertViewModelIsaMap();
+        testHelper.assertViewName(GetGameRoute.GAME_VIEW);
+    }
+
+    @Test
+    public void testHandle_valid_AIOpponent(){
+        Player p = playerLobby.getPlayer(testPlayer);
+        playerLobby.signInPlayer("Test1234");
+        Player op = playerLobby.getPlayer("Test1234");
+        when(request.queryParams(AI_OPPONENT_ATTR)).thenReturn("test");
+
+        Game g = gameCenter.newGame(p, op);
+        when(request.queryParams(GAME_ID_ATTR)).thenReturn(Integer.toString(g.getGameID()));
+
+        final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+
+        CuT.handle(request, response);
+
+        testHelper.assertViewModelExists();
+        testHelper.assertViewModelIsaMap();
+        testHelper.assertViewName(GetGameRoute.GAME_VIEW);
+    }
+
+    @Test
+    public void testHandle_valid_activePlayerWhite(){
+        Player p = playerLobby.getPlayer(testPlayer);
+        playerLobby.signInPlayer("Test1234");
+        Player op = playerLobby.getPlayer("Test1234");
+
+        Game g = gameCenter.newGame(p, op);
+        when(request.queryParams(GAME_ID_ATTR)).thenReturn(Integer.toString(g.getGameID()));
+        g.getWhitePlayer().setIsTurn(true);
+        g.getRedPlayer().setIsTurn(false);
 
         final TemplateEngineTester testHelper = new TemplateEngineTester();
         when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());

@@ -19,8 +19,7 @@ import spark.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @Tag("UI-tier")
 /**
@@ -94,6 +93,64 @@ public class PostSubmitTurnRouteTest {
         assertEquals(Message.Type.INFO, message.getType());
         assertTrue(message.isSuccessful());
         assertEquals("Move submitted successfully", message.getText());
+    }
+
+    @Test
+    void testHandle_validRedWin(){
+        JsonObject actionData = new JsonObject();
+        JsonObject start = new JsonObject();
+        start.add("row", new JsonPrimitive("2"));
+        start.add("cell", new JsonPrimitive("0"));
+        JsonObject end = new JsonObject();
+        end.add("row", new JsonPrimitive("3"));
+        end.add("cell", new JsonPrimitive("2"));
+        actionData.add("start", start);
+        actionData.add("end", end);
+
+        when(request.queryParams(eq("actionData"))).thenReturn(actionData.toString());
+        when(request.queryParams(eq("gameID"))).thenReturn("0");
+        when(center.getGame(0)).thenReturn(game);
+        when(game.checkWin()).thenReturn(Game.WinType.RED_WIN);
+
+        Player redPlayer = mock(Player.class);
+        Player whitePlayer = mock(Player.class);
+        when(game.getRedPlayer()).thenReturn(redPlayer);
+        when(game.getWhitePlayer()).thenReturn(whitePlayer);
+
+        Message message = gson.fromJson((String) CuT.handle(request, response), Message.class);
+        assertEquals(Message.Type.INFO, message.getType());
+        assertTrue(message.isSuccessful());
+        assertEquals("Move submitted successfully", message.getText());
+
+    }
+
+    @Test
+    void testHandle_validWhiteWin(){
+        JsonObject actionData = new JsonObject();
+        JsonObject start = new JsonObject();
+        start.add("row", new JsonPrimitive("2"));
+        start.add("cell", new JsonPrimitive("0"));
+        JsonObject end = new JsonObject();
+        end.add("row", new JsonPrimitive("3"));
+        end.add("cell", new JsonPrimitive("2"));
+        actionData.add("start", start);
+        actionData.add("end", end);
+
+        when(request.queryParams(eq("actionData"))).thenReturn(actionData.toString());
+        when(request.queryParams(eq("gameID"))).thenReturn("0");
+        when(center.getGame(0)).thenReturn(game);
+        when(game.checkWin()).thenReturn(Game.WinType.WHITE_WIN);
+
+        Player redPlayer = mock(Player.class);
+        Player whitePlayer = mock(Player.class);
+        when(game.getRedPlayer()).thenReturn(redPlayer);
+        when(game.getWhitePlayer()).thenReturn(whitePlayer);
+
+        Message message = gson.fromJson((String) CuT.handle(request, response), Message.class);
+        assertEquals(Message.Type.INFO, message.getType());
+        assertTrue(message.isSuccessful());
+        assertEquals("Move submitted successfully", message.getText());
+
     }
 
 

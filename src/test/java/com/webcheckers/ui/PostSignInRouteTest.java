@@ -64,7 +64,7 @@ public class PostSignInRouteTest {
     void testHandle_ValidUserName(){
         final String VALID_USERNAME = "Username";
         Player player = mock(Player.class);
-        when(request.queryParams(CuT.USERNAME_PARAM)).thenReturn(VALID_USERNAME);
+        when(request.queryParams(PostSignInRoute.USERNAME_PARAM)).thenReturn(VALID_USERNAME);
         when(lobby.signInPlayer(VALID_USERNAME)).thenReturn(PlayerLobby.SignInResult.OK);
         when(lobby.getPlayer(VALID_USERNAME)).thenReturn(player);
 
@@ -83,7 +83,7 @@ public class PostSignInRouteTest {
         final TemplateEngineTester testHelper = new TemplateEngineTester();
         when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
         final String INVALID_USERNAME = "!@#(*#%)+";
-        when(request.queryParams(CuT.USERNAME_PARAM)).thenReturn(INVALID_USERNAME);
+        when(request.queryParams(PostSignInRoute.USERNAME_PARAM)).thenReturn(INVALID_USERNAME);
         when(lobby.signInPlayer(INVALID_USERNAME)).thenReturn(PlayerLobby.SignInResult.INVALID_USERNAME);
         when(lobby.getPlayer(INVALID_USERNAME)).thenReturn(player);
 

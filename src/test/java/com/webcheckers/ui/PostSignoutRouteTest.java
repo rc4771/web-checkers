@@ -7,6 +7,7 @@ import static spark.Spark.halt;
 
 import com.webcheckers.appl.GameCenter;
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.Game;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -115,5 +116,30 @@ public class PostSignoutRouteTest {
         }
 
         verify(response).redirect(String.format("%s?%s=%s", WebServer.HOME_URL, ERROR_MESSAGE_ATTR, PlayerLobby.SignOutResult.PLAYER_NOT_LOGGED_IN.getErrorMessage()));
+    }
+
+    @Test
+    public void testHandle_activeGame(){
+        Player player = mock(Player.class);
+        Game game = mock(Game.class);
+        when(player.getName()).thenReturn("TestPlayer123");
+        when(playerLobby.signInPlayer(player.getName())).thenReturn(PlayerLobby.SignInResult.OK);
+        assertEquals(PlayerLobby.SignInResult.OK, playerLobby.signInPlayer(player.getName()));
+
+        // Because this is a mock object we can't set the attribute directly, we need to do this
+        // when/then format
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
+        when(playerLobby.signOutPlayer(player)).thenReturn(PlayerLobby.SignOutResult.OK);
+        when(gameCenter.getGameFromPlayer(player)).thenReturn(0);
+        when(gameCenter.getGame(0)).thenReturn(game);
+
+        try {
+            CuT.handle(request, response);
+        } catch (HaltException e) {
+            // expected
+        }
+
+        verify(response).redirect(WebServer.HOME_URL);
+
     }
 }
