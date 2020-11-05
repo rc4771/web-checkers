@@ -5,12 +5,14 @@ import com.webcheckers.model.pieces.RedSinglePiece;
 import com.webcheckers.model.pieces.WhiteSinglePiece;
 import com.webcheckers.model.spaces.BlackSpace;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Tag;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("Model-tier")
 class BoardTest {
 
 	@Test
