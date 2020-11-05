@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class WhiteSpaceTest {
 
+    /**
+     * Tests if white space is invalid
+     */
     @Test
     public void testWhiteSpace_isValid() {
         assertFalse(new WhiteSpace(0).isValid());
