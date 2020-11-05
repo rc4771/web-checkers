@@ -38,6 +38,7 @@
         <br />
         <#list gameList as game>
           <a href="/spectator/game?gameID=${game.gameID}">${game.name}</a>
+          <br />
         </#list>
       <#else>
         No other players current logged in
