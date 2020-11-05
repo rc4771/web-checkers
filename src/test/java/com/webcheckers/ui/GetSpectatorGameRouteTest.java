@@ -41,6 +41,9 @@ public class GetSpectatorGameRouteTest {
     private Player redPlayer;
     private Player whitePlayer;
 
+    /**
+     * Setup before each test
+     */
     @BeforeEach
     void setup(){
         gameCenter = mock(GameCenter.class);
@@ -70,26 +73,41 @@ public class GetSpectatorGameRouteTest {
 
     }
 
+    /**
+     * Test for a NullPointerException for a null Gson
+     */
     @Test
     void testConstructor_gsonNull(){
         assertThrows(NullPointerException.class, () -> new GetSpectatorGameRoute(templateEngine, gameCenter, null));
     }
 
+    /**
+     * Test for a NullPointerException for a null gameCenter
+     */
     @Test
     void testConstructor_gameCenterNull(){
         assertThrows(NullPointerException.class, () -> new GetSpectatorGameRoute(templateEngine, null, gson));
     }
 
+    /**
+     * Test for a NullPointerException for a null templateEngine
+     */
     @Test
     void testConstructor_templateEngineNull(){
         assertThrows(NullPointerException.class, () -> new GetSpectatorGameRoute(null, gameCenter, gson));
     }
 
+    /**
+     * Test for a valid GetSpectatorGameRoute
+     */
     @Test
     void testConstructor_valid(){
         new GetSpectatorGameRoute(templateEngine, gameCenter, gson);
     }
 
+    /**
+     * Test to handle a valid request when it's the redPlayer's turn
+     */
     @Test
     void handle_valid_redTurn(){
         Board board = mock(Board.class);
@@ -110,6 +128,9 @@ public class GetSpectatorGameRouteTest {
 
     }
 
+    /**
+     * Test to handle a valid request when it's the whitePlayer's turn
+     */
     @Test
     void handle_valid_whiteTurn(){
         Board board = mock(Board.class);
@@ -129,6 +150,9 @@ public class GetSpectatorGameRouteTest {
         testHelper.assertViewName(GetGameRoute.GAME_VIEW);
     }
 
+    /**
+     * Test to handle inactive game due to redPlayer win
+     */
     @Test
     void handle_valid_inactive_redWin(){
         Board board = mock(Board.class);
@@ -149,6 +173,9 @@ public class GetSpectatorGameRouteTest {
         verify(response).redirect(String.format("%s?%s=%s", WebServer.HOME_URL, Message.Type.INFO, Message.info(String.format("The game is over! %s has won the game!", game.getRedPlayer().getName()))));
     }
 
+    /**
+     * Test to handle inactive game due to whitePlayer win
+     */
     @Test
     void handle_valid_inactive_whiteWin(){
         Board board = mock(Board.class);

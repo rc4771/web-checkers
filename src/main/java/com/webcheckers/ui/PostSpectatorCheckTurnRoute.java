@@ -33,6 +33,12 @@ public class PostSpectatorCheckTurnRoute implements Route {
 
     }
 
+    /**
+     * Checks the turns for each player in the game spectated
+     * @param request the request
+     * @param response the response
+     * @return message to spectator
+     */
     @Override
     public Object handle(Request request, Response response) {
         final Game game = gameCenter.getGame(Integer.parseInt(request.queryParams(GAME_ID_ATTR)));

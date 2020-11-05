@@ -13,6 +13,9 @@ public class GetSignInRouteTest {
 
     private TemplateEngine engine;
 
+    /**
+     * Setup before each test
+     */
     @BeforeEach
     public void setup() {
         engine = mock(TemplateEngine.class);
@@ -22,11 +25,17 @@ public class GetSignInRouteTest {
         CuT = new GetSignInRoute(engine);
     }
 
+    /**
+     * Test for a NullPointerException for a null templateEngine
+     */
     @Test
     public void testConstructor_nullTemplateEngine() {
         assertThrows(NullPointerException.class, () -> new GetSignInRoute(null));
     }
 
+    /**
+     * Test to handle a valid response
+     */
     @Test
     public void testHandle() {
         final TemplateEngineTester testHelper = new TemplateEngineTester();

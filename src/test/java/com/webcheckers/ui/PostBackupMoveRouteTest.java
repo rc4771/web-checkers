@@ -47,6 +47,9 @@ public class PostBackupMoveRouteTest {
     private Session session;
     private TemplateEngine engine;
 
+    /**
+     * Setup before each test
+     */
     @BeforeEach
     /**
      * Initialization for each test
@@ -81,7 +84,7 @@ public class PostBackupMoveRouteTest {
 
     @Test
     /**
-     * Tests the handle method
+     * Tests the handle method with a valid request
      */
     void handleTest(){
         JsonObject actionData = new JsonObject();

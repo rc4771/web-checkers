@@ -78,6 +78,14 @@ public class PlayerLobby {
         return SignInResult.OK;
     }
 
+    /**
+     * Attempts to sign out the desired player
+     * @param player the player to sign out of the application
+     * @return An enum indicating the result of the sign out attempt:
+     *           OK                      - If the sign out attempt was successful
+     *          NULL_PLAYER              - If the player is null
+     *         PLAYER_NOT_LOGGED_IN      - If the player is not logged in
+     */
     public SignOutResult signOutPlayer(Player player) {
         if (player == null) {
             return SignOutResult.NULL_PLAYER;

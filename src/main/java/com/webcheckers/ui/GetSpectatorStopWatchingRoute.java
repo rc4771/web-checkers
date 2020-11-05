@@ -30,6 +30,13 @@ public class GetSpectatorStopWatchingRoute implements Route {
         this.gameCenter = Objects.requireNonNull(gameCenter, "gameCenter is required");
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
     }
+
+    /**
+     * Redirects the spectator to the homepage once exited
+     * @param request the request
+     * @param response the response
+     * @return null
+     */
     @Override
     public Object handle(Request request, Response response) {
         String message = "You have successfully exited the game.";

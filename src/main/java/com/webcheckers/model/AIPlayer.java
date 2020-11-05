@@ -37,6 +37,10 @@ public class AIPlayer extends Player {
         return aiPlayerIndex;
     }
 
+    /**
+     * Performs the AI Player's turn
+     * @param game the game being played
+     */
     public void performTurn(Game game) {
         CheckersMinimaxAlgorithm.MovePossibility movePossibility = CheckersMinimaxAlgorithm.bestMove(game.getBoard(),
                 game.getPlayerColor(this), aiPlayerIndex + 1);
