@@ -38,9 +38,10 @@ class SpaceIteratorTest {
 		testList.add(secondBlackSpace);
 	}
 
+	/**
+	 * Test to make sure the first next call works correctly. First element of testList should be null.
+	 */
 	@Test
-	/// Test to make sure the first next call works correctly
-	/// First element of testList should be null
 	void next_first() {
 		final SpaceIterator CuT = new SpaceIterator(testList);
 		final Space spaceActual = CuT.next();
@@ -51,8 +52,10 @@ class SpaceIteratorTest {
 		assertEquals(spaceExpected.getCellIdx(), spaceActual.getCellIdx());
 	}
 
+	/**
+	 * Test to make sure hasNext works correctly
+	 */
 	@Test
-	/// Test to make sure hasNext works correctly
 	void hasNext() {
 		final SpaceIterator CuT = new SpaceIterator(testList);
 
@@ -64,8 +67,10 @@ class SpaceIteratorTest {
 		assertFalse(CuT.hasNext());
 	}
 
+	/**
+	 * Test to make sure all calls to next work correctly
+	 */
 	@Test
-	/// Test to make sure all calls to next work correctly
 	void next_all() {
 		final SpaceIterator CuT = new SpaceIterator(testList);
 		CuT.next(); // skip first element

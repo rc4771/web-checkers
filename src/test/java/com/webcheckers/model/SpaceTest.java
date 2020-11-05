@@ -12,6 +12,10 @@ import org.junit.jupiter.api.Test;
 
 @Tag ("Model-tier")
 public class SpaceTest {
+
+    /**
+     * Tests if getCellIdx works properly
+     */
     @Test
     public void testGetCellIdx(){
         Space s = new WhiteSpace(42);
@@ -21,32 +25,50 @@ public class SpaceTest {
         assertEquals(s.getCellIdx(), 42);
     }
 
+    /**
+     * Tests if white space is invalid
+     */
     @Test
     public void testWhiteSpace_isValid() {
         assertFalse(new WhiteSpace(0).isValid());
     }
 
+    /**
+     * Tests if space will properly check if it has a piece or not
+     */
     @Test
     public void testBlackSpace_isValid_nullPiece() {
         assertTrue(new BlackSpace(0, null).isValid());
     }
 
+    /**
+     * Tests if black space is valid
+     */
     @Test
     public void testBlackSpace_isValid() {
         assertFalse(new BlackSpace(0, new RedSinglePiece()).isValid());
     }
 
+    /**
+     * Tests if getPiece works on empty space
+     */
     @Test
     public void testBlackSpace_getPiece_nullPiece(){
         assertNull(new BlackSpace(0).getPiece());
     }
 
+    /**
+     * Tests if getPiece works on space with piece
+     */
     @Test
     public void testBlackSpace_getPiece() {
         Piece p = new RedSinglePiece();
         assertEquals(p, new BlackSpace(0, p).getPiece());
     }
 
+    /**
+     * Tests if setPiece works on black space
+     */
     @Test
     public void testBlackSpace_setPiece() {
         BlackSpace s = new BlackSpace(0);
@@ -56,6 +78,9 @@ public class SpaceTest {
         assertEquals(p, s.getPiece());
     }
 
+    /**
+     * Tests if copy correctly makes a copy of the space
+     */
     @Test
     public void test_copy() {
         BlackSpace b1 = new BlackSpace(0, new RedSinglePiece());
