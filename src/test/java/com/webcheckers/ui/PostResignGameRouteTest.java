@@ -35,6 +35,7 @@ public class PostResignGameRouteTest {
         sessionPlayer = mock(Player.class);
 
         when(request.session()).thenReturn(session);
+        when(sessionPlayer.getIsTurn()).thenReturn(true);
     }
 
     @Test
