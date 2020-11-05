@@ -13,6 +13,9 @@ import java.util.List;
 @Tag("Application-tier")
 public class PlayerLobbyTest {
 
+    /**
+     * Tests singing in a player but with a taken username
+     */
     @Test
     public void testSignInPlayer_takenUsername() {
         PlayerLobby pl = createPlayerLobby();
@@ -21,6 +24,9 @@ public class PlayerLobbyTest {
         assertEquals(PlayerLobby.SignInResult.USERNAME_TAKEN, pl.signInPlayer("Test123"));
     }
 
+    /**
+     * Tests signing in a player but with a null and empty username
+     */
     @Test
     public void testSignInPlayer_emptyNullUsername() {
         PlayerLobby pl = createPlayerLobby();
@@ -30,6 +36,9 @@ public class PlayerLobbyTest {
         assertEquals(PlayerLobby.SignInResult.INVALID_USERNAME, pl.signInPlayer("\t")); // tab
     }
 
+    /**
+     * Tests signing out players on the valid paths
+     */
     @Test
     public void testSignOutPlayer() {
         PlayerLobby pl = createPlayerLobby();
@@ -37,12 +46,18 @@ public class PlayerLobbyTest {
         assertEquals(PlayerLobby.SignOutResult.OK, pl.signOutPlayer(pl.getPlayer("Test123")));
     }
 
+    /**
+     * Tests signing out a player but with a null Player
+     */
     @Test
     public void testSignOutPlayer_nullPlayer() {
         PlayerLobby pl = createPlayerLobby();
         assertEquals(PlayerLobby.SignOutResult.NULL_PLAYER, pl.signOutPlayer(null));
     }
 
+    /**
+     * Tests singing out a player but with a player that was never signined in
+     */
     @Test
     public void testSignOutPlayer_playerNotSignedIn() {
         PlayerLobby pl = createPlayerLobby();
@@ -50,6 +65,9 @@ public class PlayerLobbyTest {
         assertEquals(PlayerLobby.SignOutResult.PLAYER_NOT_LOGGED_IN, pl.signOutPlayer(p));
     }
 
+    /**
+     * Tests PlayerLobby.getPlayerCount() w/ a number of players
+     */
     @Test
     public void testGetPlayerCount() {
         PlayerLobby pl = createPlayerLobby();
@@ -64,6 +82,9 @@ public class PlayerLobbyTest {
         assertEquals(usernames.length, pl.getPlayerCount());
     }
 
+    /**
+     * Tests getPlayerCount() but with some invalid sign ins
+     */
     @Test
     public void testGetPlayerCount_invalidSignIns() {
         PlayerLobby pl = createPlayerLobby();
@@ -85,6 +106,9 @@ public class PlayerLobbyTest {
         assertEquals(validUsernames.length, pl.getPlayerCount());
     }
 
+    /**
+     * Tests getPlayerUsernames() w/ some signed in players
+     */
     @Test
     public void testGetPlayerUsernames() {
         PlayerLobby pl = createPlayerLobby();
@@ -104,6 +128,9 @@ public class PlayerLobbyTest {
         assertEquals(0, recv.size());
     }
 
+    /**
+     * Tests getPlayerUsernames() but excluding a username
+     */
     @Test
     public void testGetPlayerUsernames_excl() { // Test getting all usernames EXCEPT one
         PlayerLobby pl = createPlayerLobby();
@@ -124,12 +151,18 @@ public class PlayerLobbyTest {
         assertEquals(excl, usernames.get(0));
     }
 
+    /**
+     * Tests getPlayerUsernames() but with players that aren't signed in (so should count 0)
+     */
     @Test
     public void testGetPlayerUsernames_nonSignedIn() {
         PlayerLobby pl = createPlayerLobby();
         assertEquals(0, pl.getPlayerUsernames().size());
     }
 
+    /**
+     * Tests the getPlayer() method with a valid player
+     */
     @Test
     public void testGetPlayer() {
         PlayerLobby pl = createPlayerLobby();
@@ -143,18 +176,28 @@ public class PlayerLobbyTest {
         }
     }
 
+    /**
+     * Tests getPlayer() but with a player that wasn't signed in
+     */
     @Test
     public void testGetPlayer_noneSignedIn() {
         PlayerLobby pl = createPlayerLobby();
         assertNull(pl.getPlayer("swen261"));
     }
 
+    /**
+     * Tests getPlayer() but with a null username
+     */
     @Test
     public void testGetPlayer_nullUsername() {
         PlayerLobby pl = createPlayerLobby();
         assertNull(pl.getPlayer(null));
     }
 
+    /**
+     * A helper method to create a real PlayerLobby for testing
+     * @return
+     */
     private PlayerLobby createPlayerLobby() {
         return new PlayerLobby();
     }
