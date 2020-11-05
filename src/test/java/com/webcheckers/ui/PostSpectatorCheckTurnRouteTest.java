@@ -35,6 +35,9 @@ public class PostSpectatorCheckTurnRouteTest {
     private Player whitePlayer;
     private Player sessionPlayer;
 
+    /**
+     * Sets up objects and mocks to be used throughout the test
+     */
     @BeforeEach
     void setup(){
         gson = new Gson();
@@ -57,21 +60,33 @@ public class PostSpectatorCheckTurnRouteTest {
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
     }
 
+    /**
+     * Tests a valid path for the constructor of this class
+     */
     @Test
     void testConstructor_valid(){
         new PostSpectatorCheckTurnRoute(gson, gameCenter);
     }
 
+    /**
+     * Tests the constructor failing with a null Gson object
+     */
     @Test
     void testConstructor_GsonNull(){
         assertThrows(NullPointerException.class, () -> new PostSpectatorCheckTurnRoute(null, gameCenter));
     }
 
+    /**
+     * Tests the constructor failing with a null GameCenter object
+     */
     @Test
     void testConstructor_GameCenterNull(){
         assertThrows(NullPointerException.class, () -> new PostSpectatorCheckTurnRoute(gson, null));
     }
 
+    /**
+     * Test the route returning a true message for the red player turn
+     */
     @Test
     void testHandle_valid_redPlayerTurn(){
         when(redPlayer.getIsTurn()).thenReturn(true);
@@ -79,6 +94,9 @@ public class PostSpectatorCheckTurnRouteTest {
         assertEquals(gson.toJson(Message.info("true")), CuT.handle(request, response));
     }
 
+    /**
+     * Test the route returning a true message for the white player turn
+     */
     @Test
     void testHandle_valid_whitePlayerTurn(){
         when(redPlayer.getIsTurn()).thenReturn(false);
@@ -86,6 +104,9 @@ public class PostSpectatorCheckTurnRouteTest {
         assertEquals(gson.toJson(Message.info("true")), CuT.handle(request, response));
     }
 
+    /**
+     * Tests the route returning a false message for neither turn
+     */
     @Test
     void testHandle_valid_false(){
         when(redPlayer.getIsTurn()).thenReturn(false);
@@ -93,6 +114,9 @@ public class PostSpectatorCheckTurnRouteTest {
         assertEquals(gson.toJson(Message.info("false")), CuT.handle(request, response));
     }
 
+    /**
+     * Tests the route returning a true message for both turns
+     */
     @Test
     void testHandle_valid_true(){
         when(redPlayer.getIsTurn()).thenReturn(true);
@@ -100,6 +124,9 @@ public class PostSpectatorCheckTurnRouteTest {
         assertEquals(gson.toJson(Message.info("true")), CuT.handle(request, response));
     }
 
+    /**
+     * Tests a null Player in the Session and assures it returns an error message
+     */
     @Test
     void testHandle_invalid(){
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(null);

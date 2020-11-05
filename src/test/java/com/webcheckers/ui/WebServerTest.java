@@ -13,6 +13,9 @@ import static org.mockito.Mockito.when;
 
 class WebServerTest {
 
+	/**
+	 * Tests the constructor of WebServer w/ valid objects
+	 */
 	@Test
 	public void constructor_test() {
 		TemplateEngine engine = mock(TemplateEngine.class);
@@ -23,6 +26,9 @@ class WebServerTest {
 		new WebServer(engine, gson, lobby, center); // make sure no errors occur
 	}
 
+	/**
+	 * Tests the constructor of WebServer but with a null TemplateEngine
+	 */
 	@Test
 	public void nullEngine_test() {
 		TemplateEngine engine = null;
@@ -33,6 +39,9 @@ class WebServerTest {
 		assertThrows(Exception.class, () -> new WebServer(engine, gson, lobby, center));
 	}
 
+	/**
+	 * Tests the constructor of WebServer but with a null PlayerLobby
+	 */
 	@Test
 	public void nullLobby_test() {
 		TemplateEngine engine = mock(TemplateEngine.class);
@@ -43,6 +52,9 @@ class WebServerTest {
 		assertThrows(Exception.class, () -> new WebServer(engine, gson, lobby, center));
 	}
 
+	/**
+	 * Tests the constructor of WebServer but with a null GameCenter
+	 */
 	@Test
 	public void nullCenter_test() {
 		TemplateEngine engine = mock(TemplateEngine.class);
@@ -53,6 +65,9 @@ class WebServerTest {
 		assertThrows(Exception.class, () -> new WebServer(engine, gson, lobby, center));
 	}
 
+	/**
+	 * Tests the initialize function to make sure it doesn't crash
+	 */
 	@Test
 	public void intialize_test() {
 		TemplateEngine engine = mock(TemplateEngine.class);
