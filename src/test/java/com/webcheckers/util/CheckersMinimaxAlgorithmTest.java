@@ -19,8 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class CheckersMinimaxAlgorithmTest {
 
 	@Test
-	// not much depends on the minimax function being good, and it's impossible to test
-	// robust tests are not necessary
+	//
+	/**
+	 * not much depends on the minimax function being good, and it's impossible to test, robust tests are not necessary
+	 */
 	public void testSpeed_bestMove() {
 		Board board = new Board();
 		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, RED, 0).getMove());
@@ -33,8 +35,10 @@ class CheckersMinimaxAlgorithmTest {
 		board.movePiece(CheckersMinimaxAlgorithm.bestMove(board, WHITE, 7).getMove());
 	}
 
+	/**
+	 * Tests to make sure bestMove gives valid moves
+	 */
 	@Test
-	// test to make sure moves are valid
 	public void testValid_bestMove() {
 		Board board = new Board();
 		for (int i = 0; i < 4; i++) {
