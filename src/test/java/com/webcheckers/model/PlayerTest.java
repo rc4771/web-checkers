@@ -39,12 +39,18 @@ public class PlayerTest {
 
     }
 
+    /**
+     * Test if the player score is 0 if no game has been played yet.
+     */
     @Test
     public void score_noGames() {
         Player CuT = new Player(VALID_NAME);
         assertEquals(0, CuT.score());
     }
 
+    /**
+     * Test if the player score is 0 if a game has been lost.
+     */
     @Test
     public void score_loseGame() {
         Player CuT = new Player(VALID_NAME);
@@ -52,6 +58,9 @@ public class PlayerTest {
         assertEquals(0, CuT.score());
     }
 
+    /**
+     * Test if the player score is +1 if a game has been won.
+     */
     @Test
     public void score_winGame() {
         Player CuT = new Player(VALID_NAME);
@@ -59,6 +68,9 @@ public class PlayerTest {
         assertEquals(1, CuT.score());
     }
 
+    /**
+     * Test if two player score is equal.
+     */
     @Test
     public void compareTo_equal() {
         Player CuT1 = new Player(VALID_NAME);
@@ -67,7 +79,9 @@ public class PlayerTest {
         CuT2.winGame();
         assertEquals(0, CuT1.compareTo(CuT2));
     }
-
+    /**
+     * Test if one player has more points than the other.
+     */
     @Test
     public void compareTo_greater() {
         Player CuT1 = new Player(VALID_NAME);
@@ -77,7 +91,9 @@ public class PlayerTest {
         CuT2.winGame();
         assertTrue(CuT1.compareTo(CuT2) > 0);
     }
-
+    /**
+     * Test if one player has less points than the other.
+     */
     @Test
     public void compareTo_less() {
         Player CuT1 = new Player(VALID_NAME);

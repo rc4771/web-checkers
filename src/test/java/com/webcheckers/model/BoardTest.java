@@ -12,7 +12,10 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
-
+	/**
+	 * This test the color function of pieces.
+	 * Testing board.getPieceColorAt().
+	 */
 	@Test
 	void getPieceColorAt() {
 		Board board = new Board(); // uses a starting board
@@ -32,6 +35,9 @@ class BoardTest {
 		}
 	}
 
+	/**
+	 * This test the piece type function of pieces.
+	 */
 	@Test
 	/// Test that at the beginning, all pieces are either single or null
 	void getPieceTypeAt_start() {
@@ -43,6 +49,9 @@ class BoardTest {
 		}
 	}
 
+	/**
+	 * This test the pieces' existance on the board.
+	 */
 	@Test
 	void hasPieceAt() {
 		Board board = new Board();
@@ -95,6 +104,9 @@ class BoardTest {
 		}
 	}
 
+	/**
+	 * This test the empty spaces existance on the board should not hold any pieces.
+	 */
 	@Test
 	/// Check that the correct spaces are null
 	void getPieceAt_nulls() {
@@ -113,6 +125,9 @@ class BoardTest {
 		}
 	}
 
+	/**
+	 * This test if the game can get the right piece color from the board using getPiece().
+	 */
 	@Test
 	void getPieceAt_colors() {
 		Board board = new Board();
@@ -130,6 +145,9 @@ class BoardTest {
 		}
 	}
 
+	/**
+	 * This test if the game can get the right piece type from the board using getPiece().
+	 */
 	@Test
 	void getPieceAt_types() {
 		Board board = new Board();
@@ -147,6 +165,9 @@ class BoardTest {
 		}
 	}
 
+	/**
+	 * This test if the piece movements are within the American checker rule set.
+	 */
 	@Test
 	void movePiece() {
 		Board board1 = new Board();
@@ -174,6 +195,9 @@ class BoardTest {
 		assertNull(board1.getPieceAt(2, 0));
 	}
 
+	/**
+	 * Test if the game can be mirrored properly so that two players can play the same game.
+	 */
 	@Test
 	void transposeForColor() {
 		Board original = new Board();
@@ -192,6 +216,9 @@ class BoardTest {
 		}
 	}
 
+	/**
+	 * Test if the iterator performs successfully to generate a proper game board with pieces on it.
+	 */
 	@Test
 	void iterator() {
 		Board board = new Board();
@@ -303,6 +330,9 @@ class BoardTest {
 		assertEquals(Piece.PieceType.KING, CuT.getPieceTypeAt(0,1));
 	}
 
+	/**
+	 * Test if the game board can be duplicated correctly.
+	 */
 	@Test
 	public void test_copy() {
 		Board board1 = new Board();
@@ -327,6 +357,10 @@ class BoardTest {
 		}
 	}
 
+	/**
+	 * Test if the space on a board is valid in relation to the pieces' initial position based
+	 * on the American checker rule set.
+	 */
 	@Test
 	public void isValidTest() {
 		Board cut = new Board();
