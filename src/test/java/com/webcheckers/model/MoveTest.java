@@ -13,6 +13,9 @@ public class MoveTest {
 
     private WhiteSinglePiece piece;
 
+    /**
+     * Sets up objects and mocks to be used in the test
+     */
     @BeforeEach
     void setup(){
         piece = mock(WhiteSinglePiece.class);

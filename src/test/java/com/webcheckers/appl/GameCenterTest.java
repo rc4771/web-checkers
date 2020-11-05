@@ -14,6 +14,9 @@ import java.util.List;
 @Tag("Application-tier")
 public class GameCenterTest {
 
+    /**
+     * Tests the GameCenter.newGame(..) method to make sure it works with valid players
+     */
     @Test
     public void testNewGame_notNull() {
         GameCenter gc = createGameCenter();
@@ -21,6 +24,9 @@ public class GameCenterTest {
         assertNotEquals(null, gc.newGame(createDummyPlayer(0), createDummyPlayer(1)));
     }
 
+    /**
+     * Tests a valid path of newGame to make sure it can handle separate valid IDs
+     */
     @Test
     public void testNewGame_uniqueIDs() {
         GameCenter gc = createGameCenter();
@@ -41,6 +47,9 @@ public class GameCenterTest {
         assertNotEquals(g3.getGameID(), g4.getGameID());
     }
 
+    /**
+     * Tests to make sure a game can't be made with null players
+     */
     @Test
     public void testNewGame_nullPlayer() {
         GameCenter gc = createGameCenter();
@@ -51,6 +60,9 @@ public class GameCenterTest {
         assertNull(gc.newGame(null, null));
     }
 
+    /**
+     * Tests to make sure a game can't be made if a player is already in a game
+     */
     @Test
     public void testNewGame_playerAlreadyInGame() {
         GameCenter gc = createGameCenter();
@@ -64,6 +76,9 @@ public class GameCenterTest {
         assertNull(gc.newGame(p2, p3));
     }
 
+    /**
+     * Tests to make sure that game Ids are unique and greater than or equal to 0
+     */
     @Test
     public void testNewGame_validateID() {
         GameCenter gc = createGameCenter();
@@ -80,6 +95,9 @@ public class GameCenterTest {
         assertTrue(g4.getGameID() >= 0);
     }
 
+    /**
+     * Tests the getGame() method to make sure that it can get Game IDs from the IDs returned from newGame
+     */
     @Test
     public void testGetGame_validID() {
         GameCenter gc = createGameCenter();
@@ -96,6 +114,9 @@ public class GameCenterTest {
         assertEquals(gc.getGame(g4.getGameID()), g4);
     }
 
+    /**
+     * Tests to make sure newGame won't return an invalid game and that getGame() will return null for invalid IDs
+     */
     @Test
     public void testGetGame_invalidID() {
         GameCenter gc = createGameCenter();
@@ -119,6 +140,9 @@ public class GameCenterTest {
         assertNull(gc.getGame(-1));
     }
 
+    /**
+     * Tests the isPlayerInGame() method
+     */
     @Test
     public void testIsPlayerInGame() {
         GameCenter gc = createGameCenter();
@@ -139,6 +163,9 @@ public class GameCenterTest {
         assertFalse(gc.isPlayerInGame(p3));
     }
 
+    /**
+     * Tests the playerInGame() method against null players
+     */
     @Test
     public void testPlayerInGame_nullPlayer() {
         GameCenter gc = createGameCenter();
@@ -152,6 +179,9 @@ public class GameCenterTest {
         assertFalse(gc.isPlayerInGame(null));
     }
 
+    /**
+     * Tests GameCenter.getGameFromPlayer() valid paths
+     */
     @Test
     public void testGetGameFromPlayer() {
         GameCenter gc = createGameCenter();
@@ -172,6 +202,9 @@ public class GameCenterTest {
         assertEquals(-1, gc.getGameFromPlayer(p3));
     }
 
+    /**
+     * Tests GameCenter.getGameFromPlayer() with null players
+     */
     @Test
     public void testGetGameFromPlayer_nullPlayer() {
         GameCenter gc = createGameCenter();
@@ -182,6 +215,9 @@ public class GameCenterTest {
         assertEquals(-1, gc.getGameFromPlayer(null));
     }
 
+    /**
+     * Tests the getGameList() method with a couple players in games
+     */
     @Test
     public void testGetGameList() {
         GameCenter cut = new GameCenter();
@@ -197,6 +233,9 @@ public class GameCenterTest {
 
     }
 
+    /**
+     * Tests getGameList() to make sure it doesn't include games that have already ended
+     */
     @Test
     public void testGetGameList_inactive() {
         GameCenter cut = new GameCenter();
@@ -213,12 +252,18 @@ public class GameCenterTest {
         assertTrue(games.isEmpty());
     }
 
+    /**
+     * A helper method to create a dummy mock player
+     */
     private Player createDummyPlayer(int id) {
         Player player = mock(Player.class);
         when(player.getName()).thenReturn(String.format("dummyPlayer#%d", id));
         return player;
     }
 
+    /**
+     * A helper method to create a real GameCenter
+     */
     private GameCenter createGameCenter() {
         return new GameCenter();
     }

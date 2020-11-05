@@ -28,7 +28,9 @@ public class PostSignoutRouteTest {
     private PlayerLobby playerLobby;
     private GameCenter gameCenter;
 
-    // Setup BEFORE EACH test
+    /**
+     * Sets up objects and mocks to be used during the test
+     */
     @BeforeEach
     public void setup() {
         playerLobby = mock(PlayerLobby.class);
@@ -42,27 +44,42 @@ public class PostSignoutRouteTest {
         when(request.session()).thenReturn(session);
     }
 
+    /**
+     * Tests the valid path for the constructor
+     */
     @Test
     public void testConstructor() {
         // This shouldn't throw a null pointer exception if it works, that's the "assertion"
         new PostSignoutRoute(gameCenter, playerLobby, engine);
     }
 
+    /**
+     * Test the constructor failing with a null TemplateEngine
+     */
     @Test
     public void testConstructor_nullTE() {
         assertThrows(NullPointerException.class, () -> new PostSignoutRoute(gameCenter, playerLobby, null));
     }
 
+    /**
+     * Tests the constructor failing with a null PlayerLobby
+     */
     @Test
     public void testConstructor_nullPlayerLobby() {
         assertThrows(NullPointerException.class, () -> new PostSignoutRoute(gameCenter, null, engine));
     }
 
+    /**
+     * Tests the constructor failing with a null GameCenter
+     */
     @Test
     public void testConstructor_nullGameCenter() {
         assertThrows(NullPointerException.class, () -> new PostSignoutRoute(null, playerLobby, engine));
     }
 
+    /**
+     * Tests the handle() method with a valid path
+     */
     @Test
     public void testHandle() {
         // Setup signed in player
@@ -85,6 +102,9 @@ public class PostSignoutRouteTest {
         verify(response).redirect(WebServer.HOME_URL);
     }
 
+    /**
+     * Tests the handle() method with a null Player in the session assuring it returns an error
+     */
     @Test
     public void testHandle_noPlayerSession() {
         session.attribute(PostSignInRoute.PLAYER_SESSION_KEY, null);
@@ -98,7 +118,9 @@ public class PostSignoutRouteTest {
         verify(response).redirect(String.format("%s?%s=%s", WebServer.HOME_URL, ERROR_MESSAGE_ATTR, PostSignoutRoute.NO_SESSION_LAYER_ERROR_MESSAGE));
     }
 
-
+    /**
+     * Tests the make sure handle() returns an error with a player that isn't logged in
+     */
     @Test
     public void testHandle_playerNotLoggedIn() {
         Player player = mock(Player.class);
@@ -118,6 +140,9 @@ public class PostSignoutRouteTest {
         verify(response).redirect(String.format("%s?%s=%s", WebServer.HOME_URL, ERROR_MESSAGE_ATTR, PlayerLobby.SignOutResult.PLAYER_NOT_LOGGED_IN.getErrorMessage()));
     }
 
+    /**
+     * Tests the handle() method that it redirects to home during a game
+     */
     @Test
     public void testHandle_activeGame(){
         Player player = mock(Player.class);

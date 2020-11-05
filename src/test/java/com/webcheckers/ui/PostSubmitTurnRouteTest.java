@@ -43,10 +43,10 @@ public class PostSubmitTurnRouteTest {
     private Session session;
     private TemplateEngine engine;
 
-    @BeforeEach
     /**
      * Initializes each test with mocks
      */
+    @BeforeEach
     public void setup() {
         request = Mockito.mock(Request.class);
         session = Mockito.mock(Session.class);
@@ -69,10 +69,10 @@ public class PostSubmitTurnRouteTest {
         CuT = new PostSubmitTurnRoute(center, gson);
     }
 
-    @Test
     /**
      * Tests the handle method
      */
+    @Test
     void handleTest(){
         JsonObject actionData = new JsonObject();
         JsonObject start = new JsonObject();
@@ -95,6 +95,9 @@ public class PostSubmitTurnRouteTest {
         assertEquals("Move submitted successfully", message.getText());
     }
 
+    /**
+     * Tests submitting a turn with a valid red win
+     */
     @Test
     void testHandle_validRedWin(){
         JsonObject actionData = new JsonObject();
@@ -124,6 +127,9 @@ public class PostSubmitTurnRouteTest {
 
     }
 
+    /**
+     * Tests validating a move with a valid white win
+     */
     @Test
     void testHandle_validWhiteWin(){
         JsonObject actionData = new JsonObject();
@@ -152,9 +158,4 @@ public class PostSubmitTurnRouteTest {
         assertEquals("Move submitted successfully", message.getText());
 
     }
-
-
-
-
-
 }

@@ -42,6 +42,9 @@ class PostValidateMoveRouteTest {
 	private Session session;
 	private TemplateEngine engine;
 
+	/**
+	 * Sets up all the objects the tests will use
+	 */
 	@BeforeEach
 	public void setup() {
 		request = Mockito.mock(Request.class);
@@ -65,9 +68,11 @@ class PostValidateMoveRouteTest {
 		CuT = new PostValidateMoveRoute(center, gson);
 	}
 
+	/**
+	 * Tests validating a move without a piece at it
+	 */
 	@Test
 	void pieceNull_test() {
-
 		JsonObject actionData = new JsonObject();
 		JsonObject start = new JsonObject();
 		start.add("row", new JsonPrimitive("3"));
@@ -87,9 +92,11 @@ class PostValidateMoveRouteTest {
 		assertEquals("Please reset your move before trying to move again by using the Backup button", message.getText());
 	}
 
+	/**
+	 * Tests a validate move but with a piece where its trying to move to
+	 */
 	@Test
 	void endOccupied_test() {
-
 		JsonObject actionData = new JsonObject();
 		JsonObject start = new JsonObject();
 		start.add("row", new JsonPrimitive("0"));
@@ -109,9 +116,11 @@ class PostValidateMoveRouteTest {
 		assertEquals("There is a piece at the space you're jumping to", message.getText());
 	}
 
+	/**
+	 * Tests move direction validation
+	 */
 	@Test
 	void moveDirection_test() {
-
 		JsonObject actionData = new JsonObject();
 		JsonObject start = new JsonObject();
 		start.add("row", new JsonPrimitive("3"));
@@ -134,9 +143,11 @@ class PostValidateMoveRouteTest {
 		assertEquals("That type of piece cannot move in that direction", message.getText());
 	}
 
+	/**
+	 * Tests a move that went more than a single space, shouldn't work
+	 */
 	@Test
 	void tooFar_test() {
-
 		JsonObject actionData = new JsonObject();
 		JsonObject start = new JsonObject();
 		start.add("row", new JsonPrimitive("2"));
@@ -156,9 +167,11 @@ class PostValidateMoveRouteTest {
 		assertEquals("Your cannot move more than 1 space without jumping", message.getText());
 	}
 
+	/**
+	 * Test a valid path of the move validator
+	 */
 	@Test
 	void ok_test() {
-
 		JsonObject actionData = new JsonObject();
 		JsonObject start = new JsonObject();
 		start.add("row", new JsonPrimitive("2"));
