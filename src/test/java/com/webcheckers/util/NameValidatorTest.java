@@ -11,6 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Tag("Util-tier")
 public class NameValidatorTest {
 
+    /**
+     * Tests that valid usernames will be accepted
+     */
     @Test
     public void testSignInPlayer_validUsername() {
         String[] usernames = {"DavidTheF", "RIT", "can spaces", "NUMBERS123", "CoMbO 123"};
@@ -19,6 +22,9 @@ public class NameValidatorTest {
         }
     }
 
+    /**
+     * Tests to make sure invalid usernames are rejected
+     */
     @Test
     public void testSignInPlayer_nonAlphaNumeric() {
         String[] usernames = {"s@#$%^&(=;'.", "less /*-+", "simple error!", "question?"};

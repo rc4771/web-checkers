@@ -9,6 +9,8 @@ import com.webcheckers.model.Player;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 @Tag("Application-tier")
 public class GameCenterTest {
 
@@ -211,6 +213,43 @@ public class GameCenterTest {
         assertEquals(-1, gc.getGameFromPlayer(null));
         gc.newGame(createDummyPlayer(++playerIndex), createDummyPlayer(++playerIndex));
         assertEquals(-1, gc.getGameFromPlayer(null));
+    }
+
+    /**
+     * Tests the getGameList() method with a couple players in games
+     */
+    @Test
+    public void testGetGameList() {
+        GameCenter cut = new GameCenter();
+        Player redPlayer = createDummyPlayer(0);
+        Player whitePlayer = createDummyPlayer(1);
+        cut.newGame(redPlayer, whitePlayer);
+
+        List<Game> games = cut.getGameList();
+        assertEquals(1, games.size());
+        Game game = games.get(0);
+        assertEquals(redPlayer, game.getRedPlayer());
+        assertEquals(whitePlayer, game.getWhitePlayer());
+
+    }
+
+    /**
+     * Tests getGameList() to make sure it doesn't include games that have already ended
+     */
+    @Test
+    public void testGetGameList_inactive() {
+        GameCenter cut = new GameCenter();
+        Player redPlayer = createDummyPlayer(0);
+        Player whitePlayer = createDummyPlayer(1);
+        cut.newGame(redPlayer, whitePlayer);
+
+        List<Game> games = cut.getGameList();
+        assertEquals(1, games.size());
+        Game game = games.get(0);
+        game.setActive(false);
+
+        games = cut.getGameList();
+        assertTrue(games.isEmpty());
     }
 
     /**
