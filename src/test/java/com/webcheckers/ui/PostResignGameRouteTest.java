@@ -23,6 +23,9 @@ public class PostResignGameRouteTest {
     private Gson gson;
     private Player sessionPlayer;
 
+    /**
+     * Setup before each test
+     */
     @BeforeEach
     public void setup() {
         response = mock(Response.class);
@@ -38,21 +41,33 @@ public class PostResignGameRouteTest {
         when(sessionPlayer.getIsTurn()).thenReturn(true);
     }
 
+    /**
+     * Test for a NullPointerException for a null gameCenter
+     */
     @Test
     public void testConstructor_nullGameCenter() {
         assertThrows(NullPointerException.class, () -> new PostResignGameRoute(null, gson));
     }
 
+    /**
+     * Test for a NullPointerException for a null Gson
+     */
     @Test
     public void testConstructor_nullGson() {
         assertThrows(NullPointerException.class, () -> new PostResignGameRoute(gameCenter, null));
     }
 
+    /**
+     * Test to handle no Game ID
+     */
     @Test
     public void testHandle_noGameID() {
         assertEquals(CuT.handle(request, response), gson.toJson(Message.error(PostResignGameRoute.NO_GAME_ID_ERR_MSG), Message.class));
     }
 
+    /**
+     * Test to handle no Game
+     */
     @Test
     public void testHandle_noGame(){
         when(request.queryParams(GAME_ID_ATTR)).thenReturn("0");
@@ -61,6 +76,9 @@ public class PostResignGameRouteTest {
         assertEquals(gson.toJson(Message.error(PostResignGameRoute.NO_GAME_FOUND_ERR_MSG), Message.class), CuT.handle(request, response));
     }
 
+    /**
+     * Test to handle a valid request
+     */
     @Test
     public void testHandle_valid() {
         Game g = mock(Game.class);
@@ -73,6 +91,9 @@ public class PostResignGameRouteTest {
         assertEquals(CuT.handle(request, response), gson.toJson(Message.info(PostResignGameRoute.RESIGN_SUCCESSFUL_MSG), Message.class));
     }
 
+    /**
+     * Test to handle a null player
+     */
     @Test
     public void testHandle_nullPlayer(){
         Game g = mock(Game.class);

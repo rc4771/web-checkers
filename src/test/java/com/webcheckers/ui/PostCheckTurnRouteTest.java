@@ -24,6 +24,9 @@ public class PostCheckTurnRouteTest {
     private Player player;
     private GameCenter gameCenter;
 
+    /**
+     * Setup before each test
+     */
     @BeforeEach
     public void setup() {
         response = mock(Response.class);
@@ -37,26 +40,41 @@ public class PostCheckTurnRouteTest {
         when(request.session()).thenReturn(session);
     }
 
+    /**
+     * Test for a valid Constructor of PostCheckTurnRoute
+     */
     @Test
     public void testConstructor() {
         new PostCheckTurnRoute(gameCenter, gson);
     }
 
+    /**
+     * Test for a NullPointerException for a null Gson
+     */
     @Test
     public void testConstructor_nullGson() {
         assertThrows(NullPointerException.class, () -> new PostCheckTurnRoute(gameCenter, null));
     }
 
+    /**
+     * Test for a NullPointerException for a null gameCenter
+     */
     @Test
     public void testConstructor_nullGameCenter() {
         assertThrows(NullPointerException.class, () -> new PostCheckTurnRoute(null, gson));
     }
 
+    /**
+     * Test to handle no sessionPlayer
+     */
     @Test
     public void testHandle_noPlayerInSession() {
         assertEquals(gson.toJson(Message.error("false")), CuT.handle(request, response));
     }
 
+    /**
+     * Test to handle inactive player
+     */
     @Test
     public void testHandle_inactivePlayer() {
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
@@ -68,6 +86,9 @@ public class PostCheckTurnRouteTest {
         assertEquals(gson.toJson(Message.info("false")), CuT.handle(request, response));
     }
 
+    /**
+     * Test to handle active player
+     */
     @Test
     public void testHandle_activePlayer() {
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
@@ -76,6 +97,9 @@ public class PostCheckTurnRouteTest {
         assertEquals(gson.toJson(Message.info("true")), CuT.handle(request, response));
     }
 
+    /**
+     * Test to handle an inactive game
+     */
     @Test
     public void testHandle_inactiveGame(){
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
@@ -88,6 +112,9 @@ public class PostCheckTurnRouteTest {
         assertEquals(gson.toJson(Message.info("true")), CuT.handle(request, response));
     }
 
+    /**
+     * Test to handle a null game
+     */
     @Test
     public void testHandle_NullGame(){
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
@@ -100,6 +127,9 @@ public class PostCheckTurnRouteTest {
         assertEquals(gson.toJson(Message.info("true")), CuT.handle(request, response));
     }
 
+    /**
+     * Test to handle a null and inactive game
+     */
     @Test
     public void testHandle_NullGame_InactiveGame(){
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
@@ -112,6 +142,9 @@ public class PostCheckTurnRouteTest {
         assertEquals(gson.toJson(Message.info("true")), CuT.handle(request, response));
     }
 
+    /**
+     * Test to handle active and existing game
+     */
     @Test
     public void testHandle_activeGame_existingGame_true(){
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);
@@ -124,6 +157,9 @@ public class PostCheckTurnRouteTest {
         assertEquals(gson.toJson(Message.info("false")), CuT.handle(request, response));
     }
 
+    /**
+     * Test to handle active but non-existing game
+     */
     @Test
     public void testHandle_activeGame_existingGame_false(){
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(player);

@@ -37,6 +37,9 @@ class GetHomeRouteTest {
     private GameCenter gameCenter;
     private Player sessionPlayer;
 
+    /**
+     * Setup before each test
+     */
     @BeforeEach
     public void SetUp(){
         playerLobby =  mock(PlayerLobby.class);
@@ -50,21 +53,33 @@ class GetHomeRouteTest {
         when(request.session()).thenReturn(session);
     }
 
+    /**
+     * Test for a NullPointerException for a null playerLobby
+     */
     @Test
     void testConstructor_playerLobbyNull(){
         assertThrows(NullPointerException.class, () -> new GetHomeRoute(null, gameCenter, engine));
     }
 
+    /**
+     * Test for a NullPointerException for a null gameCenter
+     */
     @Test
     void testConstructor_gameCenterNull(){
         assertThrows(NullPointerException.class, () -> new GetHomeRoute(playerLobby, null, engine));
     }
 
+    /**
+     * Test for a NullPointerException for a null templateEngine
+     */
     @Test
     void testConstructor_templateEngineNull(){
         assertThrows(NullPointerException.class, () -> new GetHomeRoute(playerLobby, gameCenter, null));
     }
 
+    /**
+     * Test to handle a null sessionPlayer
+     */
     @Test
     void testHandle_NullSessionPlayer(){
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(null);
@@ -79,6 +94,9 @@ class GetHomeRouteTest {
         //verify(sessionPlayer, times(0)).getName();
     }
 
+    /**
+     * Test to handle a valid sessionPlayer
+     */
     @Test
     void testHandle_SessionPlayer(){
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
@@ -96,6 +114,9 @@ class GetHomeRouteTest {
         verify(response).redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GetGameRoute.GAME_ID_ATTR, 0));
     }
 
+    /**
+     * Test to handle the return of Error Message
+     */
     @Test
     void testHandle_ErrorMsg(){
         when(request.queryParams(ERROR_MESSAGE_ATTR)).thenReturn("error");
@@ -107,6 +128,9 @@ class GetHomeRouteTest {
         testHelper.assertViewName(GetHomeRoute.VIEW_NAME);
     }
 
+    /**
+     * Test to handle an invalid Game ID
+     */
     @Test
     void testHandle_InvalidGameID(){
         when(request.queryParams(GAME_ID_ATTR)).thenReturn("-1");
@@ -121,6 +145,9 @@ class GetHomeRouteTest {
         verify(response, times(0)).redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GetGameRoute.GAME_ID_ATTR, gameCenter.getGameFromPlayer(sessionPlayer)));
     }
 
+    /**
+     * Test to handle a valid Game ID and an active game
+     */
     @Test
     void testHandle_validGameID_activeGame(){
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
@@ -137,6 +164,9 @@ class GetHomeRouteTest {
         verify(response).redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GetGameRoute.GAME_ID_ATTR, 0));
     }
 
+    /**
+     * Test to handle an invalid Game ID and an active game
+     */
     @Test
     void testHandle_invalidGameID_activeGame(){
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
@@ -153,6 +183,9 @@ class GetHomeRouteTest {
         testHelper.assertViewName(GetHomeRoute.VIEW_NAME);
     }
 
+    /**
+     * Test to handle a valid Game ID and a inactive game
+     */
     @Test
     void testHandle_validGameID_inactiveGame(){
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
@@ -168,6 +201,9 @@ class GetHomeRouteTest {
         testHelper.assertViewModelIsaMap();
     }
 
+    /**
+     * Test to handle an invalid game ID and an inactive game
+     */
     @Test
     void testHandle_invalidGameID_inactiveGame(){
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
@@ -183,6 +219,9 @@ class GetHomeRouteTest {
         testHelper.assertViewModelIsaMap();
     }
 
+    /**
+     * Test to verify correct ViewModel
+     */
     @Test
     void testView(){
         final TemplateEngineTester testHelper = new TemplateEngineTester();
@@ -191,15 +230,5 @@ class GetHomeRouteTest {
         testHelper.assertViewModelExists();
         testHelper.assertViewModelIsaMap();
         testHelper.assertViewName(GetHomeRoute.VIEW_NAME);
-    }
-
-    @Test
-    void tesHandle(){
-
-    }
-
-    @Test
-    void testGetDisplayList(){
-
     }
 }

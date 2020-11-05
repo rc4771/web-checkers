@@ -11,6 +11,10 @@ public class WhiteKingPiece extends KingPiece {
 		super();
 	}
 
+	/**
+	 * accessor for the color of the piece
+	 * @return the color WHITE
+	 */
 	@Override
 	public PieceColor getColor() {
 		return PieceColor.WHITE;
