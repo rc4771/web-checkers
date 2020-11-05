@@ -1,5 +1,8 @@
 package com.webcheckers.ui;
 
+import static com.webcheckers.ui.GetGameRoute.SESSION_PLAYER_NULL_ERR_MSG;
+import static com.webcheckers.ui.GetHomeRoute.ERROR_MESSAGE_ATTR;
+import static com.webcheckers.ui.PostResignGameRoute.GAME_ID_ATTR;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -18,15 +21,18 @@ public class PostResignGameRouteTest {
     private Response response;
     private GameCenter gameCenter;
     private Gson gson;
+    private Player sessionPlayer;
 
     @BeforeEach
     public void setup() {
         response = mock(Response.class);
         session = mock(Session.class);
         request = mock(Request.class);
-        gameCenter = new GameCenter();
+        gameCenter = mock(GameCenter.class);
         gson = new Gson();
         CuT = new PostResignGameRoute(gameCenter, gson);
+
+        sessionPlayer = mock(Player.class);
 
         when(request.session()).thenReturn(session);
     }
@@ -47,18 +53,39 @@ public class PostResignGameRouteTest {
     }
 
     @Test
-    public void testHandle_noGame() {
-        when(request.queryParams(PostResignGameRoute.GAME_ID_ATTR)).thenReturn("0");
-        assertEquals(CuT.handle(request, response), gson.toJson(Message.error(PostResignGameRoute.NO_GAME_FOUND_ERR_MSG), Message.class));
+    public void testHandle_noGame(){
+        when(request.queryParams(GAME_ID_ATTR)).thenReturn("0");
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
+
+        assertEquals(gson.toJson(Message.error(PostResignGameRoute.NO_GAME_FOUND_ERR_MSG), Message.class), CuT.handle(request, response));
     }
 
     @Test
     public void testHandle_valid() {
-        Player p1 = new Player("Test123");
-        Player p2 = new Player("Test321");
-        Game g = gameCenter.newGame(p1, p2);
+        Game g = mock(Game.class);
+        when(g.getGameID()).thenReturn(0);
+        when(request.queryParams(GAME_ID_ATTR)).thenReturn("0");
+        when(gameCenter.getGame(Integer.parseInt(request.queryParams(GAME_ID_ATTR)))).thenReturn(g);
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(sessionPlayer);
 
-        when(request.queryParams(PostResignGameRoute.GAME_ID_ATTR)).thenReturn(Integer.toString(g.getGameID()));
+        when(g.getActive()).thenReturn(false);
         assertEquals(CuT.handle(request, response), gson.toJson(Message.info(PostResignGameRoute.RESIGN_SUCCESSFUL_MSG), Message.class));
+    }
+
+    @Test
+    public void testHandle_nullPlayer(){
+        Game g = mock(Game.class);
+        when(g.getGameID()).thenReturn(0);
+        when(request.queryParams(GAME_ID_ATTR)).thenReturn("0");
+        when(gameCenter.getGame(Integer.parseInt(request.queryParams(GAME_ID_ATTR)))).thenReturn(g);
+        when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(null);
+
+        try{
+            CuT.handle(request, response);
+        }
+        catch (HaltException e){
+            //expected
+        }
+        verify(response).redirect(String.format("%s?%s=%s", WebServer.HOME_URL, ERROR_MESSAGE_ATTR, SESSION_PLAYER_NULL_ERR_MSG));
     }
 }

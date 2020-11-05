@@ -88,20 +88,11 @@ public class GetSpectatorGameRoute implements Route {
             else{
                 msg = Message.info(String.format("The game is over! %s has won the game!", game.getWhitePlayer().getName()));
             }
-            redirectHomeWithMessage(response, msg.toString());
+            response.redirect(String.format("%s?%s=%s", WebServer.HOME_URL, Message.Type.INFO, msg));
         }
         vm.put("message", msg);
 
         return templateEngine.render(new ModelAndView(vm, GAME_VIEW));
 
-    }
-    /**
-     * Redirects with a message to the home page. This is mainly useful for an error, but also for if the player
-     * selects another player to start a game with, but that player is already in a game.
-     */
-    private String redirectHomeWithMessage(Response response, String message) {
-        response.redirect(String.format("%s?%s=%s", WebServer.HOME_URL, Message.Type.INFO, message));
-        halt();
-        return null;
     }
 }
