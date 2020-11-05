@@ -149,14 +149,12 @@ public class GetHomeRoute implements Route {
     List<String> playerUsernames = playerLobby.getPlayerUsernames(sessionPlayerName);
     List<String[]> displayList = new ArrayList<>();
 
-    for (int i = 0; i < AIPlayer.AI_NAMES.length; i++) {
-      float score = (i + 1) / (float) AIPlayer.AI_NAMES.length;
-      displayList.add(new String[] {AIPlayer.ROBOT_EMOJI + AIPlayer.AI_NAMES[i], String.format("%s?%s=%d", WebServer.GAME_URL, AI_OPPONENT_ATTR, i), Float.toString(score)});
+    for (int i = AIPlayer.AI_NAMES.length - 1; i >= 0 ; i--) {
+      displayList.add(new String[] {AIPlayer.ROBOT_EMOJI + AIPlayer.AI_NAMES[i], String.format("%s?%s=%d", WebServer.GAME_URL, AI_OPPONENT_ATTR, i)});
     }
 
     for (String username : playerUsernames) {
-      float score = new Random().nextFloat();
-      displayList.add(new String[] {username, String.format("/game?%s=%s", OPPONENT_USER_ATTR, username), Float.toString(score)});
+      displayList.add(new String[] {username, String.format("/game?%s=%s", OPPONENT_USER_ATTR, username)});
     }
 
     return displayList;

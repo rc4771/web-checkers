@@ -115,6 +115,10 @@ public class GetGameRoute implements Route{
 
             // Successfully created a new game, redirect with that gameID
             Game game = gameCenter.newGame(sessionPlayer, opponentPlayer);
+            if (game == null) {
+                return redirectHomeWithMessage(response, GAME_OBJECT_NULL_ERR_MSG);
+            }
+
             response.redirect(String.format("%s?%s=%d", WebServer.GAME_URL, GAME_ID_ATTR, game.getGameID()));
             halt();
             return null;
