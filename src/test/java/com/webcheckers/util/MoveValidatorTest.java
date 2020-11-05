@@ -71,6 +71,16 @@ public class MoveValidatorTest {
         assertThrows(TooFarMoveException.class, () -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.RED, 2, 5, 4, 3));
     }
 
+    @Test
+    void testMustJump() {
+        final Game CuT = createTestGameInstance();
+        CuT.setPendingMove(5, 0, 4, 1);
+        CuT.submitMove();
+        CuT.setPendingMove(4, 1, 3, 2);
+        CuT.submitMove();
+        assertThrows(MustJumpMoveException.class, () -> MoveValidator.validateMove(CuT.getBoard(), Piece.PieceColor.RED, 2, 1, 3, 0));
+    }
+
     /**
      * Test to check if turns are checked and applied
      */

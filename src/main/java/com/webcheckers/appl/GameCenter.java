@@ -121,17 +121,6 @@ public class GameCenter {
         return -1;
     }
 
-    /**
-     * Ends current game
-     * @param currentGame
-     *      The game to be ended
-     * @return
-     *
-     */
-    public void endGame(Game currentGame){
-        currentGames.remove(currentGame.getGameID());
-    }
-
     public List<Game> getGameList() {
         List<Game> games = new ArrayList<>(currentGames.size());
 
