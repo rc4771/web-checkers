@@ -79,6 +79,7 @@ public class GetGameRoute implements Route{
 
     /**
      * {@inheritDoc}
+     * handles the request for GetGameRoute
      */
     @Override
     public String handle(Request request, Response response) {

@@ -31,6 +31,9 @@ public class GetSpectatorStopWatchingRouteTest {
     private Response response;
     private Request request;
 
+    /**
+     * Setup before each test
+     */
     @BeforeEach
     void setup(){
         playerLobby = mock(PlayerLobby.class);
@@ -42,26 +45,41 @@ public class GetSpectatorStopWatchingRouteTest {
         CuT = new GetSpectatorStopWatchingRoute(playerLobby, gameCenter, templateEngine);
     }
 
+    /**
+     * Test for valid GetSpectatorStopWatchingRoute
+     */
     @Test
     void testConstructor_valid(){
         new GetSpectatorStopWatchingRoute(playerLobby, gameCenter, templateEngine);
     }
 
+    /**
+     * Test for a NullPointerException for a null playerLobby
+     */
     @Test
     void testConstructor_playerLobbyNull(){
         assertThrows(NullPointerException.class, () -> new GetSpectatorStopWatchingRoute(null, gameCenter, templateEngine));
     }
 
+    /**
+     * Test for a NullPointerException for a null gameCenter
+     */
     @Test
     void testConstructor_gameCenterNull(){
         assertThrows(NullPointerException.class, () -> new GetSpectatorStopWatchingRoute(playerLobby, null, templateEngine));
     }
 
+    /**
+     * Test for a NullPointerException for a null templateEngine
+     */
     @Test
     void testConstructor_templateEngineNull(){
         assertThrows(NullPointerException.class, () -> new GetSpectatorStopWatchingRoute(playerLobby, gameCenter, null));
     }
 
+    /**
+     * Test to handle valid request
+     */
     @Test
     void testHandle_valid(){
         CuT.handle(request, response);
