@@ -3,6 +3,7 @@ package com.webcheckers.appl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import com.webcheckers.model.Game;
@@ -133,8 +134,13 @@ public class GameCenter {
 
     public List<Game> getGameList() {
         List<Game> games = new ArrayList<>(currentGames.size());
-        games.addAll(currentGames.values());
 
+        for (int gameID : currentGames.keySet()) {
+            if (currentGames.get(gameID).getActive()) {
+                games.add(currentGames.get(gameID));
+            }
+        }
+        
         return games;
     }
 }
