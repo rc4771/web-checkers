@@ -23,6 +23,9 @@ class RedSinglePieceTest {
 		assertTrue(piece.getColor() == Piece.PieceColor.RED);
 	}
 
+	/**
+	 * Test that single moves can be made in two directions
+	 */
 	@Test
 	public void testAll_singleMoves() {
 		Board board = new Board();
@@ -40,6 +43,9 @@ class RedSinglePieceTest {
 		assertTrue(moves.get(1).getCaptures().isEmpty());
 	}
 
+	/**
+	 * Test that a piece in the left corner can't move
+	 */
 	@Test
 	public void testLeftCorner_singleMoves() {
 		Board board = new Board();
@@ -50,6 +56,9 @@ class RedSinglePieceTest {
 		assertTrue(moves.isEmpty());
 	}
 
+	/**
+	 * Test that a piece in the right corner can't move
+	 */
 	@Test
 	public void testRightCorner_singleMoves() {
 		Board board = new Board();
@@ -60,6 +69,9 @@ class RedSinglePieceTest {
 		assertTrue(moves.isEmpty());
 	}
 
+	/**
+	 * Test that a piece can move to the left
+	 */
 	@Test
 	public void testRedLeft_singleMoves() {
 		Board board = new Board();
@@ -74,6 +86,9 @@ class RedSinglePieceTest {
 		assertEquals(new Position(3, 6), move.getEnd());
 	}
 
+	/**
+	 * Test that a piece can move to the right
+	 */
 	@Test
 	public void testRedRight_singleMoves() {
 		Board board = new Board();
@@ -88,12 +103,18 @@ class RedSinglePieceTest {
 		assertEquals(new Position(4, 1), move.getEnd());
 	}
 
+	/**
+	 * Test that a piece can be promoted
+	 */
 	@Test
 	public void test_promote() {
 		RedSinglePiece CuT = new RedSinglePiece();
 		assertTrue(CuT.promote() instanceof RedKingPiece);
 	}
 
+	/**
+	 * Test a right single jump
+	 */
 	@Test
 	public void testRight_calculateJump() {
 		Board board = new Board();
@@ -118,6 +139,9 @@ class RedSinglePieceTest {
 		assertEquals(new Position(3, 4), capture.getPosition());
 	}
 
+	/**
+	 * Test a left single jump
+	 */
 	@Test
 	public void testLeft_calculateJump() {
 		Board board = new Board();
@@ -142,8 +166,11 @@ class RedSinglePieceTest {
 		assertEquals(new Position(3, 4), capture.getPosition());
 	}
 
+	/**
+	 * Test that a left jump can't jump over the wrong color
+	 */
 	@Test
-	public void testLeftWhitePiece_calculateJump() {
+	public void testLeftRedPiece_calculateJump() {
 		Board board = new Board();
 
 		board.movePiece(new Move(new Position(0, 1), new Position(3, 4)));
@@ -155,8 +182,11 @@ class RedSinglePieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test that a right jump can't jump over the wrong color
+	 */
 	@Test
-	public void testRightWhitePiece_calculateJump() {
+	public void testRightRedPiece_calculateJump() {
 		Board board = new Board();
 
 		board.movePiece(new Move(new Position(0, 1), new Position(3, 4)));
@@ -168,6 +198,9 @@ class RedSinglePieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test that a left jump can be blocked to the left
+	 */
 	@Test
 	public void testLeftBlocked_calculateJump() {
 		Board board = new Board();
@@ -182,6 +215,9 @@ class RedSinglePieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test that a right jump can be blocked to the right
+	 */
 	@Test
 	public void testRightBlocked_calculateJump() {
 		Board board = new Board();
@@ -196,6 +232,9 @@ class RedSinglePieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test that a left jump can't go out of bounds
+	 */
 	@Test
 	public void testLeftBounds_calculateJump() {
 		Board board = new Board();
@@ -209,6 +248,9 @@ class RedSinglePieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test that a right jump can't go out of bound
+	 */
 	@Test
 	public void testRightBounds_calculateJump() {
 		Board board = new Board();
@@ -223,6 +265,9 @@ class RedSinglePieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test left double jumps
+	 */
 	@Test
 	public void testDoubleJumpLeft_calculateJump() {
 		Board board = new Board();
@@ -254,6 +299,9 @@ class RedSinglePieceTest {
 		assertTrue(capture2.getPiece() instanceof WhiteSinglePiece);
 	}
 
+	/**
+	 * Test right double jumps
+	 */
 	@Test
 	public void testDoubleJumpRight_calculateJump() {
 		Board board = new Board();
@@ -285,6 +333,9 @@ class RedSinglePieceTest {
 		assertTrue(capture2.getPiece() instanceof WhiteSinglePiece);
 	}
 
+	/**
+	 * Test left triple jumps
+	 */
 	@Test
 	public void testTripleJumpLeft_calculateJump() {
 		Board board = new Board();
@@ -326,6 +377,9 @@ class RedSinglePieceTest {
 		assertTrue(capture3.getPiece() instanceof WhiteSinglePiece);
 	}
 
+	/**
+	 * Test right triple jumps
+	 */
 	@Test
 	public void testTripleJumpRight_calculateJump() {
 		Board board = new Board();

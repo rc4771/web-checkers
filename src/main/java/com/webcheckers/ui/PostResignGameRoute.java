@@ -24,6 +24,7 @@ public class PostResignGameRoute implements Route {
     static final String NO_GAME_ID_ERR_MSG = "No gameID found, could not resign";
     static final String NO_GAME_FOUND_ERR_MSG = "No game was found for this gameID, could not resign";
     static final String RESIGN_SUCCESSFUL_MSG = "Resigned successfully";
+    static final String NOT_YOUR_TURN_MSG = "It is not your turn to resign";
 
     //private final TemplateEngine templateEngine;
     private final GameCenter gameCenter;
@@ -65,7 +66,11 @@ public class PostResignGameRoute implements Route {
         if ((sessionPlayer = httpSession.attribute(PostSignInRoute.PLAYER_SESSION_KEY)) == null) {
             return redirectHomeWithMessage(response, SESSION_PLAYER_NULL_ERR_MSG);
         } else {
-            sessionPlayer.loseGame(); // add to losses
+            // sessionPlayer.loseGame(); // add to losses
+        }
+
+        if (!sessionPlayer.getIsTurn()) {
+            return gson.toJson(Message.error(NOT_YOUR_TURN_MSG), Message.class);
         }
 
         Game game;

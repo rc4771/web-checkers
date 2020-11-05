@@ -3,6 +3,7 @@ package com.webcheckers.appl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import com.webcheckers.model.Game;
@@ -110,8 +111,9 @@ public class GameCenter {
         for (int gameID : currentGames.keySet()) {
             Game game = currentGames.get(gameID);
 
-            if (game.getRedPlayer().getName().equals(player.getName())
-                    || game.getWhitePlayer().getName().equals(player.getName())) {
+            if ((game.getRedPlayer().getName().equals(player.getName())
+                    || game.getWhitePlayer().getName().equals(player.getName()))
+                    && game.getActive()) {
                 return gameID;
             }
         }
@@ -119,21 +121,15 @@ public class GameCenter {
         return -1;
     }
 
-    /**
-     * Ends current game
-     * @param currentGame
-     *      The game to be ended
-     * @return
-     *
-     */
-    public void endGame(Game currentGame){
-        currentGames.remove(currentGame.getGameID());
-    }
-
     public List<Game> getGameList() {
         List<Game> games = new ArrayList<>(currentGames.size());
-        games.addAll(currentGames.values());
 
+        for (int gameID : currentGames.keySet()) {
+            if (currentGames.get(gameID).getActive()) {
+                games.add(currentGames.get(gameID));
+            }
+        }
+        
         return games;
     }
 }

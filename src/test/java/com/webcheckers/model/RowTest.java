@@ -23,19 +23,33 @@ public class RowTest {
         CuT = new Row(index, spaces);
     }
 
+    /**
+     * Tests if getSpaces correctly gets spaces
+     */
     @Test
     public void testGetSpaces(){
     assertNotNull(CuT.getSpaces());
     }
+
+    /**
+     * Test to make sure all calls to next work correctly
+     */
     @Test
     public void testGetIndex(){
     assertEquals(CuT.getIndex(), index);
     }
+
+    /**
+     * Tests to make sure iterator isnt null
+     */
     @Test
     public void testIterator(){
         assertNotNull(CuT.iterator());
     }
 
+    /**
+     * Test to make sure copy correctly copies spaces
+     */
     @Test
     public void testCopy() {
         ArrayList<Space> spaces = new ArrayList<>();

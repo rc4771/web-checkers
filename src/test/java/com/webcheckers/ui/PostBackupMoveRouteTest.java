@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import spark.*;
 
+import static com.webcheckers.appl.PlayerLobby.SignInResult.OK;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -46,6 +47,9 @@ public class PostBackupMoveRouteTest {
     private Session session;
     private TemplateEngine engine;
 
+    /**
+     * Setup before each test
+     */
     @BeforeEach
     /**
      * Initialization for each test
@@ -57,16 +61,22 @@ public class PostBackupMoveRouteTest {
         engine = mock(TemplateEngine.class);
         gson = new Gson();
 
-        lobby = new PlayerLobby();
+        lobby = mock(PlayerLobby.class);
         when(session.attribute(PostSignInRoute.PLAYER_SESSION_KEY)).thenReturn(lobby);
 
+        when(lobby.signInPlayer("rafeed")).thenReturn(OK);
+        when(lobby.signInPlayer("rafe")).thenReturn(OK);
         lobby.signInPlayer("rafeed");
         lobby.signInPlayer("rafe");
 
+        when(lobby.getPlayer("rafeed")).thenReturn(new Player("rafeed"));
+        when(lobby.getPlayer("rafe")).thenReturn(new Player("rafe"));
         redPlayer = lobby.getPlayer("rafeed");
         whitePlayer = lobby.getPlayer("rafe");
 
-        center = new GameCenter();
+        center = mock(GameCenter.class);
+
+        when(center.newGame(redPlayer,whitePlayer)).thenReturn(new Game(0, redPlayer, whitePlayer));
         game = center.newGame(redPlayer, whitePlayer);
 
         CuT = new PostBackupMoveRoute(center, gson);
@@ -74,7 +84,7 @@ public class PostBackupMoveRouteTest {
 
     @Test
     /**
-     * Tests the handle method
+     * Tests the handle method with a valid request
      */
     void handleTest(){
         JsonObject actionData = new JsonObject();
@@ -89,6 +99,8 @@ public class PostBackupMoveRouteTest {
 
         when(request.queryParams(eq("actionData"))).thenReturn(actionData.toString());
         when(request.queryParams(eq("gameID"))).thenReturn("0");
+
+        when(center.getGame(0)).thenReturn(game);
 
         Message message = gson.fromJson((String) CuT.handle(request, response), Message.class);
         assertEquals(Message.Type.INFO, message.getType());

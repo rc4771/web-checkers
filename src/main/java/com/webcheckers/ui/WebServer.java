@@ -201,8 +201,8 @@ public class WebServer {
     post(VALID_MOVE_URL, new PostValidateMoveRoute(gameCenter, gson));
     post(SUBMIT_TURN_URL, new PostSubmitTurnRoute(gameCenter, gson));
     post(BACKUP_MOVE_URL, new PostBackupMoveRoute(gameCenter, gson));
-    post(CHECK_TURN_URL, new PostCheckTurnRoute(gson));
-    post(SIGNOUT_URL, new PostSignoutRoute(playerLobby, templateEngine));
+    post(CHECK_TURN_URL, new PostCheckTurnRoute(gameCenter, gson));
+    post(SIGNOUT_URL, new PostSignoutRoute(gameCenter, playerLobby, templateEngine));
 
     //Resigns player from game
     post(RESIGN_URL, new PostResignGameRoute(gameCenter, gson));

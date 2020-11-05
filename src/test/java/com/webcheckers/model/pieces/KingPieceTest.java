@@ -12,6 +12,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class KingPieceTest {
 
+	/**
+	 * Tests that a king can make a single move in each direction
+	 */
 	@Test
 	public void testAll_singleMoves() {
 		Board board = new Board();
@@ -32,6 +35,9 @@ class KingPieceTest {
 		assertTrue(moves.get(3).getCaptures().isEmpty());
 	}
 
+	/**
+	 * Test that a king in the left corner cannot move
+	 */
 	@Test
 	public void testLeftCorner_singleMoves() {
 		Board board = new Board();
@@ -44,6 +50,9 @@ class KingPieceTest {
 		assertTrue(moves.isEmpty());
 	}
 
+	/**
+	 * Test that a king in the right corner cannot make any moves
+	 */
 	@Test
 	public void testRightCorner_singleMoves() {
 		Board board = new Board();
@@ -56,6 +65,9 @@ class KingPieceTest {
 		assertTrue(moves.isEmpty());
 	}
 
+	/**
+	 * Test that it can move forward left
+	 */
 	@Test
 	public void testRedLeft_singleMoves() {
 		Board board = new Board();
@@ -72,6 +84,9 @@ class KingPieceTest {
 		assertEquals(new Position(3, 6), move.getEnd());
 	}
 
+	/**
+	 * Test that it can move forward right
+	 */
 	@Test
 	public void testRedRight_singleMoves() {
 		Board board = new Board();
@@ -88,6 +103,9 @@ class KingPieceTest {
 		assertEquals(new Position(4, 1), move.getEnd());
 	}
 
+	/**
+	 * Test that it can move backward left
+	 */
 	@Test
 	public void testWhiteLeft_singleMoves() {
 		Board board = new Board();
@@ -104,6 +122,9 @@ class KingPieceTest {
 		assertEquals(new Position(4, 1), move.getEnd());
 	}
 
+	/**
+	 * Test that it can move backward right
+	 */
 	@Test
 	public void testWhiteRight_singleMoves() {
 		Board board = new Board();
@@ -120,6 +141,9 @@ class KingPieceTest {
 		assertEquals(new Position(3, 6), move.getEnd());
 	}
 
+	/**
+	 * Test that it can jump to the right
+	 */
 	@Test
 	public void testRight_calculateJump() {
 		Board board = new Board();
@@ -146,6 +170,9 @@ class KingPieceTest {
 		assertEquals(new Position(3, 4), capture.getPosition());
 	}
 
+	/**
+	 * Test that it can jump forward left
+	 */
 	@Test
 	public void testLeft_calculateJump() {
 		Board board = new Board();
@@ -172,6 +199,9 @@ class KingPieceTest {
 		assertEquals(new Position(3, 4), capture.getPosition());
 	}
 
+	/**
+	 * Test that it can jump backward left
+	 */
 	@Test
 	public void testLeftWhitePiece_calculateJump() {
 		Board board = new Board();
@@ -187,6 +217,9 @@ class KingPieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test that it can jump backward right
+	 */
 	@Test
 	public void testRightWhitePiece_calculateJump() {
 		Board board = new Board();
@@ -202,6 +235,9 @@ class KingPieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test that a left jump can be blocked
+	 */
 	@Test
 	public void testLeftBlocked_calculateJump() {
 		Board board = new Board();
@@ -218,6 +254,9 @@ class KingPieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test that a right jump can be blocked
+	 */
 	@Test
 	public void testRightBlocked_calculateJump() {
 		Board board = new Board();
@@ -234,6 +273,9 @@ class KingPieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test that the piece can't jump out of bounds to the left
+	 */
 	@Test
 	public void testLeftBounds_calculateJump() {
 		Board board = new Board();
@@ -249,6 +291,9 @@ class KingPieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test that the piece can't move out of bounds to the right
+	 */
 	@Test
 	public void testRightBounds_calculateJump() {
 		Board board = new Board();
@@ -265,6 +310,9 @@ class KingPieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test left double jumps
+	 */
 	@Test
 	public void testDoubleJumpLeft_calculateJump() {
 		Board board = new Board();
@@ -298,6 +346,9 @@ class KingPieceTest {
 		assertTrue(capture2.getPiece() instanceof WhiteSinglePiece);
 	}
 
+	/**
+	 * Test right double jumps
+	 */
 	@Test
 	public void testDoubleJumpRight_calculateJump() {
 		Board board = new Board();
@@ -331,6 +382,9 @@ class KingPieceTest {
 		assertTrue(capture2.getPiece() instanceof WhiteSinglePiece);
 	}
 
+	/**
+	 * Test left triple jumps
+	 */
 	@Test
 	public void testTripleJumpLeft_calculateJump() {
 		Board board = new Board();
@@ -374,6 +428,9 @@ class KingPieceTest {
 		assertTrue(capture3.getPiece() instanceof WhiteSinglePiece);
 	}
 
+	/**
+	 * Test right triple jumps
+	 */
 	@Test
 	public void testTripleJumpRight_calculateJump() {
 		Board board = new Board();
@@ -416,7 +473,9 @@ class KingPieceTest {
 		assertTrue(capture3.getPiece() instanceof WhiteSinglePiece);
 	}
 
-
+	/**
+	 * Test backward jumps to the right
+	 */
 	@Test
 	public void testBackRight_calculateJump() {
 		Board board = new Board();
@@ -443,6 +502,9 @@ class KingPieceTest {
 		assertEquals(new Position(4, 3), capture.getPosition());
 	}
 
+	/**
+	 * Test backward jumps to the left
+	 */
 	@Test
 	public void testBackLeft_calculateJump() {
 		Board board = new Board();
@@ -469,6 +531,9 @@ class KingPieceTest {
 		assertEquals(new Position(4, 3), capture.getPosition());
 	}
 
+	/**
+	 * Test backward jump with wrong piece
+	 */
 	@Test
 	public void testBackLeftWhitePiece_calculateJump() {
 		Board board = new Board();
@@ -484,6 +549,9 @@ class KingPieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test backward jumps with wrong piece
+	 */
 	@Test
 	public void testBackRightWhitePiece_calculateJump() {
 		Board board = new Board();
@@ -499,6 +567,9 @@ class KingPieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test that a backward jump can be blocked to the left
+	 */
 	@Test
 	public void testBackLeftBlocked_calculateJump() {
 		Board board = new Board();
@@ -515,6 +586,9 @@ class KingPieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test that a backward jump can be blocked to the right
+	 */
 	@Test
 	public void testBackRightBlocked_calculateJump() {
 		Board board = new Board();
@@ -531,6 +605,9 @@ class KingPieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test that a backward jump can't go out of bounds to the left
+	 */
 	@Test
 	public void testBackLeftBounds_calculateJump() {
 		Board board = new Board();
@@ -546,6 +623,9 @@ class KingPieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test that a backward jump can't go out of bounds to the right
+	 */
 	@Test
 	public void testBackRightBounds_calculateJump() {
 		Board board = new Board();
@@ -562,6 +642,9 @@ class KingPieceTest {
 		assertTrue(jumps.isEmpty());
 	}
 
+	/**
+	 * Test backward double jumps
+	 */
 	@Test
 	public void testBackDoubleJumpLeft_calculateJump() {
 		Board board = new Board();
@@ -595,6 +678,9 @@ class KingPieceTest {
 		assertTrue(capture2.getPiece() instanceof RedSinglePiece);
 	}
 
+	/**
+	 * Test backward double jumps to the right
+	 */
 	@Test
 	public void testBackDoubleJumpRight_calculateJump() {
 		Board board = new Board();
@@ -628,6 +714,9 @@ class KingPieceTest {
 		assertTrue(capture2.getPiece() instanceof RedSinglePiece);
 	}
 
+	/**
+	 * Test backward triple jumps to the left
+	 */
 	@Test
 	public void testBackTripleJumpLeft_calculateJump() {
 		Board board = new Board();
@@ -671,6 +760,9 @@ class KingPieceTest {
 		assertTrue(capture3.getPiece() instanceof RedSinglePiece);
 	}
 
+	/**
+	 * Test a backward triple jump to the right
+	 */
 	@Test
 	public void testBackTripleJumpRight_calculateJump() {
 		Board board = new Board();
