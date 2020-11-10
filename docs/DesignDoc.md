@@ -60,7 +60,7 @@ with the American rules. The required features are discussed below.
 
 ## Application Domain
 
-![The WebCheckers Domain Model](domain_model.png)
+![The WebCheckers Domain Model](updated_domain_model.png)
 
 Our domain model represents a standard game of Checkers. Two players play a game of Checkers.
 The game is played on a board, which contains 64 squares. Each player controls 12 pieces which are
