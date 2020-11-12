@@ -29,6 +29,7 @@ The purpose is to allow Checkers players to play a fully-featured game of Checke
 | UI | User Interface |
 | CSS | Cascading Style Sheet |
 | HTML | Hyper Text Markup Language |
+| FTL | FreeMarker Template |
 
 ## Requirements
 
@@ -92,7 +93,6 @@ This section describes the web interface flow; this is how the user views and in
 with the WebCheckers application.
 
 ![The WebCheckers Web Interface Statechart](web-interface.png)
-
 
 When the player first goes to WebCheckers, they're able to see the number of other players signed in and there's a button allowing them to sign in. When the
 player clicks on that, they're sent to the Sign-In page. Once they've entered a valid
@@ -167,6 +167,16 @@ or `RedKingPiece`. A move by the player is represented by the `Move` class. When
 * Utilize the `Position` class more throughout the code base
 * Fix a number of Law of Demeter violations, but without over-complicating classes
 * Move some of the logic from the route handlers to the application tier or model tier
+* Create a variant of the WinType enum that represents a resignation
+* Use primitive arrays instead of ArrayLists where possible
+* Override the `equals()` and `hashCode()` methods for more classes
+* Use more constant strings instead of literals
+* `redirectHomeWithMessage()` should be a public utility function
+* Create an `isBlack()` and `isWhite()` to check the color of a space
+* Store the player whose turn it is in the Game class
+* Make EvenRow and OddRow classes for constructing the Board
+* Split up complicated methods into more smaller methods
+* Use a second HashMap in GameCenter to map Players to games
 
 ## Testing
 
@@ -175,14 +185,13 @@ make sure they play correctly.
 
 ### Acceptance Testing
 
-We have 14 user stories, 50 acceptance testing criteria and all of them passes without issue. All of the user stories
-had acceptance testing done. Our only concern is that when a game ends, only one user can see that the game ended. The
-other user is sent to the home page without an error.
+We have 14 short user stories, 50 acceptance testing criteria and all of them passes without issue. All of the user stories
+had acceptance testing done.
 
 ### Unit Testing and Code Coverage
 
 We hope to meet the code coverage requirements listed on the rubric, which is 90%. We currently have 94% of instructions
-covered and 91% of branches covered. All of our unit tests pass. For Sprint 3 and 4, our strategy will be to write the unit
+covered and 91% of branches covered. All of our unit tests pass. Our strategy is to write the unit
 tests before we write the code.  
 
 ![Overall coverage](overall_coverage.PNG)
