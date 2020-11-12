@@ -8,7 +8,7 @@ geometry: margin=1in
 * Team members
   * Mike White
   * David Allen
-  * Will Peterson
+  * Will Petersen
   * Sokol Nguyen
   * Rafeed Choudhury
 
