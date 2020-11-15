@@ -92,7 +92,7 @@ Details of the components within these tiers are supplied below.
 This section describes the web interface flow; this is how the user views and interacts
 with the WebCheckers application.
 
-![The WebCheckers Web Interface Statechart](web-interface.png)
+![The WebCheckers Web Interface Statechart](updated_web-interface.png)
 
 When the player first goes to WebCheckers, they're able to see the number of other players signed in and there's a button allowing them to sign in. When the
 player clicks on that, they're sent to the Sign-In page. Once they've entered a valid
@@ -159,7 +159,7 @@ a `Piece` on it. Each `Piece` has a `Position` and can be either a `RedKingPiece
 or `RedKingPiece`. A move by the player is represented by the `Move` class. When playing against an AI player, an 
 `AIPlayer` will be used in place of a `Player`.
 
-![Model tier class diagram](model_tier.png)
+![Model tier class diagram](updated_model_tier.png)
 
 ### Design Improvements
 
